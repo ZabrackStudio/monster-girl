@@ -1,0 +1,104 @@
+{
+	"id": "slime",
+	"nombre": "Reme",
+	"especie": "Slime",
+	"personalidad": "Curiosa y pegajosa. Imita todo lo que ve, absorbe lo que toca y lleva fatal quedarse sola.",
+	"color": "6fd3c1",
+	"stats_iniciales": {
+		"salud": 80,
+		"felicidad": 60,
+		"tristeza": 15,
+		"hambre": 30,
+		"energia": 70,
+		"higiene": 70,
+		"lujuria": 10
+	},
+	"minijuego_inicial": "burbujas",
+	"afinidades": {
+		"limpiar": 1.3,
+		"comer": 1.1,
+		"pasear": 0.9
+	},
+	"minijuegos": {
+		"burbujas": 1.3,
+		"memoria": 0.8
+	},
+	"efectos_extra": {
+		"trabajar": {
+			"tristeza": 4,
+			"lujuria": 2
+		}
+	},
+	"lujuria": {
+		"base": 6.0,
+		"por_tristeza": 0.08,
+		"por_hambre": 0.12,
+		"por_cansancio": 0.12,
+		"por_suciedad": 0.16,
+		"por_felicidad": 0.08,
+		"por_salud": 0.05,
+		"por_dia": 0.12,
+		"max_por_dia": 999.0,
+		"ruido": 2.5
+	},
+	"dialogos": {
+		"inicio": [
+			"Ah, ¡hola! Me llamo Reme. Bueno, me lo puse yo: era lo primero que ponía en un frasco de la farmacia. ¿Vivimos juntos ahora?"
+		],
+		"trabajar": [
+			"¿Otra vez te vas? Vale... te espero pegada a la puerta.",
+			"Intentaré no absorber el sofá mientras no estás.",
+			"Trae algo rico, ¿sí?"
+		],
+		"comer": [
+			"¡Ñam! Se nota cómo baja por dentro. Literalmente: soy transparente.",
+			"Esto está buenísimo. ¿Puedo absorber también el plato?",
+			"Ya no me siento tan... blandurria."
+		],
+		"pasear": [
+			"¡Mira, un charco! Es como un primo lejano.",
+			"Hay mucha gente. Me pongo un poquito más opaca para que no me miren.",
+			"El aire fresco me sienta genial. Me noto más firme."
+		],
+		"limpiar": [
+			"Me sacudo las pelusas... ¡Ay, que se me quedan dentro!",
+			"Ahora brillo. ¡Mírame! Bueno, mira a través de mí.",
+			"Limpia por fuera, limpia por dentro. Es lo bueno de ser slime."
+		],
+		"jugar": [
+			"¡Otra! ¡Otra!",
+			"Eso ha sido divertidísimo.",
+			"Me encanta cuando hacemos cosas juntos."
+		],
+		"dormir": [
+			"Me hago una bolita. Buenas noches.",
+			"Si me escurro por debajo de la puerta, no te asustes."
+		],
+		"nivel_0": [
+			"Hoy me siento tranquila. Como gelatina recién hecha.",
+			"Todo bien por aquí."
+		],
+		"nivel_1": [
+			"Estoy un poco... temblorosa. No sé por qué.",
+			"¿Te puedes quedar un rato cerca?"
+		],
+		"nivel_2": [
+			"Noto que me cuesta mantener la forma.",
+			"Perdona, me quedo mirándote sin querer."
+		],
+		"nivel_3": [
+			"No te acerques demasiado... o sí... no sé.",
+			"Me estoy derritiendo por dentro. Ayúdame a distraerme."
+		]
+	},
+	"finales": {
+		"consumida": {
+			"titulo": "Final: Marea interior",
+			"texto": "Esa noche, Reme no se hace una bolita.\n\nSe queda en el marco de la puerta, sin contornos, con un brillo que no habías visto nunca. Ya no imita tu voz: la suya suena más grave, más segura.\n\n«Lo he intentado», dice. «Pero esto también soy yo.»\n\nLa luz del pasillo se apaga.\n\n—\n\nPor la mañana el piso huele a lluvia. En la nevera hay una nota escrita con una letra que se escurre: «No me busques. Si vuelvo, que sea siendo yo.»"
+		},
+		"carnal": {
+			"titulo": "Final: Sin forma",
+			"texto": "Te dices que solo es un abrazo.\n\nReme se cierra a tu alrededor, fría al principio, luego no. Sus ojos ya no te piden que la ayudes a contenerse.\n\nFundido a negro.\n\n—\n\nCuidar de ella era no ceder. Cediste. Lo que quedaba de su autocontrol se fue contigo esa noche, y la casa nunca volvió a ser tranquila."
+		}
+	}
+}

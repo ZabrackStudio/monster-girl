@@ -1,0 +1,133 @@
+[
+	{
+		"id": "gelatina",
+		"nombre": "Gelatina de frutas",
+		"categoria": "Alimentación",
+		"tipo": "consumible",
+		"precio": 14,
+		"descripcion": "Su comida favorita. Quita hambre y la pone contenta.",
+		"efectos": {
+			"hambre": -25,
+			"felicidad": 10
+		},
+		"favorito": [
+			"slime"
+		]
+	},
+	{
+		"id": "caramelos",
+		"nombre": "Caramelos ácidos",
+		"categoria": "Alimentación",
+		"tipo": "consumible",
+		"precio": 8,
+		"descripcion": "Un capricho rápido. Alegra un poco, alimenta poco.",
+		"efectos": {
+			"hambre": -8,
+			"felicidad": 6,
+			"salud": -1
+		}
+	},
+	{
+		"id": "agua",
+		"nombre": "Agua mineral",
+		"categoria": "Cuidado personal",
+		"tipo": "consumible",
+		"precio": 10,
+		"descripcion": "Hidrata y refresca. Para un slime, es casi un baño.",
+		"efectos": {
+			"salud": 6,
+			"higiene": 12,
+			"lujuria": -3
+		}
+	},
+	{
+		"id": "jabon",
+		"nombre": "Jabón neutro",
+		"categoria": "Cuidado personal",
+		"tipo": "consumible",
+		"precio": 12,
+		"descripcion": "Limpieza a fondo sin gastar una acción.",
+		"efectos": {
+			"higiene": 35
+		}
+	},
+	{
+		"id": "manzanilla",
+		"nombre": "Té de manzanilla",
+		"categoria": "Artículos especiales",
+		"tipo": "consumible",
+		"precio": 22,
+		"descripcion": "Calma los nervios. Reduce la lujuria al momento.",
+		"efectos": {
+			"lujuria": -10,
+			"energia": 4
+		}
+	},
+	{
+		"id": "bebida_energia",
+		"nombre": "Zumo energético",
+		"categoria": "Cuidado personal",
+		"tipo": "consumible",
+		"precio": 15,
+		"descripcion": "Recupera energía, pero la deja algo acelerada.",
+		"efectos": {
+			"energia": 25,
+			"lujuria": 3
+		}
+	},
+	{
+		"id": "almohada",
+		"nombre": "Almohada de gel",
+		"categoria": "Cuidado personal",
+		"tipo": "pasivo",
+		"precio": 60,
+		"descripcion": "Duerme mejor: +15 de energía cada noche.",
+		"pasivo": {
+			"energia_dormir": 15
+		}
+	},
+	{
+		"id": "pecera",
+		"nombre": "Pecera decorativa",
+		"categoria": "Entretenimiento",
+		"tipo": "pasivo",
+		"precio": 90,
+		"descripcion": "Se queda horas mirando los peces. -2 de lujuria cada día.",
+		"pasivo": {
+			"lujuria_diaria": -2
+		}
+	},
+	{
+		"id": "lampara",
+		"nombre": "Lámpara de lava",
+		"categoria": "Entretenimiento",
+		"tipo": "pasivo",
+		"precio": 70,
+		"descripcion": "Dice que es como verse en un espejo. La tristeza baja 3 cada día.",
+		"pasivo": {
+			"tristeza_diaria": -3
+		}
+	},
+	{
+		"id": "frasco",
+		"nombre": "Frasco hermético",
+		"categoria": "Artículos especiales",
+		"tipo": "pasivo",
+		"precio": 120,
+		"especie": "slime",
+		"descripcion": "Un sitio fresco donde compactarse. Pierde 3 puntos menos de higiene al día y la lujuria baja 1 cada día.",
+		"pasivo": {
+			"higiene_diaria": -3,
+			"lujuria_diaria": -1
+		}
+	},
+	{
+		"id": "mj_memoria",
+		"nombre": "Juego: Memoria",
+		"categoria": "Entretenimiento",
+		"tipo": "minijuego",
+		"precio": 50,
+		"descripcion": "Desbloquea el minijuego de parejas.",
+		"minijuego": "memoria"
+	}
+]

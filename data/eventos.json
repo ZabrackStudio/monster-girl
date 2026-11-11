@@ -1,0 +1,89 @@
+[
+	{ "id": "charco", "tipo": "cotidiano", "momento": ["pasear"], "peso": 3,
+	  "texto": "Reme encuentra un charco enorme y se queda mirándolo. «¿Puedo meterme? Solo un poquito.»",
+	  "opciones": [
+		{ "texto": "Adelante, salta.", "efectos": { "felicidad": 10, "higiene": -15 }, "resultado": "Salta, salpica a medio parque y vuelve chorreando y feliz." },
+		{ "texto": "Mejor no, que te ensucias.", "efectos": { "tristeza": 4, "higiene": 2 }, "resultado": "Se aleja del charco con cara de pena." }
+	  ] },
+	{ "id": "perro", "tipo": "positivo", "momento": ["pasear"], "peso": 2,
+	  "texto": "Un perro se acerca a olisquear a Reme. Ella se queda totalmente quieta.",
+	  "opciones": [
+		{ "texto": "Déjala que lo acaricie.", "efectos": { "felicidad": 12, "tristeza": -6, "lujuria": -4 }, "resultado": "El perro le da un lametón. Reme se ríe tanto que tiembla entera." }
+	  ] },
+	{ "id": "miradas", "tipo": "negativo", "momento": ["pasear"], "peso": 2, "condiciones": { "dia_min": 3 },
+	  "texto": "Unos chavales señalan a Reme y se ríen. Ella se encoge hasta hacerse pequeña.",
+	  "opciones": [
+		{ "texto": "Volver a casa enseguida.", "efectos": { "tristeza": 6 }, "resultado": "Ya en casa, tarda un rato en recuperar su tamaño." },
+		{ "texto": "Ponerte delante y seguir paseando.", "efectos": { "felicidad": 6, "tristeza": -2, "energia": -6 }, "resultado": "«Gracias», te susurra. Sigue algo opaca, pero camina a tu lado." }
+	  ] },
+	{ "id": "calor", "tipo": "especie", "momento": ["pasear", "noche"], "peso": 2, "condiciones": { "dia_min": 4 },
+	  "texto": "Hace un calor tremendo. Reme empieza a perder consistencia y a ponerse muy, muy inquieta.",
+	  "opciones": [
+		{ "texto": "Llenarle la bañera de agua fría (8 $).", "efectos": { "lujuria": -6, "higiene": 10, "dinero": -8 }, "resultado": "Se queda flotando un buen rato, aliviada." },
+		{ "texto": "Abrir las ventanas y aguantar.", "efectos": { "lujuria": 8, "energia": -8 }, "resultado": "La noche se hace larga. Reme no para de dar vueltas." }
+	  ] },
+	{ "id": "imitacion", "tipo": "especie", "momento": ["noche", "jugar"], "peso": 2,
+	  "texto": "Reme ha visto una película y ahora imita a la protagonista: pone tu misma pose, tu misma cara. Le sale casi perfecto.",
+	  "opciones": [
+		{ "texto": "Aplaudir la actuación.", "efectos": { "felicidad": 8 }, "resultado": "Hace una reverencia tan profunda que acaba en el suelo." },
+		{ "texto": "Pedirle que imite algo más inocente.", "efectos": { "felicidad": 3, "lujuria": -3 }, "resultado": "Se pasa media hora haciendo de tostadora." }
+	  ] },
+	{ "id": "absorbe", "tipo": "negativo", "momento": ["trabajar"], "peso": 3,
+	  "texto": "Al volver de trabajar, falta el mando de la tele. Lo ves flotando dentro de Reme.",
+	  "opciones": [
+		{ "texto": "Reñirle.", "efectos": { "tristeza": 8, "felicidad": -4 }, "resultado": "Lo escupe con cara de culpa y se va a un rincón." },
+		{ "texto": "Reírte y pedírselo con cariño.", "efectos": { "felicidad": 4, "tristeza": -2 }, "resultado": "Te lo devuelve pegajoso, pero sonriendo." }
+	  ] },
+	{ "id": "sola", "tipo": "negativo", "momento": ["trabajar"], "peso": 2, "condiciones": { "tristeza_min": 35 },
+	  "texto": "La encuentras pegada a la ventana, aplastada contra el cristal. Lleva así todo el día.",
+	  "opciones": [
+		{ "texto": "Abrazarla un momento.", "efectos": { "tristeza": -8, "lujuria": 4 }, "resultado": "Se despega del cristal y se queda muy cerca de ti, quizá demasiado." },
+		{ "texto": "Prepararle algo rico (6 $).", "efectos": { "tristeza": -5, "hambre": -15, "dinero": -6 }, "resultado": "Se anima un poco al oler la comida." }
+	  ] },
+	{ "id": "propina", "tipo": "positivo", "momento": ["trabajar"], "peso": 1,
+	  "texto": "Hoy te han dado una propina inesperada.",
+	  "opciones": [ { "texto": "¡Bien!", "efectos": { "dinero": 20 }, "resultado": "+20 $." } ] },
+	{ "id": "pelusas", "tipo": "cotidiano", "momento": ["limpiar", "noche"], "peso": 2, "condiciones": { "higiene_max": 45 },
+	  "texto": "Reme se ha tragado una bola de pelusas de debajo del sofá y ahora está gris.",
+	  "opciones": [
+		{ "texto": "Limpiar el sofá también.", "efectos": { "higiene": 10, "energia": -4 }, "resultado": "Por fin el sofá está limpio. Y Reme, un poco menos gris." }
+	  ] },
+	{ "id": "estrellas", "tipo": "positivo", "momento": ["noche"], "peso": 2, "condiciones": { "felicidad_min": 55 },
+	  "texto": "Reme te pide que salgáis al balcón a ver las estrellas. Dice que, si se queda muy quieta, se reflejan en ella.",
+	  "opciones": [
+		{ "texto": "Salir un rato.", "efectos": { "lujuria": -6, "tristeza": -5, "energia": -3 }, "resultado": "Es verdad. Tiene el cielo entero dentro." }
+	  ] },
+	{ "id": "pesadilla", "tipo": "negativo", "momento": ["noche"], "peso": 2, "condiciones": { "tristeza_min": 40 },
+	  "texto": "Reme ha tenido una pesadilla: soñaba que se secaba y nadie la echaba de menos.",
+	  "opciones": [
+		{ "texto": "Quedarte con ella hasta que se duerma.", "efectos": { "tristeza": -6, "energia": -5 }, "resultado": "Se duerme agarrada a tu dedo." },
+		{ "texto": "Decirle que solo es un sueño y volver a la cama.", "efectos": { "tristeza": 4 }, "resultado": "Asiente, pero se nota que no se lo cree." }
+	  ] },
+	{ "id": "inquieta_noche", "tipo": "critico", "momento": ["noche"], "peso": 3, "condiciones": { "nivel_min": 2 },
+	  "texto": "Pasada la medianoche, oyes algo deslizándose por el pasillo. Reme está en tu puerta, con un brillo raro.",
+	  "opciones": [
+		{ "texto": "Encender la luz y ponerle una película.", "efectos": { "lujuria": -5, "energia": -10 }, "resultado": "Se queda dormida a mitad de la peli. Tú no tanto." },
+		{ "texto": "Cerrar la puerta con suavidad.", "efectos": { "lujuria": 3, "tristeza": 6 }, "resultado": "La oyes alejarse despacio." }
+	  ] },
+	{ "id": "acercamiento", "tipo": "critico", "momento": ["noche", "jugar", "pasear"], "peso": 4, "condiciones": { "nivel_min": 3 },
+	  "texto": "Reme se acerca mucho. Su voz ya no imita a nadie. «Ya no puedo más. ¿Y si dejo de contenerme... contigo?»",
+	  "opciones": [
+		{ "texto": "Apartarte con suavidad y traerle agua fría.", "efectos": { "lujuria": -12, "tristeza": 8 }, "resultado": "Se le cae el brillo de golpe. «Tienes razón. Perdona.» Le cuesta, pero se aparta." },
+		{ "texto": "Ceder.", "final": "carnal" }
+	  ] },
+	{ "id": "temblor", "tipo": "critico", "momento": ["comer", "limpiar"], "peso": 2, "condiciones": { "nivel_min": 2 },
+	  "texto": "A Reme le tiembla todo el cuerpo. Se le escapa algo de forma por los bordes y lo recoge, avergonzada.",
+	  "opciones": [
+		{ "texto": "Hacer como que no lo has visto.", "efectos": { "felicidad": 2 }, "resultado": "Te lo agradece con la mirada." },
+		{ "texto": "Preguntarle cómo está de verdad.", "efectos": { "tristeza": -6, "lujuria": -3 }, "resultado": "Habla un rato. Se nota más ligera al terminar." }
+	  ] },
+	{ "id": "receta", "tipo": "positivo", "momento": ["comer"], "peso": 1,
+	  "texto": "Reme te enseña una receta que ha aprendido imitando a la vecina.",
+	  "opciones": [ { "texto": "Probarla.", "efectos": { "felicidad": 8, "hambre": -10 }, "resultado": "Sabe sorprendentemente bien. Y solo un poco a slime." } ] },
+	{ "id": "racha", "tipo": "positivo", "momento": ["jugar"], "peso": 2, "condiciones": { "felicidad_min": 60 },
+	  "texto": "Reme está tan contenta que propone otra partida rápida sin descansar.",
+	  "opciones": [
+		{ "texto": "¡Venga!", "efectos": { "felicidad": 6, "lujuria": -4, "energia": -6 }, "resultado": "Gana ella. Por mucho." },
+		{ "texto": "Mejor descansar.", "efectos": { "energia": 4 }, "resultado": "Se acurruca a tu lado en el sofá." }
+	  ] }
+]

@@ -1,0 +1,136 @@
+{
+	"dinero_inicial": 40,
+	"acciones_por_dia": 5,
+	"repeticion_mult": 0.6,
+	"niveles": [
+		{
+			"nombre": "Estable",
+			"min": 0,
+			"color": "5cc98a",
+			"efectividad": 1.0
+		},
+		{
+			"nombre": "Inquieta",
+			"min": 25,
+			"color": "e2c044",
+			"efectividad": 1.0
+		},
+		{
+			"nombre": "Alterada",
+			"min": 50,
+			"color": "e8893a",
+			"efectividad": 0.9
+		},
+		{
+			"nombre": "Crítica",
+			"min": 75,
+			"color": "d9434f",
+			"efectividad": 0.75
+		},
+		{
+			"nombre": "Consumida",
+			"min": 100,
+			"color": "8a1c3c",
+			"efectividad": 0.0
+		}
+	],
+	"actividades": {
+		"trabajar": {
+			"nombre": "Trabajar",
+			"costo": 2,
+			"dinero": 40,
+			"efectos": {
+				"hambre": 6,
+				"felicidad": -4
+			},
+			"prob_evento": 0.15
+		},
+		"comer": {
+			"nombre": "Comer",
+			"costo": 1,
+			"precio": 6,
+			"efectos": {
+				"hambre": -35,
+				"salud": 3,
+				"felicidad": 3
+			},
+			"prob_evento": 0.05
+		},
+		"pasear": {
+			"nombre": "Pasear",
+			"costo": 1,
+			"energia_min": 15,
+			"efectos": {
+				"felicidad": 12,
+				"tristeza": -10,
+				"energia": -15,
+				"lujuria": -4,
+				"higiene": -6
+			},
+			"prob_evento": 0.5
+		},
+		"limpiar": {
+			"nombre": "Limpiar",
+			"costo": 1,
+			"efectos": {
+				"higiene": 40,
+				"energia": -5,
+				"salud": 2
+			},
+			"prob_evento": 0.1
+		},
+		"jugar": {
+			"nombre": "Jugar",
+			"costo": 1,
+			"energia_min": 12,
+			"efectos": {
+				"energia": -12
+			},
+			"prob_evento": 0.1
+		}
+	},
+	"dia": {
+		"energia_dormir": 30,
+		"hambre_diaria": 15,
+		"higiene_diaria": 12,
+		"felicidad_diaria": 8,
+		"hambre_danina": 80,
+		"dano_hambre": 6,
+		"higiene_danina": 25,
+		"dano_higiene": 4,
+		"felicidad_triste": 30,
+		"tristeza_sube": 6,
+		"felicidad_alegre": 60,
+		"tristeza_baja": 4,
+		"recuperacion_salud": 2,
+		"prob_evento_noche": 0.35
+	},
+	"minijuegos": {
+		"burbujas": {
+			"nombre": "Revienta burbujas",
+			"descripcion": "Revienta todas las burbujas que puedas en 15 segundos.",
+			"efectos_base": {
+				"felicidad": 4,
+				"lujuria": -2
+			},
+			"efectos_bonus": {
+				"felicidad": 10,
+				"lujuria": -7,
+				"tristeza": -6
+			}
+		},
+		"memoria": {
+			"nombre": "Memoria",
+			"descripcion": "Encuentra las 6 parejas antes de que se acabe el tiempo.",
+			"efectos_base": {
+				"felicidad": 3,
+				"lujuria": -3
+			},
+			"efectos_bonus": {
+				"felicidad": 8,
+				"lujuria": -9,
+				"tristeza": -8
+			}
+		}
+	}
+}
