@@ -42,3 +42,16 @@ Cada "k" está en el JSON de la especie, así cada chica monstruo reacciona dist
 `<stat>_min`, `<stat>_max`, `dia_min`, `nivel_min`, `nivel_max`, `dinero_min`.
 Momentos: `trabajar`, `comer`, `pasear`, `limpiar`, `jugar`, `noche`.
 Una opción con `"final": "carnal"` termina la partida con ese final.
+
+## Versión web (GitHub Pages)
+
+Se juega en <https://zabrackstudio.github.io/monster-girl/>, también desde iPhone con Safari
+(Compartir → «Añadir a pantalla de inicio» para abrirlo como una app).
+
+Para publicar cambios, vuelve a exportar a `docs/` y sube:
+
+    flatpak run org.godotengine.Godot --headless --path . --export-release "Web" docs/index.html
+    git add -A && git commit -m "Actualiza build web" && git push
+
+GitHub tarda un minuto en publicarlo. La exportación usa la variante sin hilos
+(`thread_support=false`) porque GitHub Pages no permite las cabeceras que requieren los hilos.
