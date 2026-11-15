@@ -38,6 +38,10 @@ var current_line := ""
 var last_lust_breakdown: Dictionary = {}
 var rng := RandomNumberGenerator.new()
 var quiet := false                  # el simulador lo activa para no generar textos
+# La maldición
+var tolerance: Dictionary = {}      # remedio -> tolerancia acumulada (se recupera cada noche)
+var curse_mark := 0.0               # mínimo permanente de lujuria que dejan las crisis
+var marked := false                 # esta crisis ya dejó su marca
 
 
 static func load_json(path: String) -> Variant:
@@ -152,7 +156,7 @@ func do_activity(id: String) -> void:
 	money += earned
 	total_money += earned
 	var mult := _mult_for(id) * float(character["afinidades"].get(id, 1.0))
-	var real := apply(act["efectos"], mult)
+	var real := apply(act["efectos"], mult, _tolerance_use(id))
 	var extra: Dictionary = character["efectos_extra"].get(id, {})
 	if not extra.is_empty():
 		real.merge(apply(extra), false)
@@ -182,7 +186,7 @@ func play_minigame(id: String, score: float) -> void:
 	for k in mg["efectos_bonus"]:
 		eff[k] = eff.get(k, 0.0) + float(mg["efectos_bonus"][k]) * score
 	var mult := _mult_for("jugar") * minigame_affinity(id)
-	var real := apply(eff, mult)
+	var real := apply(eff, mult, _tolerance_use("mj_" + id))
 	real.merge(apply(act["efectos"]), false)
 	known_affinity[id] = true
 	_count("jugar")
@@ -227,7 +231,7 @@ func use_item(id: String) -> void:
 	var it: Dictionary = items[id]
 	var mult := 1.3 if character["id"] in it.get("favorito", []) else 1.0
 	# Usar el mismo objeto varias veces el mismo día rinde cada vez menos.
-	var real := apply(it["efectos"], mult * _mult_for("objeto_" + id))
+	var real := apply(it["efectos"], mult * _mult_for("objeto_" + id), _tolerance_use("objeto_" + id))
 	_count("objeto_" + id)
 	_log("Usas %s: %s" % [it["nombre"], _fmt(real)])
 	_check_consumed()
@@ -257,8 +261,12 @@ func sleep() -> void:
 		_add("tristeza", float(d["tristeza_sube"]))
 	elif stats["felicidad"] >= float(d["felicidad_alegre"]):
 		_add("tristeza", -float(d["tristeza_baja"]))
+	var full_moon := is_full_moon()
 	var lust := lust_delta()
 	_add("lujuria", lust)
+	var decay := float(balance["maldicion"]["tolerancia_decay"])
+	for k in tolerance:
+		tolerance[k] *= decay
 	day += 1
 	actions_left = int(balance["acciones_por_dia"])
 	times_today.clear()
@@ -266,6 +274,8 @@ func sleep() -> void:
 	for s in STATS:
 		diff[s] = stats[s] - before[s]
 	_log("[b]— Día %d —[/b] Durante la noche: %s" % [day, _fmt(diff)])
+	if full_moon:
+		_log("[color=#ef7d86]Luna llena: la maldición despierta con fuerza.[/color]")
 	_log(_explain_lust())
 	if _check_consumed():
 		return
@@ -287,6 +297,10 @@ func lust_delta() -> float:
 	b["salud"] = -maxf(0, stats["salud"] - 60) * float(l["por_salud"])
 	b["días"] = minf(day * float(l["por_dia"]), float(l["max_por_dia"]))
 	b["objetos"] = passive_sum("lujuria_diaria")
+	var m: Dictionary = balance["maldicion"]
+	b["maldición"] = maxf(0, stats["lujuria"] - float(m["umbral"])) * float(m["autoalimentacion"])
+	if is_full_moon():
+		b["luna llena"] = float(m["luna_base"]) + day * float(m["luna_por_dia"])
 	b["azar"] = rng.randf_range(-float(l["ruido"]), float(l["ruido"]))
 	last_lust_breakdown = b
 	var total := 0.0
@@ -359,7 +373,7 @@ func _conditions_ok(cond: Dictionary) -> bool:
 
 ## Aplica efectos. `mult` solo escala los efectos beneficiosos, así un estado
 ## alterado o una actividad repetida rinden menos sin suavizar lo negativo.
-func apply(effects: Dictionary, mult: float = 1.0) -> Dictionary:
+func apply(effects: Dictionary, mult: float = 1.0, lust_mult: float = 1.0) -> Dictionary:
 	var real := {}
 	for k in effects:
 		var v := float(effects[k])
@@ -373,14 +387,42 @@ func apply(effects: Dictionary, mult: float = 1.0) -> Dictionary:
 		var beneficial: bool = (v > 0) == (k in GOOD_UP)
 		if beneficial:
 			v *= mult
+			if k == "lujuria":
+				v *= lust_mult
 		var before: float = stats[k]
-		stats[k] = clampf(before + v, 0, 100)
+		stats[k] = clampf(before + v, _floor(k), 100)
 		real[k] = stats[k] - before
 	return real
 
 
 func _add(stat: String, v: float) -> void:
-	stats[stat] = clampf(stats[stat] + v, 0, 100)
+	stats[stat] = clampf(stats[stat] + v, _floor(stat), 100)
+
+
+func _floor(stat: String) -> float:
+	return curse_mark if stat == "lujuria" else 0.0
+
+
+## Días que faltan para la luna llena (0 = esta noche).
+func moon_in() -> int:
+	var c := int(balance["maldicion"]["ciclo_luna"])
+	return (c - day % c) % c
+
+
+func is_full_moon() -> bool:
+	return moon_in() == 0
+
+
+## Devuelve cuánto rinde ahora un remedio contra la lujuria y suma tolerancia.
+func _tolerance_use(source: String) -> float:
+	var t: float = tolerance.get(source, 0.0)
+	tolerance[source] = t + 1.0
+	return 1.0 / (1.0 + t * float(balance["maldicion"]["tolerancia"]))
+
+
+## Cuánto rendiría ahora un remedio (para mostrarlo en la interfaz).
+func tolerance_factor(source: String) -> float:
+	return 1.0 / (1.0 + tolerance.get(source, 0.0) * float(balance["maldicion"]["tolerancia"]))
 
 
 func _mult_for(id: String) -> float:
@@ -399,6 +441,13 @@ func _after_action(moment: String, prob: float) -> void:
 
 
 func _check_consumed() -> bool:
+	var niveles: Array = balance["niveles"]
+	if not marked and stats["lujuria"] >= float(niveles[3]["min"]):
+		marked = true
+		curse_mark = minf(curse_mark + float(balance["maldicion"]["marca"]), float(balance["maldicion"]["marca_max"]))
+		_log("[color=#ef7d86]La maldición deja una marca: la lujuria ya no bajará de %d.[/color]" % roundi(curse_mark))
+	elif marked and stats["lujuria"] < float(niveles[2]["min"]):
+		marked = false
 	if not over and stats["lujuria"] >= 100:
 		_end("consumida")
 	return over

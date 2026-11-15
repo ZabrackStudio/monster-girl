@@ -29,13 +29,20 @@ Cambia los JSON y ejecuta el simulador (200 partidas por estrategia):
 
     flatpak run org.godotengine.Godot --headless --path . -s res://tests/sim.gd
 
-Resultado actual: al azar ~30 días, estrategia básica ~108, experta ~320.
+Resultado actual: al azar ~16 días, estrategia básica ~38, experta ~93.
 
 ## Fórmula de lujuria nocturna
 
 base + tristeza×k + (hambre−50)×k + (40−energía)×k + (50−higiene)×k
 − (felicidad−50)×k − (salud−60)×k + día×k + objetos + azar.
 Cada "k" está en el JSON de la especie, así cada chica monstruo reacciona distinto.
+
+## La maldición (`maldicion` en balance.json)
+
+- **Autoalimentación:** por encima de `umbral`, la lujuria sube cada noche un extra de (lujuria − umbral) × `autoalimentacion`.
+- **Tolerancia:** cada remedio (actividad, minijuego u objeto) rinde 1 / (1 + usos × `tolerancia`). Los usos se multiplican por `tolerancia_decay` cada noche.
+- **Luna llena:** cada `ciclo_luna` días suma `luna_base` + día × `luna_por_dia`.
+- **Marca:** al llegar a Crítica, el mínimo de lujuria sube `marca` (hasta `marca_max`) y ya no se puede bajar de ahí.
 
 ## Eventos: condiciones
 

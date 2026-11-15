@@ -14,6 +14,8 @@ func _run() -> void:
 	_shot("1_principal")
 	if main.modal: main._close_modal()
 	main.game.stats["lujuria"] = 80
+	main.game._check_consumed()
+	main.game.day = 6
 	main.game.changed.emit()
 	for i in 20: await process_frame
 	_shot("2_critica")

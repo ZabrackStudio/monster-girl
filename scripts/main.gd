@@ -26,6 +26,8 @@ var lbl_level: Label
 var level_pill: PanelContainer
 var lust_bar: ProgressBar
 var lbl_lust: Label
+var lbl_moon: Label
+var moon_pill: PanelContainer
 var lbl_line: Label
 var log_box: RichTextLabel
 var portrait: Control
@@ -125,6 +127,11 @@ func _build_ui() -> void:
 	var name_lbl := _label("%s · %s" % [game.character["nombre"], game.character["especie"]], 26)
 	name_pill.add_child(name_lbl)
 	pills.add_child(name_pill)
+	pills.add_theme_constant_override("separation", 8)
+	moon_pill = _pill(Color(0.1, 0.1, 0.22, 0.88), Color("8fa3d9"))
+	lbl_moon = _label("", 20)
+	moon_pill.add_child(lbl_moon)
+	pills.add_child(moon_pill)
 	var spacer := Control.new()
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pills.add_child(spacer)
@@ -318,6 +325,12 @@ func _refresh() -> void:
 	lbl_level.add_theme_color_override("font_color", Color("1d1530") if game.level() < 3 else Color.WHITE)
 	lust_bar.value = game.stats["lujuria"]
 	lbl_lust.text = "%d%%" % roundi(game.stats["lujuria"])
+	if game.curse_mark > 0:
+		lbl_lust.text += "  (mín. %d)" % roundi(game.curse_mark)
+	var moon: int = game.moon_in()
+	lbl_moon.text = "Luna llena: ¡esta noche!" if moon == 0 else "Luna llena en %d d" % moon
+	var msb := moon_pill.get_theme_stylebox("panel") as StyleBoxFlat
+	msb.border_color = Color("ef7d86") if moon <= 1 else Color("8fa3d9")
 	(lust_bar.get_theme_stylebox("fill") as StyleBoxFlat).bg_color = lv_color
 	for s in BAR_STATS:
 		stat_bars[s].value = game.stats[s]
@@ -399,6 +412,11 @@ func _close_modal() -> void:
 		music.play("lobby")
 
 
+func _tolerance_text(f: float) -> String:
+	var txt := "Calma la maldición al %d%%" % roundi(f * 100)
+	return txt + (" (se ha acostumbrado)" if f < 0.75 else "")
+
+
 func _sound_label() -> String:
 	return "Sonido: no" if music.muted else "Sonido: sí"
 
@@ -467,6 +485,10 @@ func _show_inventory() -> void:
 		var info := VBoxContainer.new()
 		info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		info.add_child(_label("%s ×%d" % [it["nombre"], game.inventory[id]], 22))
+		if float(it["efectos"].get("lujuria", 0)) < 0:
+			var r := _label(_tolerance_text(game.tolerance_factor("objeto_" + id)), 17)
+			r.modulate = TEXT_DIM
+			info.add_child(r)
 		var d := _wrap(it["descripcion"], 17)
 		d.modulate = TEXT_DIM
 		info.add_child(d)
@@ -494,7 +516,8 @@ func _show_minigame_select() -> void:
 			var a: float = game.minigame_affinity(id)
 			aff = "Le encanta" if a >= 1.2 else ("Le gusta" if a >= 0.95 else "No le entusiasma")
 		v.add_child(_label(mg["nombre"], 24))
-		var d := _wrap("%s  ·  %s" % [mg["descripcion"], aff], 17)
+		var d := _wrap("%s  ·  %s  ·  %s" % [mg["descripcion"], aff,
+			_tolerance_text(game.tolerance_factor("mj_" + id))], 17)
 		d.modulate = TEXT_DIM
 		v.add_child(d)
 		v.add_child(_button("Jugar", _start_minigame.bind(id)))

@@ -132,5 +132,16 @@
 				"tristeza": -8
 			}
 		}
+	},
+	"maldicion": {
+		"umbral": 40,
+		"autoalimentacion": 0.2,
+		"tolerancia": 0.45,
+		"tolerancia_decay": 0.7,
+		"ciclo_luna": 7,
+		"luna_base": 15,
+		"luna_por_dia": 0.15,
+		"marca": 8,
+		"marca_max": 60
 	}
 }
