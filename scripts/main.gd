@@ -3,7 +3,7 @@
 extends Control
 
 const Game := preload("res://scripts/game.gd")
-const SlimeView := preload("res://scripts/slime_view.gd")
+const Portrait := preload("res://scripts/portrait.gd")
 const MINIGAME_SCRIPTS := {
 	"burbujas": preload("res://scripts/minigame_bubbles.gd"),
 	"memoria": preload("res://scripts/minigame_memory.gd"),
@@ -11,22 +11,25 @@ const MINIGAME_SCRIPTS := {
 const CHARACTER := "res://data/personajes/slime.json"
 const RECORDS_PATH := "user://records.json"
 const BAR_STATS := ["salud", "felicidad", "tristeza", "hambre", "energia", "higiene"]
-const BG := Color("141a24")
+const STAT_COLORS := {"salud": "5fd38a", "felicidad": "f07ac0", "tristeza": "8a78f0",
+	"hambre": "f0953c", "energia": "f5c842", "higiene": "4fc3f0"}
+const BG := Color("141a2a")
 const PANEL := Color("1f2835")
+const BORDER := Color("5b4a9e")
 const TEXT_DIM := Color(1, 1, 1, 0.65)
 
 var game
 var bg: ColorRect
 var lbl_top: Label
-var lbl_name: Label
 var lbl_level: Label
+var level_pill: PanelContainer
 var lust_bar: ProgressBar
+var lbl_lust: Label
 var lbl_line: Label
 var log_box: RichTextLabel
-var portrait_holder: Control
-var slime_view: Control
-var portrait_tex: TextureRect
+var portrait: Control
 var stat_bars := {}
+var stat_values := {}
 var action_buttons := {}
 var modal: Control
 
@@ -54,80 +57,143 @@ func _build_ui() -> void:
 	var margin := MarginContainer.new()
 	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "right", "top", "bottom"]:
-		margin.add_theme_constant_override("margin_" + side, 18)
+		margin.add_theme_constant_override("margin_" + side, 16)
 	add_child(margin)
 
 	var root := VBoxContainer.new()
 	root.add_theme_constant_override("separation", 10)
 	margin.add_child(root)
 
+	# Barra superior
+	var top := _pill(Color("1b2236"), BORDER)
+	root.add_child(top)
 	lbl_top = _label("", 24)
-	root.add_child(lbl_top)
+	lbl_top.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	top.add_child(lbl_top)
 
-	# Retrato
-	var portrait_panel := _panel()
-	portrait_panel.custom_minimum_size = Vector2(0, 360)
-	root.add_child(portrait_panel)
-	var pv := VBoxContainer.new()
-	portrait_panel.add_child(pv)
-	var name_row := HBoxContainer.new()
-	pv.add_child(name_row)
-	lbl_name = _label("%s · %s" % [game.character["nombre"], game.character["especie"]], 26)
-	lbl_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	name_row.add_child(lbl_name)
+	# Retrato con fondo y elementos superpuestos
+	var stage := Control.new()
+	stage.custom_minimum_size = Vector2(0, 470)
+	stage.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	stage.size_flags_stretch_ratio = 3.0
+	root.add_child(stage)
+	portrait = Portrait.new()
+	portrait.set_anchors_preset(Control.PRESET_FULL_RECT)
+	stage.add_child(portrait)
+	portrait.setup(game.character["id"], Color(game.character["color"]))
+	var frame := Panel.new()
+	frame.set_anchors_preset(Control.PRESET_FULL_RECT)
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var fsb := StyleBoxFlat.new()
+	fsb.draw_center = false
+	fsb.border_color = BORDER
+	fsb.set_border_width_all(3)
+	fsb.set_corner_radius_all(18)
+	frame.add_theme_stylebox_override("panel", fsb)
+	stage.add_child(frame)
+
+	var over := MarginContainer.new()
+	over.set_anchors_preset(Control.PRESET_FULL_RECT)
+	over.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for side in ["left", "right", "top", "bottom"]:
+		over.add_theme_constant_override("margin_" + side, 12)
+	stage.add_child(over)
+	var ov := VBoxContainer.new()
+	ov.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	over.add_child(ov)
+	var pills := HBoxContainer.new()
+	ov.add_child(pills)
+	var name_pill := _pill(Color(0.17, 0.12, 0.3, 0.88), Color("a88bf0"))
+	var name_lbl := _label("%s · %s" % [game.character["nombre"], game.character["especie"]], 26)
+	name_pill.add_child(name_lbl)
+	pills.add_child(name_pill)
+	var spacer := Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pills.add_child(spacer)
+	level_pill = _pill(Color("f5c842"), Color("ffe08a"))
 	lbl_level = _label("", 24)
-	name_row.add_child(lbl_level)
-	portrait_holder = Control.new()
-	portrait_holder.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	pv.add_child(portrait_holder)
-	slime_view = SlimeView.new()
-	slime_view.base_color = Color(game.character["color"])
-	slime_view.set_anchors_preset(Control.PRESET_FULL_RECT)
-	portrait_holder.add_child(slime_view)
-	portrait_tex = TextureRect.new()
-	portrait_tex.set_anchors_preset(Control.PRESET_FULL_RECT)
-	portrait_tex.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	portrait_tex.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	portrait_tex.visible = false
-	portrait_holder.add_child(portrait_tex)
+	lbl_level.add_theme_color_override("font_color", Color("2a1d3d"))
+	level_pill.add_child(lbl_level)
+	pills.add_child(level_pill)
+	var gap := Control.new()
+	gap.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ov.add_child(gap)
+	var lust_pill := _pill(Color(0.1, 0.08, 0.2, 0.9), BORDER)
+	ov.add_child(lust_pill)
 	var lust_row := HBoxContainer.new()
-	pv.add_child(lust_row)
-	lust_row.add_child(_label("Lujuria", 22))
-	lust_bar = _bar(Color("d9434f"))
-	lust_bar.custom_minimum_size = Vector2(0, 26)
+	lust_row.add_theme_constant_override("separation", 10)
+	lust_pill.add_child(lust_row)
+	var drop := TextureRect.new()
+	drop.texture = load("res://ui/gota.png")
+	drop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	drop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	drop.custom_minimum_size = Vector2(44, 40)
+	lust_row.add_child(drop)
+	lust_row.add_child(_label("Lujuria", 24))
+	lust_bar = _bar(Color("d9434f"), 22)
 	lust_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lust_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	lust_row.add_child(lust_bar)
+	lbl_lust = _label("", 24)
+	lbl_lust.custom_minimum_size = Vector2(64, 0)
+	lbl_lust.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	lust_row.add_child(lbl_lust)
 
-	# Diálogo
-	var line_panel := _panel(Color("2a2236"))
-	root.add_child(line_panel)
-	lbl_line = _label("", 22)
+	# Bocadillo de diálogo
+	var bubble := PanelContainer.new()
+	var bsb := StyleBoxTexture.new()
+	bsb.texture = load("res://ui/bocadillo.png")
+	bsb.texture_margin_left = 34
+	bsb.texture_margin_right = 34
+	bsb.texture_margin_top = 34
+	bsb.texture_margin_bottom = 22
+	bsb.content_margin_left = 30
+	bsb.content_margin_right = 30
+	bsb.content_margin_top = 30
+	bsb.content_margin_bottom = 16
+	bubble.add_theme_stylebox_override("panel", bsb)
+	root.add_child(bubble)
+	lbl_line = _label("", 23)
 	lbl_line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	line_panel.add_child(lbl_line)
+	lbl_line.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	bubble.add_child(lbl_line)
 
 	# Estadísticas
 	var grid := GridContainer.new()
 	grid.columns = 2
-	grid.add_theme_constant_override("h_separation", 16)
-	grid.add_theme_constant_override("v_separation", 4)
+	grid.add_theme_constant_override("h_separation", 10)
+	grid.add_theme_constant_override("v_separation", 8)
 	root.add_child(grid)
-	var colors := {"salud": "6fcf7f", "felicidad": "f2c14e", "tristeza": "6f8fd9",
-		"hambre": "e8893a", "energia": "4fb3e8", "higiene": "8fe3f5"}
 	for s in BAR_STATS:
-		var box := VBoxContainer.new()
-		box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		box.add_theme_constant_override("separation", 0)
-		var l := _label(Game.STAT_NAMES[s], 18)
-		l.modulate = TEXT_DIM
-		box.add_child(l)
-		var bar := _bar(Color(colors[s]))
-		box.add_child(bar)
-		grid.add_child(box)
+		var cell := _pill(Color("1b2236"), Color("343d5e"))
+		cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 8)
+		cell.add_child(row)
+		var l := _label(Game.STAT_NAMES[s], 19)
+		l.custom_minimum_size = Vector2(92, 0)
+		row.add_child(l)
+		var bar := _bar(Color(STAT_COLORS[s]), 14)
+		bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		row.add_child(bar)
+		var v := _label("", 19)
+		v.custom_minimum_size = Vector2(52, 0)
+		v.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		row.add_child(v)
+		grid.add_child(cell)
 		stat_bars[s] = bar
+		stat_values[s] = v
 
-	# Registro
-	var log_panel := _panel()
+	# Registro dentro del marco del kit
+	var log_panel := PanelContainer.new()
+	var lsb := StyleBoxTexture.new()
+	lsb.texture = load("res://ui/marco.png")
+	lsb.set_texture_margin_all(30)
+	lsb.set_content_margin_all(22)
+	log_panel.add_theme_stylebox_override("panel", lsb)
+	log_panel.custom_minimum_size = Vector2(0, 130)
 	log_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	root.add_child(log_panel)
 	log_box = RichTextLabel.new()
@@ -137,11 +203,11 @@ func _build_ui() -> void:
 	log_box.add_theme_font_size_override("bold_font_size", 18)
 	log_panel.add_child(log_box)
 
-	# Acciones
+	# Acciones con los iconos del kit
 	var actions := GridContainer.new()
 	actions.columns = 4
 	actions.add_theme_constant_override("h_separation", 8)
-	actions.add_theme_constant_override("v_separation", 8)
+	actions.add_theme_constant_override("v_separation", 6)
 	root.add_child(actions)
 	var defs := [
 		["trabajar", "Trabajar"], ["comer", "Comer"], ["pasear", "Pasear"], ["jugar", "Jugar"],
@@ -149,9 +215,20 @@ func _build_ui() -> void:
 	]
 	for d in defs:
 		var b := Button.new()
-		b.custom_minimum_size = Vector2(0, 76)
+		b.custom_minimum_size = Vector2(0, 150)
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		b.icon = load("res://ui/btn_%s.png" % d[0])
+		b.expand_icon = true
+		b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		b.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
 		b.add_theme_font_size_override("font_size", 20)
+		b.add_theme_constant_override("h_separation", 2)
+		for st in ["normal", "hover", "pressed", "disabled", "focus"]:
+			b.add_theme_stylebox_override(st, StyleBoxEmpty.new())
+		b.add_theme_color_override("icon_disabled_color", Color(1, 1, 1, 0.3))
+		b.add_theme_color_override("icon_pressed_color", Color(0.8, 0.8, 0.9))
+		b.add_theme_color_override("icon_hover_color", Color(1.1, 1.1, 1.1))
+		b.add_theme_color_override("font_disabled_color", Color(1, 1, 1, 0.35))
 		b.pressed.connect(_on_action.bind(d[0]))
 		actions.add_child(b)
 		action_buttons[d[0]] = [b, d[1]]
@@ -174,17 +251,36 @@ func _panel(color: Color = PANEL) -> PanelContainer:
 	return p
 
 
-func _bar(color: Color) -> ProgressBar:
+## Panel en forma de píldora con borde de color.
+func _pill(color: Color, border: Color) -> PanelContainer:
+	var p := PanelContainer.new()
+	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = color
+	sb.border_color = border
+	sb.set_border_width_all(2)
+	sb.set_corner_radius_all(22)
+	sb.content_margin_left = 16
+	sb.content_margin_right = 16
+	sb.content_margin_top = 6
+	sb.content_margin_bottom = 6
+	p.add_theme_stylebox_override("panel", sb)
+	return p
+
+
+func _bar(color: Color, height := 16) -> ProgressBar:
 	var bar := ProgressBar.new()
 	bar.max_value = 100
 	bar.show_percentage = false
-	bar.custom_minimum_size = Vector2(0, 16)
+	bar.custom_minimum_size = Vector2(0, height)
 	var fill := StyleBoxFlat.new()
 	fill.bg_color = color
-	fill.set_corner_radius_all(6)
+	fill.set_corner_radius_all(height / 2)
 	var back := StyleBoxFlat.new()
 	back.bg_color = Color(1, 1, 1, 0.08)
-	back.set_corner_radius_all(6)
+	back.border_color = Color(1, 1, 1, 0.15)
+	back.set_border_width_all(1)
+	back.set_corner_radius_all(height / 2)
 	bar.add_theme_stylebox_override("fill", fill)
 	bar.add_theme_stylebox_override("background", back)
 	return bar
@@ -198,44 +294,38 @@ func _refresh() -> void:
 	lbl_top.text = "Día %d   ·   Acciones: %d/%d   ·   %d $" % [
 		game.day, game.actions_left, int(game.balance["acciones_por_dia"]), game.money]
 	lbl_level.text = info["nombre"]
-	lbl_level.add_theme_color_override("font_color", lv_color)
+	var psb := level_pill.get_theme_stylebox("panel") as StyleBoxFlat
+	psb.bg_color = lv_color
+	psb.border_color = lv_color.lightened(0.35)
+	lbl_level.add_theme_color_override("font_color", Color("1d1530") if game.level() < 3 else Color.WHITE)
 	lust_bar.value = game.stats["lujuria"]
+	lbl_lust.text = "%d%%" % roundi(game.stats["lujuria"])
 	(lust_bar.get_theme_stylebox("fill") as StyleBoxFlat).bg_color = lv_color
 	for s in BAR_STATS:
 		stat_bars[s].value = game.stats[s]
+		stat_values[s].text = "%d%%" % roundi(game.stats[s])
 	lbl_line.text = "«%s»" % game.current_line if game.current_line != "" else ""
 	bg.color = BG.lerp(Color("3a1424"), game.level() * 0.18)
-
-	var mood: String = game.mood()
-	slime_view.mood = mood
-	slime_view.level = game.level()
-	slime_view.tint = lv_color
-	var tex_path := "res://personajes/%s/expresiones/%s.png" % [game.character["id"], mood]
-	if ResourceLoader.exists(tex_path):
-		portrait_tex.texture = load(tex_path)
-		portrait_tex.visible = true
-		slime_view.visible = false
-	else:
-		portrait_tex.visible = false
-		slime_view.visible = true
+	portrait.set_state(game.mood(), game.level())
 
 	for id in action_buttons:
 		var b: Button = action_buttons[id][0]
 		var label: String = action_buttons[id][1]
 		match id:
-			"tienda", "objetos", "dormir":
+			"tienda", "dormir":
 				b.text = label
+				b.disabled = game.over
+			"objetos":
+				var n := 0
+				for k in game.inventory:
+					n += game.inventory[k]
+				b.text = "%s (%d)" % [label, n]
 				b.disabled = game.over
 			_:
 				var act: Dictionary = game.activity(id)
-				b.text = "%s\n%d acc." % [label, int(act["costo"])]
+				b.text = "%s (%d)" % [label, int(act["costo"])]
 				b.disabled = not game.can_do(id)
 				b.tooltip_text = game.why_not(id)
-	var obj_count := 0
-	for k in game.inventory:
-		obj_count += game.inventory[k]
-	action_buttons["objetos"][0].text = "Objetos\n(%d)" % obj_count
-	action_buttons["dormir"][0].text = "Dormir\nfin del día"
 
 
 # ================================================================ acciones

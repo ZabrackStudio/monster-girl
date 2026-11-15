@@ -1,0 +1,84 @@
+## Retrato del personaje sobre su fondo.
+## Busca, por orden: expresiones/<estado>.png, retrato.png y, si no hay nada,
+## el slime dibujado con código. Con una sola imagen, el estado se transmite
+## con efectos: tinte rosado según la lujuria, respiración y temblor.
+extends Control
+
+const SlimeView := preload("res://scripts/slime_view.gd")
+
+var char_id := ""
+var mood := "neutral"
+var level := 0
+var t := 0.0
+
+var bg: TextureRect
+var sprite: TextureRect
+var fallback: Control
+var textures := {}
+
+
+func setup(id: String, color: Color) -> void:
+	char_id = id
+	clip_contents = true
+	bg = TextureRect.new()
+	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	bg.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	var bg_path := "res://personajes/%s/fondo.png" % id
+	if ResourceLoader.exists(bg_path):
+		bg.texture = load(bg_path)
+	add_child(bg)
+	sprite = TextureRect.new()
+	sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	add_child(sprite)
+	fallback = SlimeView.new()
+	fallback.base_color = color
+	fallback.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(fallback)
+
+
+func set_state(new_mood: String, new_level: int) -> void:
+	mood = new_mood
+	level = new_level
+	var tex := _texture_for(mood)
+	sprite.texture = tex
+	sprite.visible = tex != null
+	fallback.visible = tex == null
+	fallback.mood = mood
+	fallback.level = level
+
+
+func _texture_for(m: String) -> Texture2D:
+	if textures.has(m):
+		return textures[m]
+	var tex: Texture2D = null
+	for path in ["res://personajes/%s/expresiones/%s.png" % [char_id, m],
+			"res://personajes/%s/retrato.png" % char_id]:
+		if ResourceLoader.exists(path):
+			tex = load(path)
+			break
+	textures[m] = tex
+	return tex
+
+
+func _process(delta: float) -> void:
+	t += delta
+	if not sprite.visible or sprite.texture == null:
+		return
+	var tex_size := sprite.texture.get_size()
+	var h := size.y * 0.97
+	var w := h * tex_size.x / tex_size.y
+	var breathe := sin(t * (1.6 + level * 0.6)) * (3.0 + level)
+	var shake := Vector2.ZERO
+	if level >= 3:
+		shake = Vector2(randf_range(-2, 2), randf_range(-1, 1))
+	sprite.size = Vector2(w, h)
+	sprite.position = Vector2((size.x - w) / 2, size.y - h + 6 + breathe) + shake
+	# Más lujuria, más rosa; en estado crítico, además, late.
+	var pink := Color("ff8fc8")
+	var amount := level * 0.14 + (0.08 * (0.5 + 0.5 * sin(t * 4.0)) if level >= 3 else 0.0)
+	var target := Color.WHITE.lerp(pink, amount)
+	if mood == "triste" or mood == "cansada":
+		target = target.lerp(Color("b8c4e0"), 0.25)
+	sprite.modulate = sprite.modulate.lerp(target, clampf(delta * 3.0, 0, 1))
