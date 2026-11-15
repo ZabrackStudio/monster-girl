@@ -337,7 +337,7 @@ func _refresh() -> void:
 		stat_values[s].text = "%d%%" % roundi(game.stats[s])
 	lbl_line.text = "«%s»" % game.current_line if game.current_line != "" else ""
 	bg.color = BG.lerp(Color("3a1424"), game.level() * 0.18)
-	portrait.set_state(game.mood(), game.level())
+	portrait.set_state(game.mood(), game.level(), game.outfit)
 
 	for id in action_buttons:
 		var b: Button = action_buttons[id][0]
@@ -504,8 +504,32 @@ func _show_inventory() -> void:
 		var p := _wrap("En casa: " + ", ".join(names), 18)
 		p.modulate = TEXT_DIM
 		v.add_child(p)
+	_add_wardrobe(v)
 	_add_diary(v)
 	v.add_child(_button("Cerrar", _close_modal))
+
+
+func _add_wardrobe(v: VBoxContainer) -> void:
+	if game.outfits.size() < 2:
+		return
+	v.add_child(HSeparator.new())
+	v.add_child(_label("Vestuario", 24))
+	var names: Dictionary = game.character.get("trajes", {})
+	for t in game.outfits:
+		var row := HBoxContainer.new()
+		var l := _label(names.get(t, t), 20)
+		l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(l)
+		var worn: bool = t == game.outfit
+		var b := _button("Puesto" if worn else "Vestir", _wear.bind(t), worn)
+		b.custom_minimum_size = Vector2(130, 56)
+		row.add_child(b)
+		v.add_child(row)
+
+
+func _wear(t: String) -> void:
+	game.wear(t)
+	_show_inventory()
 
 
 ## Lo que el jugador ha aprendido de las reacciones de su compañera.

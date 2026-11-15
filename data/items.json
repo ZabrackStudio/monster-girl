@@ -129,5 +129,35 @@
 		"precio": 50,
 		"descripcion": "Desbloquea el minijuego de parejas.",
 		"minijuego": "memoria"
+	},
+	{
+		"id": "traje_casual",
+		"nombre": "Sudadera y shorts",
+		"categoria": "Vestuario",
+		"tipo": "traje",
+		"precio": 80,
+		"especie": "slime",
+		"traje": "casual",
+		"descripcion": "Ropa cómoda para estar por casa. Dicen que la ropa nueva levanta el ánimo."
+	},
+	{
+		"id": "traje_vestido_blanco",
+		"nombre": "Vestido blanco con lazo",
+		"categoria": "Vestuario",
+		"tipo": "traje",
+		"precio": 120,
+		"especie": "slime",
+		"traje": "vestido_blanco",
+		"descripcion": "Un vestido de volantes. Seguro que le hace ilusión estrenarlo."
+	},
+	{
+		"id": "traje_vestido_lila",
+		"nombre": "Vestido lila de fiesta",
+		"categoria": "Vestuario",
+		"tipo": "traje",
+		"precio": 150,
+		"especie": "slime",
+		"traje": "vestido_lila",
+		"descripcion": "El más caro de la tienda. Lo que se ve, se paga."
 	}
 ]

@@ -9,6 +9,8 @@ const SlimeView := preload("res://scripts/slime_view.gd")
 var char_id := ""
 var mood := "neutral"
 var level := 0
+var outfit := ""
+var has_expression := false
 var t := 0.0
 
 var bg: TextureRect
@@ -38,9 +40,10 @@ func setup(id: String, color: Color) -> void:
 	add_child(fallback)
 
 
-func set_state(new_mood: String, new_level: int) -> void:
+func set_state(new_mood: String, new_level: int, new_outfit: String = "") -> void:
 	mood = new_mood
 	level = new_level
+	outfit = new_outfit
 	var tex := _texture_for(mood)
 	sprite.texture = tex
 	sprite.visible = tex != null
@@ -50,16 +53,18 @@ func set_state(new_mood: String, new_level: int) -> void:
 
 
 func _texture_for(m: String) -> Texture2D:
-	if textures.has(m):
-		return textures[m]
-	var tex: Texture2D = null
-	for path in ["res://personajes/%s/expresiones/%s.png" % [char_id, m],
-			"res://personajes/%s/retrato.png" % char_id]:
-		if ResourceLoader.exists(path):
-			tex = load(path)
-			break
-	textures[m] = tex
-	return tex
+	var key := outfit + "/" + m
+	if not textures.has(key):
+		var found: Array = [null, false]
+		for path in ["res://personajes/%s/trajes/%s/%s.png" % [char_id, outfit, m],
+				"res://personajes/%s/expresiones/%s.png" % [char_id, m],
+				"res://personajes/%s/retrato.png" % char_id]:
+			if ResourceLoader.exists(path):
+				found = [load(path), not path.ends_with("retrato.png")]
+				break
+		textures[key] = found
+	has_expression = textures[key][1]
+	return textures[key][0]
 
 
 func _process(delta: float) -> void:
@@ -78,7 +83,9 @@ func _process(delta: float) -> void:
 	# Más lujuria, más rosa; en estado crítico, además, late.
 	var pink := Color("ff8fc8")
 	var amount := level * 0.14 + (0.08 * (0.5 + 0.5 * sin(t * 4.0)) if level >= 3 else 0.0)
+	if has_expression:
+		amount *= 0.35   # la ilustración ya muestra el estado; el tinte solo acompaña
 	var target := Color.WHITE.lerp(pink, amount)
-	if mood == "triste" or mood == "cansada":
+	if not has_expression and (mood == "triste" or mood == "cansada"):
 		target = target.lerp(Color("b8c4e0"), 0.25)
 	sprite.modulate = sprite.modulate.lerp(target, clampf(delta * 3.0, 0, 1))

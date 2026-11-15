@@ -89,6 +89,11 @@
 		"nivel_3": [
 			"No te acerques demasiado... o sí... no sé.",
 			"Me estoy derritiendo por dentro. Ayúdame a distraerme."
+		],
+		"vestir": [
+			"¿Me queda bien? Me queda bien. Me queda bien, ¿verdad?",
+			"Lo he absorbido un poquito al ponérmelo... no se nota, ¿no?",
+			"¡Ropa nueva! Ahora soy otra slime. Bueno, la misma, pero con lazo."
 		]
 	},
 	"finales": {
@@ -198,5 +203,12 @@
 			"texto": "Sucia como está, absorbe todo lo que toca por la calle.",
 			"nota": "Trampa: sacarla a pasear sucia la altera."
 		}
-	]
+	],
+	"traje_inicial": "inicial",
+	"trajes": {
+		"inicial": "Ropa de siempre",
+		"casual": "Sudadera y shorts",
+		"vestido_blanco": "Vestido blanco con lazo",
+		"vestido_lila": "Vestido lila de fiesta"
+	}
 }

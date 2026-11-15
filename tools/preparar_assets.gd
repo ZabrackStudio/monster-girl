@@ -19,6 +19,15 @@ const KIT := {
 	"gota": Rect2i(55, 795, 128, 120),
 }
 const HALF := ["bocadillo", "marco"]
+## Hojas de expresiones -> carpeta del traje. Columnas en el orden de MOODS.
+const SHEETS := {
+	"Hoja de expresiones de chica slime ropa inical": "inicial",
+	"Hoja de expresiones de chica slime casual 1": "casual",
+	"Hoja de expresiones de chica slime vestido 1": "vestido_blanco",
+	"Hoja de expresiones de chica slime vestido 2": "vestido_lila",
+}
+const MOODS := ["neutral", "feliz", "triste", "cansada", "inquieta", "alterada", "critica"]
+const CUT := 0.84   # fracción de altura que se conserva (corta a la altura de la cintura)
 
 
 func _init() -> void:
@@ -55,7 +64,105 @@ func _init() -> void:
 	f.resize(int(w * 0.75), int(h * 0.75), Image.INTERPOLATE_LANCZOS)
 	f.save_png(base + "personajes/slime/fondo.png")
 	print("fondo ", f.get_size())
+
+	# Hojas de expresiones: 7 columnas, una por estado, recortadas a la cintura.
+	for sheet in SHEETS:
+		var src := Image.load_from_file(base + SRC + sheet + ".png")
+		var had_alpha := src.detect_alpha() != Image.ALPHA_NONE
+		src.convert(Image.FORMAT_RGBA8)
+		if not had_alpha:
+			_remove_dark_bg(src)
+		var dir := "personajes/slime/trajes/%s/" % SHEETS[sheet]
+		DirAccess.make_dir_recursive_absolute(base + dir)
+		var col_w := src.get_width() / MOODS.size()
+		for i in MOODS.size():
+			var frame := src.get_region(Rect2i(i * col_w, 0, col_w, int(src.get_height() * CUT)))
+			_isolate(frame)
+			frame.save_png(base + dir + MOODS[i] + ".png")
+		print(dir, " ", MOODS.size(), " expresiones ", col_w, "x", int(src.get_height() * CUT))
 	quit()
+
+
+## Quita un fondo oscuro con relleno desde los bordes, para no comerse
+## los contornos negros del dibujo.
+func _remove_dark_bg(img: Image, lim := 18, soft := 48) -> void:
+	var w := img.get_width()
+	var h := img.get_height()
+	var data := img.get_data()
+	var seen := PackedByteArray()
+	seen.resize(w * h)
+	var stack := PackedInt32Array()
+	for x in w:
+		stack.append(x)
+		stack.append((h - 1) * w + x)
+	for y in h:
+		stack.append(y * w)
+		stack.append(y * w + w - 1)
+	while not stack.is_empty():
+		var i: int = stack[stack.size() - 1]
+		stack.resize(stack.size() - 1)
+		if seen[i]:
+			continue
+		seen[i] = 1
+		var o := i * 4
+		var m := maxi(data[o], maxi(data[o + 1], data[o + 2]))
+		if m > soft:
+			continue
+		data[o + 3] = 0 if m <= lim else int(255.0 * (m - lim) / (soft - lim))
+		if m > lim:
+			continue
+		var x := i % w
+		var y := i / w
+		if x > 0: stack.append(i - 1)
+		if x < w - 1: stack.append(i + 1)
+		if y > 0: stack.append(i - w)
+		if y < h - 1: stack.append(i + w)
+	# Bolsas de fondo encerradas entre mechones: el negro puro también fuera.
+	for i in w * h:
+		var o := i * 4
+		if maxi(data[o], maxi(data[o + 1], data[o + 2])) <= 10:
+			data[o + 3] = 0
+	img.set_data(w, h, false, Image.FORMAT_RGBA8, data)
+
+
+## Deja el personaje y borra los trozos de las columnas vecinas: zonas
+## opacas que tocan el borde izquierdo o derecho y no son la figura principal.
+func _isolate(img: Image) -> void:
+	var w := img.get_width()
+	var h := img.get_height()
+	var data := img.get_data()
+	var label := PackedInt32Array()
+	label.resize(w * h)
+	var sizes := [0]
+	var edge := [false]
+	for start in w * h:
+		if label[start] != 0 or data[start * 4 + 3] < 20:
+			continue
+		var id := sizes.size()
+		sizes.append(0)
+		edge.append(false)
+		var stack := PackedInt32Array([start])
+		label[start] = id
+		while not stack.is_empty():
+			var i: int = stack[stack.size() - 1]
+			stack.resize(stack.size() - 1)
+			sizes[id] += 1
+			var x := i % w
+			if x == 0 or x == w - 1:
+				edge[id] = true
+			for n in [i - 1 if x > 0 else -1, i + 1 if x < w - 1 else -1, i - w, i + w]:
+				if n >= 0 and n < w * h and label[n] == 0 and data[n * 4 + 3] >= 20:
+					label[n] = id
+					stack.append(n)
+	var main := 1
+	for id in range(1, sizes.size()):
+		if sizes[id] > sizes[main]:
+			main = id
+	for i in w * h:
+		var id := label[i]
+		if id != 0 and id != main and edge[id]:
+			data[i * 4 + 3] = 0
+	img.set_data(w, h, false, Image.FORMAT_RGBA8, data)
 
 
 func _avg(img: Image, rect: Rect2i) -> Color:

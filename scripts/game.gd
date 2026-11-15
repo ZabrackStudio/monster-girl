@@ -45,6 +45,9 @@ var marked := false                 # esta crisis ya dejó su marca
 # Reacciones de especie (sinergias y trampas)
 var today: Array = []               # actividades de hoy, en orden
 var discovered: Dictionary = {}     # reacciones ya descubiertas (diario)
+# Vestuario (puramente estético)
+var outfit := ""
+var outfits: Array = []
 
 
 static func load_json(path: String) -> Variant:
@@ -76,6 +79,8 @@ func start() -> void:
 	money = int(balance["dinero_inicial"])
 	actions_left = int(balance["acciones_por_dia"])
 	minigames = [character["minijuego_inicial"]]
+	outfit = character.get("traje_inicial", "")
+	outfits = [outfit]
 	_say("inicio")
 	_log("Día 1. %s (%s) se muda contigo." % [character["nombre"], character["especie"]])
 	changed.emit()
@@ -216,6 +221,8 @@ func buy(id: String) -> bool:
 			passives.append(id)
 		"minijuego":
 			minigames.append(it["minijuego"])
+		"traje":
+			outfits.append(it["traje"])
 	_log("Compras: %s (-%d $)" % [it["nombre"], int(it["precio"])])
 	changed.emit()
 	return true
@@ -228,7 +235,19 @@ func can_buy(id: String) -> bool:
 			return not passives.has(id)
 		"minijuego":
 			return not minigames.has(it["minijuego"])
+		"traje":
+			return not outfits.has(it["traje"])
 	return true
+
+
+## Cambia de ropa. No afecta a ninguna estadística: es una trampa para el dinero.
+func wear(t: String) -> void:
+	if over or not outfits.has(t) or t == outfit:
+		return
+	outfit = t
+	_say("vestir")
+	_log("%s se pone: %s." % [character["nombre"], character.get("trajes", {}).get(t, t)])
+	changed.emit()
 
 
 func use_item(id: String) -> void:
