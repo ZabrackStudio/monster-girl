@@ -4,6 +4,7 @@ extends Control
 
 const Game := preload("res://scripts/game.gd")
 const Portrait := preload("res://scripts/portrait.gd")
+const Music := preload("res://scripts/music.gd")
 const MINIGAME_SCRIPTS := {
 	"burbujas": preload("res://scripts/minigame_bubbles.gd"),
 	"memoria": preload("res://scripts/minigame_memory.gd"),
@@ -32,12 +33,17 @@ var stat_bars := {}
 var stat_values := {}
 var action_buttons := {}
 var modal: Control
+var music
+var btn_sound: Button
 
 
 func _ready() -> void:
 	game = Game.new()
 	game.setup(CHARACTER)
+	music = Music.new()
+	add_child(music)
 	_build_ui()
+	music.play("lobby")
 	game.changed.connect(_refresh)
 	game.log_message.connect(func(t): log_box.append_text(t + "\n"))
 	game.event_triggered.connect(_show_event)
@@ -64,12 +70,24 @@ func _build_ui() -> void:
 	root.add_theme_constant_override("separation", 10)
 	margin.add_child(root)
 
-	# Barra superior
+	# Barra superior con botón de sonido
+	var top_row := HBoxContainer.new()
+	top_row.add_theme_constant_override("separation", 8)
+	root.add_child(top_row)
 	var top := _pill(Color("1b2236"), BORDER)
-	root.add_child(top)
+	top.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	top_row.add_child(top)
 	lbl_top = _label("", 24)
 	lbl_top.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	top.add_child(lbl_top)
+	btn_sound = Button.new()
+	btn_sound.add_theme_font_size_override("font_size", 20)
+	btn_sound.custom_minimum_size = Vector2(120, 0)
+	btn_sound.text = _sound_label()
+	btn_sound.pressed.connect(func():
+		music.toggle_mute()
+		btn_sound.text = _sound_label())
+	top_row.add_child(btn_sound)
 
 	# Retrato con fondo y elementos superpuestos
 	var stage := Control.new()
@@ -377,6 +395,12 @@ func _close_modal() -> void:
 	if modal:
 		modal.queue_free()
 		modal = null
+	if not game.over:
+		music.play("lobby")
+
+
+func _sound_label() -> String:
+	return "Sonido: no" if music.muted else "Sonido: sí"
 
 
 func _button(text: String, cb: Callable, disabled := false) -> Button:
@@ -397,6 +421,7 @@ func _wrap(text: String, font_size := 20) -> Label:
 
 func _show_shop() -> void:
 	var v := _open_modal("Tienda   (%d $)" % game.money)
+	music.play("tienda")
 	var last_cat := ""
 	var order: Array = game.item_order.duplicate()
 	var cats := []
@@ -433,6 +458,7 @@ func _show_shop() -> void:
 
 func _show_inventory() -> void:
 	var v := _open_modal("Objetos")
+	music.play("tienda")
 	if game.inventory.is_empty():
 		v.add_child(_wrap("No tienes objetos. Compra algo en la tienda."))
 	for id in game.inventory:
@@ -535,6 +561,7 @@ func _event_tag(kind: String) -> String:
 func _show_game_over(ending: Dictionary) -> void:
 	await get_tree().process_frame
 	_close_modal()
+	music.play(ending.get("musica", "final_malo"))
 	var record := _save_record(ending)
 	var fade := ColorRect.new()
 	fade.color = Color(0, 0, 0, 0)

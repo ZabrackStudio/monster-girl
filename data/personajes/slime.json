@@ -93,12 +93,14 @@
 	},
 	"finales": {
 		"consumida": {
-			"titulo": "Final: Marea interior",
-			"texto": "Esa noche, Reme no se hace una bolita.\n\nSe queda en el marco de la puerta, sin contornos, con un brillo que no habías visto nunca. Ya no imita tu voz: la suya suena más grave, más segura.\n\n«Lo he intentado», dice. «Pero esto también soy yo.»\n\nLa luz del pasillo se apaga.\n\n—\n\nPor la mañana el piso huele a lluvia. En la nevera hay una nota escrita con una letra que se escurre: «No me busques. Si vuelvo, que sea siendo yo.»"
+			"titulo": "Final bueno: Marea interior",
+			"musica": "final_bueno",
+			"texto": "Esa noche, Reme no se hace una bolita.\n\nLa ves en el marco de la puerta, sin contornos, con un brillo que no le conocías. Da un paso hacia ti. Se detiene.\n\n«Si me quedo, te hago daño», dice. Ya no imita tu voz; la suya tiembla. «Y tú eres lo único que no quiero romper.»\n\nRetrocede. La luz del pasillo se apaga.\n\n—\n\nPor la mañana el piso huele a lluvia. En la nevera hay una nota con una letra que se escurre: «Me voy a donde no pueda alcanzarte. No me busques. Te quise más de lo que te deseé.»"
 		},
 		"carnal": {
-			"titulo": "Final: Sin forma",
-			"texto": "Te dices que solo es un abrazo.\n\nReme se cierra a tu alrededor, fría al principio, luego no. Sus ojos ya no te piden que la ayudes a contenerse.\n\nFundido a negro.\n\n—\n\nCuidar de ella era no ceder. Cediste. Lo que quedaba de su autocontrol se fue contigo esa noche, y la casa nunca volvió a ser tranquila."
+			"titulo": "Final malo: Disuelto",
+			"musica": "final_malo",
+			"texto": "Te dices que solo es un abrazo.\n\nReme se cierra a tu alrededor, fría al principio, después no. Busca tus ojos y ya no los encuentra: no te mira, solo te desea.\n\nAlgo empieza a escocer en la piel. Intentas apartarte, pero su cuerpo no tiene bordes de donde empujar.\n\n«Espera», dices. Ella ya no oye nada.\n\nFundido a negro.\n\n—\n\nAl amanecer, Reme recupera la forma sola en el sofá. Brilla más que nunca y no entiende por qué la casa está tan callada. Junto a la puerta siguen tus zapatillas.\n\nUn slime disuelve lo que abraza. Ella lo sabía. Tú también."
 		}
 	}
 }
