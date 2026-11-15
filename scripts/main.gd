@@ -475,7 +475,7 @@ func _show_shop() -> void:
 
 
 func _show_inventory() -> void:
-	var v := _open_modal("Objetos")
+	var v := _open_modal("Objetos y diario")
 	music.play("tienda")
 	if game.inventory.is_empty():
 		v.add_child(_wrap("No tienes objetos. Compra algo en la tienda."))
@@ -504,7 +504,28 @@ func _show_inventory() -> void:
 		var p := _wrap("En casa: " + ", ".join(names), 18)
 		p.modulate = TEXT_DIM
 		v.add_child(p)
+	_add_diary(v)
 	v.add_child(_button("Cerrar", _close_modal))
+
+
+## Lo que el jugador ha aprendido de las reacciones de su compañera.
+func _add_diary(v: VBoxContainer) -> void:
+	v.add_child(HSeparator.new())
+	v.add_child(_label("Diario de %s" % game.character["nombre"], 24))
+	var known := 0
+	for r in game.character.get("reacciones", []):
+		if not game.discovered.has(r["id"]):
+			continue
+		known += 1
+		var trap: bool = float(r["efectos"].get("lujuria", 0)) > 0
+		var l := _wrap(r["nota"], 18)
+		l.add_theme_color_override("font_color", Color("f2a65a") if trap else Color("9fd8ff"))
+		v.add_child(l)
+	var left: int = game.reactions_total() - known
+	var hint := _wrap("Quedan %d reacciones por descubrir. Prueba a combinar actividades en distinto orden." % left
+		if left > 0 else "Ya lo sabes todo de ella.", 17)
+	hint.modulate = TEXT_DIM
+	v.add_child(hint)
 
 
 func _show_minigame_select() -> void:

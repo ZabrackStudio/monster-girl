@@ -89,6 +89,8 @@ func _act(g, strategy: String) -> bool:
 			g.use_item("jabon")
 		if s["hambre"] > 50 and g.inventory.get("gelatina", 0) > 0:
 			g.use_item("gelatina")
+	if expert and _routine(g):
+		return true
 	if s["hambre"] > 55 and g.can_do("comer"):
 		g.do_activity("comer"); return true
 	if s["higiene"] < 40 and g.can_do("limpiar"):
@@ -119,3 +121,29 @@ func _shop(g) -> void:
 		g.buy("manzanilla")
 	if g.inventory.get("jabon", 0) < 1 and g.money >= 40:
 		g.buy("jabon")
+
+
+## Rutina del vínculo (comer, pasear, jugar, limpiar) evitando las trampas.
+func _routine(g) -> bool:
+	var seq := ["comer", "pasear", "jugar", "limpiar"]
+	var done: Array = g.today
+	if done.size() >= seq.size() or done != seq.slice(0, done.size()):
+		return false
+	var nxt: String = seq[done.size()]
+	if nxt == "comer" and g.stats["hambre"] <= 25:
+		return false
+	if nxt == "pasear" and g.stats["higiene"] <= 35:
+		return false
+	if nxt == "jugar":
+		if not g.can_play():
+			return false
+		var mg: String = g.minigames[0]
+		for m in g.minigames:
+			if g.minigame_affinity(m) > g.minigame_affinity(mg):
+				mg = m
+		g.play_minigame(mg, g.rng.randf_range(0.5, 0.95))
+		return true
+	if not g.can_do(nxt):
+		return false
+	g.do_activity(nxt)
+	return true

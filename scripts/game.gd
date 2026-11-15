@@ -42,6 +42,9 @@ var quiet := false                  # el simulador lo activa para no generar tex
 var tolerance: Dictionary = {}      # remedio -> tolerancia acumulada (se recupera cada noche)
 var curse_mark := 0.0               # mínimo permanente de lujuria que dejan las crisis
 var marked := false                 # esta crisis ya dejó su marca
+# Reacciones de especie (sinergias y trampas)
+var today: Array = []               # actividades de hoy, en orden
+var discovered: Dictionary = {}     # reacciones ya descubiertas (diario)
 
 
 static func load_json(path: String) -> Variant:
@@ -155,6 +158,7 @@ func do_activity(id: String) -> void:
 	var earned := int(act.get("dinero", 0) * (0.8 if level() >= 2 else 1.0))
 	money += earned
 	total_money += earned
+	var reactions := _match_reactions(id)
 	var mult := _mult_for(id) * float(character["afinidades"].get(id, 1.0))
 	var real := apply(act["efectos"], mult, _tolerance_use(id))
 	var extra: Dictionary = character["efectos_extra"].get(id, {})
@@ -166,6 +170,8 @@ func do_activity(id: String) -> void:
 	if earned > 0:
 		msg += " (+%d $)" % earned
 	_log("%s: %s" % [msg, _fmt(real)])
+	today.append(id)
+	_apply_reactions(reactions)
 	_after_action(id, float(act.get("prob_evento", 0)))
 
 
@@ -185,6 +191,7 @@ func play_minigame(id: String, score: float) -> void:
 		eff[k] = float(mg["efectos_base"][k])
 	for k in mg["efectos_bonus"]:
 		eff[k] = eff.get(k, 0.0) + float(mg["efectos_bonus"][k]) * score
+	var reactions := _match_reactions("jugar")
 	var mult := _mult_for("jugar") * minigame_affinity(id)
 	var real := apply(eff, mult, _tolerance_use("mj_" + id))
 	real.merge(apply(act["efectos"]), false)
@@ -192,6 +199,8 @@ func play_minigame(id: String, score: float) -> void:
 	_count("jugar")
 	_say("jugar")
 	_log("%s (%d%%): %s" % [mg["nombre"], int(score * 100), _fmt(real)])
+	today.append("jugar")
+	_apply_reactions(reactions)
 	_after_action("jugar", float(act.get("prob_evento", 0)))
 
 
@@ -270,6 +279,7 @@ func sleep() -> void:
 	day += 1
 	actions_left = int(balance["acciones_por_dia"])
 	times_today.clear()
+	today.clear()
 	var diff := {}
 	for s in STATS:
 		diff[s] = stats[s] - before[s]
@@ -307,6 +317,44 @@ func lust_delta() -> float:
 	for k in b:
 		total += b[k]
 	return total
+
+
+# ---------------------------------------------------------------- reacciones
+
+## Reacciones de la especie que provoca esta actividad. Se evalúan antes de
+## aplicar sus efectos (por ejemplo, "comer sin hambre" mira el hambre de antes).
+func _match_reactions(id: String) -> Array:
+	var seq: Array = today + [id]
+	var out := []
+	for r in character.get("reacciones", []):
+		if r["accion"] != id:
+			continue
+		if r.has("cadena"):
+			var c: Array = r["cadena"]
+			if seq.size() < c.size() or seq.slice(seq.size() - c.size()) != c:
+				continue
+		if r.has("no_despues_de") and not today.is_empty() and today[-1] == r["no_despues_de"]:
+			continue
+		if not _conditions_ok(r.get("condiciones", {})):
+			continue
+		out.append(r)
+	return out
+
+
+func _apply_reactions(list: Array) -> void:
+	for r in list:
+		var good: bool = float(r["efectos"].get("lujuria", 0)) < 0
+		var real := apply(r["efectos"], effectiveness() if good else 1.0,
+			_tolerance_use("reaccion_" + r["id"]) if good else 1.0)
+		var first := not discovered.has(r["id"])
+		discovered[r["id"]] = true
+		var color := "#9fd8ff" if good else "#f2a65a"
+		var note := "  [color=#f2c14e](nueva nota en el diario)[/color]" if first else ""
+		_log("[color=%s]%s[/color] %s%s" % [color, r["texto"], _fmt(real), note])
+
+
+func reactions_total() -> int:
+	return character.get("reacciones", []).size()
 
 
 # ---------------------------------------------------------------- eventos

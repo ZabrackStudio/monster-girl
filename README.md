@@ -29,7 +29,7 @@ Cambia los JSON y ejecuta el simulador (200 partidas por estrategia):
 
     flatpak run org.godotengine.Godot --headless --path . -s res://tests/sim.gd
 
-Resultado actual: al azar ~16 días, estrategia básica ~38, experta ~93.
+Resultado actual: al azar ~10 días, estrategia básica ~40, experta (conoce la rutina y evita las trampas) ~167.
 
 ## Fórmula de lujuria nocturna
 
@@ -43,6 +43,16 @@ Cada "k" está en el JSON de la especie, así cada chica monstruo reacciona dist
 - **Tolerancia:** cada remedio (actividad, minijuego u objeto) rinde 1 / (1 + usos × `tolerancia`). Los usos se multiplican por `tolerancia_decay` cada noche.
 - **Luna llena:** cada `ciclo_luna` días suma `luna_base` + día × `luna_por_dia`.
 - **Marca:** al llegar a Crítica, el mínimo de lujuria sube `marca` (hasta `marca_max`) y ya no se puede bajar de ahí.
+
+## Reacciones de especie (`reacciones` en el JSON del personaje)
+
+Sinergias y trampas que se activan al hacer una actividad:
+
+- `accion`: la actividad que la dispara (`jugar` cubre cualquier minijuego).
+- `cadena`: las últimas actividades del día deben coincidir, en orden, terminando en `accion`.
+- `no_despues_de`: no se activa si la actividad anterior de hoy fue esa.
+- `condiciones`: mismas claves que los eventos; se evalúan antes de aplicar la actividad.
+- `efectos`, `texto` (registro) y `nota` (diario). Las que bajan la lujuria sufren tolerancia.
 
 ## Eventos: condiciones
 

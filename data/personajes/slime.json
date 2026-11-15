@@ -102,5 +102,101 @@
 			"musica": "final_malo",
 			"texto": "Te dices que solo es un abrazo.\n\nReme se cierra a tu alrededor, fría al principio, después no. Busca tus ojos y ya no los encuentra: no te mira, solo te desea.\n\nAlgo empieza a escocer en la piel. Intentas apartarte, pero su cuerpo no tiene bordes de donde empujar.\n\n«Espera», dices. Ella ya no oye nada.\n\nFundido a negro.\n\n—\n\nAl amanecer, Reme recupera la forma sola en el sofá. Brilla más que nunca y no entiende por qué la casa está tan callada. Junto a la puerta siguen tus zapatillas.\n\nUn slime disuelve lo que abraza. Ella lo sabía. Tú también."
 		}
-	}
+	},
+	"reacciones": [
+		{
+			"id": "paseo_digestivo",
+			"accion": "pasear",
+			"cadena": [
+				"comer",
+				"pasear"
+			],
+			"efectos": {
+				"lujuria": -5,
+				"felicidad": 4
+			},
+			"texto": "Con la tripa llena, el paseo la deja firme y tranquila.",
+			"nota": "Comer y después pasear la calma."
+		},
+		{
+			"id": "juego_tras_paseo",
+			"accion": "jugar",
+			"cadena": [
+				"pasear",
+				"jugar"
+			],
+			"efectos": {
+				"lujuria": -4,
+				"felicidad": 3
+			},
+			"texto": "Llega del paseo con ganas de jugar y se le olvida todo lo demás.",
+			"nota": "Jugar justo después de pasear la distrae más."
+		},
+		{
+			"id": "bano_relajado",
+			"accion": "limpiar",
+			"cadena": [
+				"jugar",
+				"limpiar"
+			],
+			"efectos": {
+				"lujuria": -3,
+				"energia": 5
+			},
+			"texto": "Cansada de jugar, el baño la adormece en vez de alterarla.",
+			"nota": "Si está cansada de jugar, el baño la relaja."
+		},
+		{
+			"id": "rutina_vinculo",
+			"accion": "limpiar",
+			"cadena": [
+				"comer",
+				"pasear",
+				"jugar",
+				"limpiar"
+			],
+			"efectos": {
+				"lujuria": -10,
+				"tristeza": -6,
+				"felicidad": 6
+			},
+			"texto": "Comer, pasear, jugar y bañarse: la rutina completa. Reme se queda quieta a tu lado, en paz.",
+			"nota": "Comer, pasear, jugar y limpiar, seguidos y en ese orden: la rutina que más la calma."
+		},
+		{
+			"id": "agua_excita",
+			"accion": "limpiar",
+			"no_despues_de": "jugar",
+			"efectos": {
+				"lujuria": 7
+			},
+			"texto": "Absorbe el agua del baño, se hincha y se pone nerviosa.",
+			"nota": "Trampa: bañarla sin más la altera. El jabón de la tienda no tiene ese problema."
+		},
+		{
+			"id": "empacho",
+			"accion": "comer",
+			"condiciones": {
+				"hambre_max": 25
+			},
+			"efectos": {
+				"lujuria": 7,
+				"salud": -2
+			},
+			"texto": "Come sin hambre y se hincha: lo que absorbe de más se le sube a la cabeza.",
+			"nota": "Trampa: darle de comer sin hambre la altera."
+		},
+		{
+			"id": "calle_sucia",
+			"accion": "pasear",
+			"condiciones": {
+				"higiene_max": 35
+			},
+			"efectos": {
+				"lujuria": 6
+			},
+			"texto": "Sucia como está, absorbe todo lo que toca por la calle.",
+			"nota": "Trampa: sacarla a pasear sucia la altera."
+		}
+	]
 }
