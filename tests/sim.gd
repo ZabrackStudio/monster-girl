@@ -12,7 +12,7 @@ var bonds := []
 
 
 func _init() -> void:
-	for strategy in ["azar", "basica", "experta", "experta:casual", "experta:vestido_blanco", "experta:vestido_lila"]:
+	for strategy in (OS.get_environment("SIM_STRATS").split(",") if OS.get_environment("SIM_STRATS") != "" else ["azar", "basica", "experta", "experta:casual", "experta:vestido_blanco", "experta:vestido_lila"]):
 		var days := []
 		finals.clear()
 		bonds.clear()

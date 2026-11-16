@@ -30,8 +30,10 @@ Cambia los JSON y ejecuta el simulador (200 partidas por estrategia):
 
     flatpak run org.godotengine.Godot --headless --path . -s res://tests/sim.gd
 
-Resultado actual: al azar ~10 días, estrategia básica ~56, experta (conoce la rutina y evita las trampas) ~167.
-Final bueno: 0 % al azar, 0 % básica, ~31 % experta. El resto acaba en un final malo.
+Para simular solo algunas estrategias: `flatpak run --env=SIM_STRATS=basica,experta org.godotengine.Godot ...`
+
+Resultado actual: al azar ~9 días, estrategia básica ~42, experta (conoce la rutina y evita las trampas) ~153.
+Final bueno: 0 % al azar, 0 % básica, ~28 % experta (40–52 % con un traje que encaje). El resto acaba en un final malo.
 
 ## Fórmula de lujuria nocturna
 

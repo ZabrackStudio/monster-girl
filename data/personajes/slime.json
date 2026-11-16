@@ -29,7 +29,7 @@
 		}
 	},
 	"lujuria": {
-		"base": 6.0,
+		"base": 8.0,
 		"por_tristeza": 0.08,
 		"por_hambre": 0.12,
 		"por_suciedad": 0.16,
