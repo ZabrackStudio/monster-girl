@@ -9,7 +9,6 @@
 		"felicidad": 60,
 		"tristeza": 15,
 		"hambre": 30,
-		"energia": 70,
 		"higiene": 70,
 		"lujuria": 10
 	},
@@ -33,7 +32,6 @@
 		"base": 6.0,
 		"por_tristeza": 0.08,
 		"por_hambre": 0.12,
-		"por_cansancio": 0.12,
 		"por_suciedad": 0.16,
 		"por_felicidad": 0.08,
 		"por_salud": 0.05,
@@ -151,10 +149,10 @@
 			],
 			"efectos": {
 				"lujuria": -3,
-				"energia": 5
+				"felicidad": 3
 			},
-			"texto": "Cansada de jugar, el baño la adormece en vez de alterarla.",
-			"nota": "Si está cansada de jugar, el baño la relaja."
+			"texto": "Después de jugar, el baño la adormece en vez de alterarla.",
+			"nota": "Después de jugar, el baño la relaja."
 		},
 		{
 			"id": "rutina_vinculo",

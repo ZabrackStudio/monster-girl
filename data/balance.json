@@ -59,11 +59,9 @@
 		"pasear": {
 			"nombre": "Pasear",
 			"costo": 1,
-			"energia_min": 15,
 			"efectos": {
 				"felicidad": 12,
 				"tristeza": -10,
-				"energia": -15,
 				"lujuria": -4,
 				"higiene": -6
 			},
@@ -74,7 +72,6 @@
 			"costo": 1,
 			"efectos": {
 				"higiene": 40,
-				"energia": -5,
 				"salud": 2
 			},
 			"prob_evento": 0.1
@@ -82,15 +79,11 @@
 		"jugar": {
 			"nombre": "Jugar",
 			"costo": 1,
-			"energia_min": 12,
-			"efectos": {
-				"energia": -12
-			},
+			"efectos": {},
 			"prob_evento": 0.1
 		}
 	},
 	"dia": {
-		"energia_dormir": 30,
 		"hambre_diaria": 15,
 		"higiene_diaria": 12,
 		"felicidad_diaria": 8,

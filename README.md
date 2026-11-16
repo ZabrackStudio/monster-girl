@@ -30,12 +30,12 @@ Cambia los JSON y ejecuta el simulador (200 partidas por estrategia):
 
     flatpak run org.godotengine.Godot --headless --path . -s res://tests/sim.gd
 
-Resultado actual: al azar ~10 días, estrategia básica ~40, experta (conoce la rutina y evita las trampas) ~167.
+Resultado actual: al azar ~10 días, estrategia básica ~56, experta (conoce la rutina y evita las trampas) ~167.
 Final bueno: 0 % al azar, 0 % básica, ~31 % experta. El resto acaba en un final malo.
 
 ## Fórmula de lujuria nocturna
 
-base + tristeza×k + (hambre−50)×k + (40−energía)×k + (50−higiene)×k
+base + tristeza×k + (hambre−50)×k + (50−higiene)×k
 − (felicidad−50)×k − (salud−60)×k + día×k + objetos + azar.
 Cada "k" está en el JSON de la especie, así cada chica monstruo reacciona distinto.
 

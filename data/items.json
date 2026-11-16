@@ -59,20 +59,7 @@
 		"precio": 22,
 		"descripcion": "Calma los nervios. Reduce la lujuria al momento.",
 		"efectos": {
-			"lujuria": -10,
-			"energia": 4
-		}
-	},
-	{
-		"id": "bebida_energia",
-		"nombre": "Zumo energético",
-		"categoria": "Cuidado personal",
-		"tipo": "consumible",
-		"precio": 15,
-		"descripcion": "Recupera energía, pero la deja algo acelerada.",
-		"efectos": {
-			"energia": 25,
-			"lujuria": 3
+			"lujuria": -10
 		}
 	},
 	{
@@ -81,9 +68,9 @@
 		"categoria": "Cuidado personal",
 		"tipo": "pasivo",
 		"precio": 60,
-		"descripcion": "Duerme mejor: +15 de energía cada noche.",
+		"descripcion": "Duerme abrazada a ella. Cada noche bien cuidada, +1 de vínculo extra.",
 		"pasivo": {
-			"energia_dormir": 15
+			"vinculo_noche": 1
 		}
 	},
 	{

@@ -7,13 +7,13 @@ signal log_message(text: String)
 signal event_triggered(event: Dictionary)
 signal game_over(ending: Dictionary)
 
-const STATS := ["salud", "felicidad", "tristeza", "hambre", "energia", "higiene", "lujuria"]
+const STATS := ["salud", "felicidad", "tristeza", "hambre", "higiene", "lujuria"]
 const STAT_NAMES := {
 	"salud": "Salud", "felicidad": "Felicidad", "tristeza": "Tristeza", "hambre": "Hambre",
-	"energia": "Energía", "higiene": "Higiene", "lujuria": "Lujuria",
+	"higiene": "Higiene", "lujuria": "Lujuria",
 }
 ## Estadísticas donde subir es bueno; en el resto, bajar es bueno.
-const GOOD_UP := ["salud", "felicidad", "energia", "higiene"]
+const GOOD_UP := ["salud", "felicidad", "higiene"]
 
 var character: Dictionary
 var balance: Dictionary
@@ -112,7 +112,7 @@ func mood() -> String:
 	if lv >= 3: return "critica"
 	if lv == 2: return "alterada"
 	if stats["tristeza"] > 60: return "triste"
-	if stats["energia"] < 20: return "cansada"
+	if actions_left == 0 and not over: return "cansada"   # al final del día
 	if lv == 1: return "inquieta"
 	if stats["felicidad"] > 65: return "feliz"
 	return "neutral"
@@ -130,8 +130,6 @@ func can_do(id: String) -> bool:
 		return false
 	if money < int(act.get("precio", 0)):
 		return false
-	if stats["energia"] < float(act.get("energia_min", 0)):
-		return false
 	return true
 
 
@@ -139,7 +137,6 @@ func why_not(id: String) -> String:
 	var act := activity(id)
 	if int(act["costo"]) > actions_left: return "No te quedan acciones hoy."
 	if money < int(act.get("precio", 0)): return "No tienes dinero suficiente."
-	if stats["energia"] < float(act.get("energia_min", 0)): return "%s está demasiado cansada." % character["nombre"]
 	return ""
 
 
@@ -292,7 +289,6 @@ func sleep() -> void:
 	var d: Dictionary = balance["dia"]
 	var before := stats.duplicate()
 	_say("dormir")
-	stats["energia"] = clampf(stats["energia"] + float(d["energia_dormir"]) + passive_sum("energia_dormir"), 0, 100)
 	_add("hambre", float(d["hambre_diaria"]))
 	_add("higiene", -(float(d["higiene_diaria"]) + passive_sum("higiene_diaria")))
 	_add("felicidad", -float(d["felicidad_diaria"]))
@@ -341,7 +337,6 @@ func lust_delta() -> float:
 	b["naturaleza"] = float(l["base"])
 	b["tristeza"] = stats["tristeza"] * float(l["por_tristeza"])
 	b["hambre"] = maxf(0, stats["hambre"] - 50) * float(l["por_hambre"])
-	b["cansancio"] = maxf(0, 40 - stats["energia"]) * float(l["por_cansancio"])
 	b["suciedad"] = maxf(0, 50 - stats["higiene"]) * float(l["por_suciedad"])
 	b["felicidad"] = -maxf(0, stats["felicidad"] - 50) * float(l["por_felicidad"])
 	b["salud"] = -maxf(0, stats["salud"] - 60) * float(l["por_salud"])
@@ -576,7 +571,7 @@ func _night_bond() -> void:
 	elif lv >= 2:
 		_bond(float(vb["noche_alterada"]))
 	elif stats["felicidad"] >= 55 and stats["tristeza"] <= 35 and stats["hambre"] < 60 and stats["higiene"] > 40:
-		_bond(float(vb["noche_cuidada"]))
+		_bond(float(vb["noche_cuidada"]) + passive_sum("vinculo_noche"))
 
 
 func _say(key: String) -> void:

@@ -12,9 +12,9 @@ const MINIGAME_SCRIPTS := {
 }
 const CHARACTER := "res://data/personajes/slime.json"
 const RECORDS_PATH := "user://records.json"
-const BAR_STATS := ["salud", "felicidad", "tristeza", "hambre", "energia", "higiene"]
+const BAR_STATS := ["salud", "felicidad", "tristeza", "hambre", "vinculo", "higiene"]
 const STAT_COLORS := {"salud": "5fd38a", "felicidad": "f07ac0", "tristeza": "8a78f0",
-	"hambre": "f0953c", "energia": "f5c842", "higiene": "4fc3f0"}
+	"hambre": "f0953c", "vinculo": "e85d8a", "higiene": "4fc3f0"}
 const BG := Color("141a2a")
 const PANEL := Color("1f2835")
 const BORDER := Color("5b4a9e")
@@ -27,8 +27,6 @@ var lbl_level: Label
 var level_pill: PanelContainer
 var lust_bar: ProgressBar
 var lbl_lust: Label
-var bond_bar: ProgressBar
-var lbl_bond: Label
 var lbl_moon: Label
 var moon_pill: PanelContainer
 var lbl_line: Label
@@ -176,22 +174,6 @@ func _build_ui() -> void:
 	lbl_lust.custom_minimum_size = Vector2(64, 0)
 	lbl_lust.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	lust_row.add_child(lbl_lust)
-	var bond_pill := _pill(Color(0.1, 0.08, 0.2, 0.9), Color("f07ac0"))
-	ov.add_child(bond_pill)
-	var bond_row := HBoxContainer.new()
-	bond_row.add_theme_constant_override("separation", 10)
-	bond_pill.add_child(bond_row)
-	var bl := _label("Vínculo", 20)
-	bl.custom_minimum_size = Vector2(98, 0)
-	bond_row.add_child(bl)
-	bond_bar = _bar(Color("f07ac0"), 14)
-	bond_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	bond_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	bond_row.add_child(bond_bar)
-	lbl_bond = _label("", 20)
-	lbl_bond.custom_minimum_size = Vector2(150, 0)
-	lbl_bond.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	bond_row.add_child(lbl_bond)
 
 	# Bocadillo de diálogo
 	var bubble := PanelContainer.new()
@@ -224,7 +206,7 @@ func _build_ui() -> void:
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 8)
 		cell.add_child(row)
-		var l := _label(Game.STAT_NAMES[s], 19)
+		var l := _label("Vínculo" if s == "vinculo" else Game.STAT_NAMES[s], 19)
 		l.custom_minimum_size = Vector2(92, 0)
 		row.add_child(l)
 		var bar := _bar(Color(STAT_COLORS[s]), 14)
@@ -232,7 +214,7 @@ func _build_ui() -> void:
 		bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		row.add_child(bar)
 		var v := _label("", 19)
-		v.custom_minimum_size = Vector2(52, 0)
+		v.custom_minimum_size = Vector2(64, 0)
 		v.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		row.add_child(v)
 		grid.add_child(cell)
@@ -355,18 +337,21 @@ func _refresh() -> void:
 	lbl_lust.text = "%d%%" % roundi(game.stats["lujuria"])
 	if game.curse_mark > 0:
 		lbl_lust.text += "  (mín. %d)" % roundi(game.curse_mark)
-	bond_bar.value = game.bond
-	lbl_bond.text = "%d / %d" % [roundi(game.bond), roundi(game.bond_goal())]
-	# Sin símbolos especiales: la fuente web no los trae. Al alcanzar la meta, cambia de color.
-	lbl_bond.add_theme_color_override("font_color", Color("ffb3dd") if game.bond >= game.bond_goal() else Color.WHITE)
 	var moon: int = game.moon_in()
 	lbl_moon.text = "Luna llena: ¡esta noche!" if moon == 0 else "Luna llena en %d d" % moon
 	var msb := moon_pill.get_theme_stylebox("panel") as StyleBoxFlat
 	msb.border_color = Color("ef7d86") if moon <= 1 else Color("8fa3d9")
 	(lust_bar.get_theme_stylebox("fill") as StyleBoxFlat).bg_color = lv_color
 	for s in BAR_STATS:
-		stat_bars[s].value = game.stats[s]
-		stat_values[s].text = "%d%%" % roundi(game.stats[s])
+		if s == "vinculo":
+			stat_bars[s].max_value = game.bond_goal()
+			stat_bars[s].value = game.bond
+			stat_values[s].text = "%d/%d" % [roundi(game.bond), roundi(game.bond_goal())]
+			# Sin símbolos especiales (la fuente web no los trae): al llegar a la meta cambia de color.
+			stat_values[s].add_theme_color_override("font_color", Color("ffb3dd") if game.bond >= game.bond_goal() else Color.WHITE)
+		else:
+			stat_bars[s].value = game.stats[s]
+			stat_values[s].text = "%d%%" % roundi(game.stats[s])
 	lbl_line.text = "«%s»" % game.current_line if game.current_line != "" else ""
 	bg.color = BG.lerp(Color("3a1424"), game.level() * 0.18)
 	portrait.set_state(game.mood(), game.level(), game.outfit)
