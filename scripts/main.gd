@@ -658,24 +658,18 @@ func _leave_shop() -> void:
 	v.add_child(who)
 	for l in lines:
 		v.add_child(_wrap("«%s»" % l, 22))
-	var loading := _label("Volviendo a casa…", 18)
-	loading.modulate = TEXT_DIM
-	v.add_child(loading)
-	var bar := _bar(Color("d6c46a"), 10)
-	v.add_child(bar)
+	var hint := _label("Toca para volver a casa", 18)
+	hint.modulate = TEXT_DIM
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.visible = false
+	v.add_child(hint)
 	var screen := modal
-	var tw := create_tween()
-	tw.tween_property(bar, "value", 100.0, 1.2 + 1.4 * lines.size())
-	tw.tween_callback(func():
-		if modal == screen:
-			_close_modal())
-	# Tocar la pantalla salta la espera, tras un instante para que no se cierre sin querer.
+	# Se queda hasta que toques; un instante de margen para no cerrarla sin querer.
 	await get_tree().create_timer(0.7).timeout
 	if modal == screen:
-		loading.text = "Volviendo a casa…  (toca para continuar)"
+		hint.visible = true
 		screen.gui_input.connect(func(e):
 			if e is InputEventMouseButton and e.pressed and modal == screen:
-				tw.kill()
 				_close_modal())
 
 
