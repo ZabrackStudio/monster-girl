@@ -16,6 +16,7 @@ Abre la carpeta en Godot y pulsa F5, o desde la terminal:
 | `data/personajes/slime.json` | Stats iniciales, afinidades, fórmula de lujuria de la especie, diálogos y finales |
 | `data/items.json` | Tienda: consumibles, pasivos y minijuegos desbloqueables |
 | `data/eventos.json` | Eventos con momento, condiciones, peso y opciones |
+| `data/tienda.json` | Frases de la intendente de la tienda |
 | `scripts/game.gd` | Toda la lógica (sin interfaz) |
 | `scripts/main.gd` | Interfaz construida en código |
 | `scripts/slime_view.gd` | Retrato provisional dibujado |
@@ -30,6 +31,7 @@ Cambia los JSON y ejecuta el simulador (200 partidas por estrategia):
     flatpak run org.godotengine.Godot --headless --path . -s res://tests/sim.gd
 
 Resultado actual: al azar ~10 días, estrategia básica ~40, experta (conoce la rutina y evita las trampas) ~167.
+Final bueno: 0 % al azar, 0 % básica, ~31 % experta. El resto acaba en un final malo.
 
 ## Fórmula de lujuria nocturna
 
@@ -43,6 +45,18 @@ Cada "k" está en el JSON de la especie, así cada chica monstruo reacciona dist
 - **Tolerancia:** cada remedio (actividad, minijuego u objeto) rinde 1 / (1 + usos × `tolerancia`). Los usos se multiplican por `tolerancia_decay` cada noche.
 - **Luna llena:** cada `ciclo_luna` días suma `luna_base` + día × `luna_por_dia`.
 - **Marca:** al llegar a Crítica, el mínimo de lujuria sube `marca` (hasta `marca_max`) y ya no se puede bajar de ahí.
+
+## Finales y vínculo (`vinculo` en balance.json)
+
+Cuando la lujuria llega a 100, el vínculo decide el final:
+
+- **Vínculo ≥ `final`** → *Marea interior* (bueno): ella se va para no hacerte daño.
+- **Vínculo menor** → *Poseída* (malo): la maldición la lleva hasta ti.
+- Elegir «Ceder» en el evento de acercamiento → *Disuelto* (malo).
+
+El vínculo sube con noches cuidadas (`noche_cuidada`), reacciones buenas (`reaccion_buena`,
+o el `vinculo` propio de la reacción, como la rutina) y minijuegos bien jugados. Baja con
+las trampas, cada noche en Alterada o Crítica y con cada crisis que deja marca (`crisis`).
 
 ## Reacciones de especie (`reacciones` en el JSON del personaje)
 

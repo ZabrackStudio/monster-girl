@@ -48,6 +48,8 @@ var discovered: Dictionary = {}     # reacciones ya descubiertas (diario)
 # Vestuario (puramente estético)
 var outfit := ""
 var outfits: Array = []
+# Vínculo: lo único que puede salvarla cuando la maldición llegue al máximo.
+var bond := 0.0
 
 
 static func load_json(path: String) -> Variant:
@@ -204,6 +206,8 @@ func play_minigame(id: String, score: float) -> void:
 	_count("jugar")
 	_say("jugar")
 	_log("%s (%d%%): %s" % [mg["nombre"], int(score * 100), _fmt(real)])
+	if score >= float(balance["vinculo"]["minijuego_min"]):
+		_bond(float(balance["vinculo"]["minijuego"]))
 	today.append("jugar")
 	_apply_reactions(reactions)
 	_after_action("jugar", float(act.get("prob_evento", 0)))
@@ -292,6 +296,7 @@ func sleep() -> void:
 	var full_moon := is_full_moon()
 	var lust := lust_delta()
 	_add("lujuria", lust)
+	_night_bond()
 	var decay := float(balance["maldicion"]["tolerancia_decay"])
 	for k in tolerance:
 		tolerance[k] *= decay
@@ -370,6 +375,8 @@ func _apply_reactions(list: Array) -> void:
 		var color := "#9fd8ff" if good else "#f2a65a"
 		var note := "  [color=#f2c14e](nueva nota en el diario)[/color]" if first else ""
 		_log("[color=%s]%s[/color] %s%s" % [color, r["texto"], _fmt(real), note])
+		var vb: Dictionary = balance["vinculo"]
+		_bond(float(r.get("vinculo", vb["reaccion_buena"] if good else vb["reaccion_trampa"])))
 
 
 func reactions_total() -> int:
@@ -513,10 +520,12 @@ func _check_consumed() -> bool:
 		marked = true
 		curse_mark = minf(curse_mark + float(balance["maldicion"]["marca"]), float(balance["maldicion"]["marca_max"]))
 		_log("[color=#ef7d86]La maldición deja una marca: la lujuria ya no bajará de %d.[/color]" % roundi(curse_mark))
+		_bond(float(balance["vinculo"]["crisis"]))
 	elif marked and stats["lujuria"] < float(niveles[2]["min"]):
 		marked = false
 	if not over and stats["lujuria"] >= 100:
-		_end("consumida")
+		# Solo un vínculo muy fuerte le deja elegir irse en vez de cazarte.
+		_end("marea" if bond >= bond_goal() else "poseida")
 	return over
 
 
@@ -527,6 +536,31 @@ func _end(kind: String) -> void:
 	ending["dias"] = day
 	changed.emit()
 	game_over.emit(ending)
+
+
+## Vínculo necesario para el final bueno.
+func bond_goal() -> float:
+	return float(balance["vinculo"]["final"])
+
+
+func _bond(v: float) -> void:
+	var before := bond
+	bond = clampf(bond + v, 0.0, 100.0)
+	var real := bond - before
+	if absf(real) >= 0.5:
+		_log("[color=%s]%+d vínculo[/color]" % ["#f07ac0" if real > 0 else "#9a8aa8", roundi(real)])
+
+
+## Por la noche: una casa cuidada lo refuerza; la maldición lo erosiona.
+func _night_bond() -> void:
+	var vb: Dictionary = balance["vinculo"]
+	var lv := level()
+	if lv >= 3:
+		_bond(float(vb["noche_critica"]))
+	elif lv >= 2:
+		_bond(float(vb["noche_alterada"]))
+	elif stats["felicidad"] >= 55 and stats["tristeza"] <= 35 and stats["hambre"] < 60 and stats["higiene"] > 40:
+		_bond(float(vb["noche_cuidada"]))
 
 
 func _say(key: String) -> void:

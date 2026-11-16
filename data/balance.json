@@ -143,5 +143,16 @@
 		"luna_por_dia": 0.15,
 		"marca": 8,
 		"marca_max": 60
+	},
+	"vinculo": {
+		"final": 70,
+		"noche_cuidada": 2,
+		"noche_alterada": -3,
+		"noche_critica": -8,
+		"reaccion_buena": 1,
+		"reaccion_trampa": -3,
+		"minijuego": 1,
+		"minijuego_min": 0.7,
+		"crisis": -15
 	}
 }

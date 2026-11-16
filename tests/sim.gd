@@ -8,12 +8,14 @@ const GAMES := 200
 const MAX_DAYS := 1000
 
 var finals := {}
+var bonds := []
 
 
 func _init() -> void:
 	for strategy in ["azar", "basica", "experta"]:
 		var days := []
 		finals.clear()
+		bonds.clear()
 		for i in GAMES:
 			days.append(_run(strategy, i))
 		days.sort()
@@ -23,6 +25,8 @@ func _init() -> void:
 		print("%-8s  media %6.1f  mediana %4d  p10 %4d  p90 %4d  máx %4d  finales %s" % [
 			strategy, float(total) / GAMES, days[GAMES / 2], days[GAMES / 10],
 			days[GAMES * 9 / 10], days[-1], finals])
+		bonds.sort()
+		print("          vínculo final: mediana %d  p90 %d  máx %d" % [bonds[bonds.size() / 2], bonds[bonds.size() * 9 / 10], bonds[-1]])
 	quit()
 
 
@@ -31,7 +35,7 @@ func _run(strategy: String, seed_value: int) -> int:
 	g.quiet = true
 	g.setup("res://data/personajes/slime.json", seed_value)
 	g.event_triggered.connect(func(ev): _resolve(g, ev, strategy))
-	g.game_over.connect(func(e): finals[e["tipo"]] = finals.get(e["tipo"], 0) + 1)
+	g.game_over.connect(func(e): finals[e["tipo"]] = finals.get(e["tipo"], 0) + 1; bonds.append(g.bond))
 	g.start()
 	while not g.over and g.day < MAX_DAYS:
 		var guard := 0

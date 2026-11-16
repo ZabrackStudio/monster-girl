@@ -80,7 +80,78 @@ func _init() -> void:
 			_isolate(frame)
 			frame.save_png(base + dir + MOODS[i] + ".png")
 		print(dir, " ", MOODS.size(), " expresiones ", col_w, "x", int(src.get_height() * CUT))
+
+	# Tienda: almacén de fondo, la intendente y dos soldados de guardia.
+	var alm := Image.load_from_file(base + SRC + "almacen.png")
+	alm.resize(720, 1080, Image.INTERPOLATE_LANCZOS)
+	alm.save_png(base + "ui/tienda_fondo.png")
+	var chica_s := Image.load_from_file(base + SRC + "chica soldado.png")
+	chica_s.convert(Image.FORMAT_RGBA8)
+	_trim_alpha(chica_s, 90, 200)
+	_keep_largest(chica_s)
+	chica_s = chica_s.get_region(chica_s.get_used_rect())
+	_fit_height(chica_s, 900)
+	chica_s.save_png(base + "ui/tienda_vendedora.png")
+	print("tienda_vendedora ", chica_s.get_size())
+	var sold := Image.load_from_file(base + SRC + "soldados.png")
+	sold.convert(Image.FORMAT_RGBA8)
+	_trim_alpha(sold, 90, 200)
+	var half := sold.get_width() / 2
+	for i in 2:
+		var one := sold.get_region(Rect2i(i * half, 0, half, sold.get_height()))
+		_keep_largest(one)
+		one = one.get_region(one.get_used_rect())
+		_fit_height(one, 560)
+		one.save_png(base + "ui/tienda_soldado_%d.png" % (i + 1))
+		print("tienda_soldado_%d " % (i + 1), one.get_size())
 	quit()
+
+
+## Quita el halo semitransparente: lo muy transparente fuera; rampa suave hasta lo opaco.
+func _trim_alpha(img: Image, lo: int, hi: int) -> void:
+	var data := img.get_data()
+	for i in range(3, data.size(), 4):
+		var a := data[i]
+		data[i] = 0 if a <= lo else (255 if a >= hi else int(255.0 * (a - lo) / (hi - lo)))
+	img.set_data(img.get_width(), img.get_height(), false, Image.FORMAT_RGBA8, data)
+
+
+## Deja solo la figura más grande (borra motas y restos sueltos).
+func _keep_largest(img: Image) -> void:
+	var w := img.get_width()
+	var h := img.get_height()
+	var data := img.get_data()
+	var label := PackedInt32Array()
+	label.resize(w * h)
+	var sizes := [0]
+	for start in w * h:
+		if label[start] != 0 or data[start * 4 + 3] < 20:
+			continue
+		var id := sizes.size()
+		sizes.append(0)
+		var stack := PackedInt32Array([start])
+		label[start] = id
+		while not stack.is_empty():
+			var i: int = stack[stack.size() - 1]
+			stack.resize(stack.size() - 1)
+			sizes[id] += 1
+			var x := i % w
+			for n in [i - 1 if x > 0 else -1, i + 1 if x < w - 1 else -1, i - w, i + w]:
+				if n >= 0 and n < w * h and label[n] == 0 and data[n * 4 + 3] >= 20:
+					label[n] = id
+					stack.append(n)
+	var main := 1
+	for id in range(1, sizes.size()):
+		if sizes[id] > sizes[main]:
+			main = id
+	for i in w * h:
+		if label[i] != main:
+			data[i * 4 + 3] = 0
+	img.set_data(w, h, false, Image.FORMAT_RGBA8, data)
+
+
+func _fit_height(img: Image, h: int) -> void:
+	img.resize(int(img.get_width() * float(h) / img.get_height()), h, Image.INTERPOLATE_LANCZOS)
 
 
 ## Quita un fondo oscuro con relleno desde los bordes, para no comerse

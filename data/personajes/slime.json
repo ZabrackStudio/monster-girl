@@ -97,15 +97,20 @@
 		]
 	},
 	"finales": {
-		"consumida": {
-			"titulo": "Final bueno: Marea interior",
-			"musica": "final_bueno",
-			"texto": "Esa noche, Reme no se hace una bolita.\n\nLa ves en el marco de la puerta, sin contornos, con un brillo que no le conocías. Da un paso hacia ti. Se detiene.\n\n«Si me quedo, te hago daño», dice. Ya no imita tu voz; la suya tiembla. «Y tú eres lo único que no quiero romper.»\n\nRetrocede. La luz del pasillo se apaga.\n\n—\n\nPor la mañana el piso huele a lluvia. En la nevera hay una nota con una letra que se escurre: «Me voy a donde no pueda alcanzarte. No me busques. Te quise más de lo que te deseé.»"
-		},
 		"carnal": {
 			"titulo": "Final malo: Disuelto",
 			"musica": "final_malo",
 			"texto": "Te dices que solo es un abrazo.\n\nReme se cierra a tu alrededor, fría al principio, después no. Busca tus ojos y ya no los encuentra: no te mira, solo te desea.\n\nAlgo empieza a escocer en la piel. Intentas apartarte, pero su cuerpo no tiene bordes de donde empujar.\n\n«Espera», dices. Ella ya no oye nada.\n\nFundido a negro.\n\n—\n\nAl amanecer, Reme recupera la forma sola en el sofá. Brilla más que nunca y no entiende por qué la casa está tan callada. Junto a la puerta siguen tus zapatillas.\n\nUn slime disuelve lo que abraza. Ella lo sabía. Tú también."
+		},
+		"marea": {
+			"titulo": "Final bueno: Marea interior",
+			"musica": "final_bueno",
+			"texto": "Esa noche, Reme no se hace una bolita.\n\nLa ves en el marco de la puerta, sin contornos, con un brillo que no le conocías. Da un paso hacia ti. Se detiene.\n\n«Si me quedo, te hago daño», dice. Ya no imita tu voz; la suya tiembla. «Y tú eres lo único que no quiero romper.»\n\nRetrocede. La luz del pasillo se apaga.\n\n—\n\nPor la mañana el piso huele a lluvia. En la nevera hay una nota con una letra que se escurre: «Me voy a donde no pueda alcanzarte. No me busques. Te quise más de lo que te deseé.»"
+		},
+		"poseida": {
+			"titulo": "Final malo: Poseída",
+			"musica": "final_malo",
+			"texto": "Esa noche no hay bolita en el sofá.\n\nLa oyes antes de verla: un goteo lento que cruza el pasillo. En el marco de la puerta, Reme ya no tiene contornos. Brilla con un rosa que no es suyo.\n\nDices su nombre. Sonríe con tu voz, no con la suya.\n\nLa puerta del cuarto no tiene cerrojo. Tampoco habría servido: un slime pasa por debajo.\n\nFundido a negro.\n\n—\n\nAl amanecer, Reme recupera la forma sola, en tu cama. No recuerda la noche. Solo sabe que la casa está demasiado callada y que tus zapatillas siguen junto a la puerta.\n\nLa maldición no entiende de cariño. Tú tampoco le diste tiempo de aprenderlo."
 		}
 	},
 	"reacciones": [
@@ -166,7 +171,8 @@
 				"felicidad": 6
 			},
 			"texto": "Comer, pasear, jugar y bañarse: la rutina completa. Reme se queda quieta a tu lado, en paz.",
-			"nota": "Comer, pasear, jugar y limpiar, seguidos y en ese orden: la rutina que más la calma."
+			"nota": "Comer, pasear, jugar y limpiar, seguidos y en ese orden: la rutina que más la calma.",
+			"vinculo": 4
 		},
 		{
 			"id": "agua_excita",

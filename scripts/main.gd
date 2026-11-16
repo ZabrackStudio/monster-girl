@@ -26,6 +26,8 @@ var lbl_level: Label
 var level_pill: PanelContainer
 var lust_bar: ProgressBar
 var lbl_lust: Label
+var bond_bar: ProgressBar
+var lbl_bond: Label
 var lbl_moon: Label
 var moon_pill: PanelContainer
 var lbl_line: Label
@@ -164,6 +166,22 @@ func _build_ui() -> void:
 	lbl_lust.custom_minimum_size = Vector2(64, 0)
 	lbl_lust.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	lust_row.add_child(lbl_lust)
+	var bond_pill := _pill(Color(0.1, 0.08, 0.2, 0.9), Color("f07ac0"))
+	ov.add_child(bond_pill)
+	var bond_row := HBoxContainer.new()
+	bond_row.add_theme_constant_override("separation", 10)
+	bond_pill.add_child(bond_row)
+	var bl := _label("Vínculo", 20)
+	bl.custom_minimum_size = Vector2(98, 0)
+	bond_row.add_child(bl)
+	bond_bar = _bar(Color("f07ac0"), 14)
+	bond_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bond_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	bond_row.add_child(bond_bar)
+	lbl_bond = _label("", 20)
+	lbl_bond.custom_minimum_size = Vector2(150, 0)
+	lbl_bond.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	bond_row.add_child(lbl_bond)
 
 	# Bocadillo de diálogo
 	var bubble := PanelContainer.new()
@@ -327,6 +345,10 @@ func _refresh() -> void:
 	lbl_lust.text = "%d%%" % roundi(game.stats["lujuria"])
 	if game.curse_mark > 0:
 		lbl_lust.text += "  (mín. %d)" % roundi(game.curse_mark)
+	bond_bar.value = game.bond
+	lbl_bond.text = "%d / %d" % [roundi(game.bond), roundi(game.bond_goal())]
+	# Sin símbolos especiales: la fuente web no los trae. Al alcanzar la meta, cambia de color.
+	lbl_bond.add_theme_color_override("font_color", Color("ffb3dd") if game.bond >= game.bond_goal() else Color.WHITE)
 	var moon: int = game.moon_in()
 	lbl_moon.text = "Luna llena: ¡esta noche!" if moon == 0 else "Luna llena en %d d" % moon
 	var msb := moon_pill.get_theme_stylebox("panel") as StyleBoxFlat
@@ -437,8 +459,11 @@ func _wrap(text: String, font_size := 20) -> Label:
 	return l
 
 
-func _show_shop() -> void:
-	var v := _open_modal("Tienda   (%d $)" % game.money)
+func _show_shop(line := "") -> void:
+	var shop: Dictionary = Game.load_json("res://data/tienda.json")
+	if line == "":
+		line = game._pick(shop["saludo"])
+	var v := _open_scene(shop["nombre"], line, "Tienda   (%d $)" % game.money)
 	music.play("tienda")
 	var last_cat := ""
 	var order: Array = game.item_order.duplicate()
@@ -472,6 +497,75 @@ func _show_shop() -> void:
 		row.add_child(b)
 		v.add_child(row)
 	v.add_child(_button("Cerrar", _close_modal))
+
+
+## Ventana con escenario: fondo ilustrado, personajes y la lista abajo.
+func _open_scene(speaker: String, line: String, title: String) -> VBoxContainer:
+	_close_modal()
+	modal = Control.new()
+	modal.set_anchors_preset(Control.PRESET_FULL_RECT)
+	modal.mouse_filter = Control.MOUSE_FILTER_STOP
+	modal.clip_contents = true
+	add_child(modal)
+	var back := ColorRect.new()
+	back.color = Color("0d0f14")
+	back.set_anchors_preset(Control.PRESET_FULL_RECT)
+	modal.add_child(back)
+	var scene_h := size.y * 0.5
+	var bgt := TextureRect.new()
+	bgt.texture = load("res://ui/tienda_fondo.png")
+	bgt.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	bgt.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	bgt.position = Vector2.ZERO
+	bgt.size = Vector2(size.x, scene_h + 80)
+	modal.add_child(bgt)
+	# Guardias al fondo, más pequeños y en penumbra.
+	for i in 2:
+		var g := _figure("res://ui/tienda_soldado_%d.png" % (i + 1), scene_h * (0.4 if i == 0 else 0.5))
+		g.modulate = Color(0.55, 0.55, 0.62)
+		g.position = Vector2(size.x * 0.27 if i == 0 else size.x * 0.94 - g.size.x, scene_h * (0.2 if i == 0 else 0.44))
+		modal.add_child(g)
+	var keeper := _figure("res://ui/tienda_vendedora.png", scene_h * 1.08)
+	keeper.position = Vector2(size.x * 0.03, scene_h * 0.06)
+	modal.add_child(keeper)
+	# Bocadillo de la intendente.
+	var talk := _pill(Color(0.08, 0.09, 0.07, 0.9), Color("8a8f5a"))
+	talk.position = Vector2(size.x * 0.46, scene_h * 0.08)
+	talk.custom_minimum_size = Vector2(size.x * 0.5, 0)
+	var tv := VBoxContainer.new()
+	talk.add_child(tv)
+	var who := _label(speaker, 18)
+	who.add_theme_color_override("font_color", Color("d6c46a"))
+	tv.add_child(who)
+	var said := _wrap("«%s»" % line, 20)
+	said.custom_minimum_size = Vector2(size.x * 0.5 - 40, 0)
+	tv.add_child(said)
+	modal.add_child(talk)
+	# Lista de artículos.
+	var panel := _panel(Color(0.09, 0.1, 0.12, 0.94))
+	panel.position = Vector2(12, scene_h)
+	panel.size = Vector2(size.x - 24, size.y - scene_h - 12)
+	modal.add_child(panel)
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	panel.add_child(scroll)
+	var v := VBoxContainer.new()
+	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	v.add_theme_constant_override("separation", 12)
+	scroll.add_child(v)
+	v.add_child(_label(title, 28))
+	return v
+
+
+func _figure(path: String, h: float) -> TextureRect:
+	var t := TextureRect.new()
+	t.texture = load(path)
+	t.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	t.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
+	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var ts: Vector2 = t.texture.get_size()
+	t.size = Vector2(h * ts.x / ts.y, h)
+	return t
 
 
 func _show_inventory() -> void:
@@ -597,8 +691,12 @@ func _show_event(ev: Dictionary) -> void:
 
 
 func _buy(id: String) -> void:
+	var shop: Dictionary = Game.load_json("res://data/tienda.json")
+	var kind: String = "traje" if game.items[id]["tipo"] == "traje" else "compra"
 	if game.buy(id):
-		_show_shop()
+		_show_shop(game._pick(shop[kind]))
+	else:
+		_show_shop(game._pick(shop["sin_dinero"]))
 
 
 func _use(id: String) -> void:
@@ -647,7 +745,7 @@ func _show_game_over(ending: Dictionary) -> void:
 		"  ¡Nuevo récord!" if record["nuevo"] else ""], 20)
 	rec.modulate = TEXT_DIM
 	v.add_child(rec)
-	var finals := _label("Finales descubiertos: %d/2" % record["finales"].size(), 20)
+	var finals := _label("Finales descubiertos: %d/%d" % [record["finales"].size(), game.character["finales"].size()], 20)
 	finals.modulate = TEXT_DIM
 	v.add_child(finals)
 	v.add_child(_button("Nueva partida", get_tree().reload_current_scene))

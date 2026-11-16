@@ -1,0 +1,22 @@
+{
+	"nombre": "Intendente",
+	"saludo": [
+		"Pagas, te lo llevas. Sin preguntas.",
+		"¿Otra vez tú? Mientras la tengas a raya, me da igual.",
+		"Todo lo de aquí ha frenado a algún monstruo. Casi todo.",
+		"No fíes. No devuelvo. No pregunto."
+	],
+	"compra": [
+		"Buena elección. Úsalo antes de que lo necesites.",
+		"Hecho. Siguiente.",
+		"Eso aguanta. Tú procura aguantar también."
+	],
+	"traje": [
+		"¿Ropa? A la maldición le da igual lo que lleve. Allá tú.",
+		"Bonito. Inútil, pero bonito.",
+		"Con eso no la calmas. Pero cobro igual."
+	],
+	"sin_dinero": [
+		"Sin dinero no hay trato. Ve a trabajar."
+	]
+}
