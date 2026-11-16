@@ -216,5 +216,43 @@
 		"casual": "Sudadera y shorts",
 		"vestido_blanco": "Vestido blanco con lazo",
 		"vestido_lila": "Vestido lila de fiesta"
+	},
+	"trajes_efectos": {
+		"inicial": {},
+		"casual": {
+			"pasear": {
+				"lujuria": -4
+			},
+			"comer": {
+				"lujuria": 2
+			},
+			"limpiar": {
+				"lujuria": 3
+			},
+			"jugar": {
+				"lujuria": 2
+			}
+		},
+		"vestido_blanco": {
+			"pasear": {
+				"lujuria": 5
+			},
+			"comer": {
+				"lujuria": -2
+			},
+			"limpiar": {
+				"lujuria": -3
+			}
+		},
+		"vestido_lila": {
+			"pasear": {
+				"lujuria": 8,
+				"felicidad": 6
+			},
+			"jugar": {
+				"lujuria": -4,
+				"felicidad": 4
+			}
+		}
 	}
 }

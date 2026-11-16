@@ -138,7 +138,7 @@
 		"precio": 80,
 		"especie": "slime",
 		"traje": "casual",
-		"descripcion": "Ropa cómoda para estar por casa. Dicen que la ropa nueva levanta el ánimo."
+		"descripcion": "Cómoda para salir: en la calle nadie la mira y se calma. En casa, tan a gusto, se relaja demasiado."
 	},
 	{
 		"id": "traje_vestido_blanco",
@@ -148,7 +148,7 @@
 		"precio": 120,
 		"especie": "slime",
 		"traje": "vestido_blanco",
-		"descripcion": "Un vestido de volantes. Seguro que le hace ilusión estrenarlo."
+		"descripcion": "Fuera llama la atención y eso la altera. En casa se siente arreglada y se serena."
 	},
 	{
 		"id": "traje_vestido_lila",
@@ -158,6 +158,6 @@
 		"precio": 150,
 		"especie": "slime",
 		"traje": "vestido_lila",
-		"descripcion": "El más caro de la tienda. Lo que se ve, se paga."
+		"descripcion": "De fiesta: en la calle se pone muy contenta… y muy acelerada. Jugando en casa, en cambio, se calma."
 	}
 ]

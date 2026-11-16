@@ -12,7 +12,7 @@ var bonds := []
 
 
 func _init() -> void:
-	for strategy in ["azar", "basica", "experta"]:
+	for strategy in ["azar", "basica", "experta", "experta:casual", "experta:vestido_blanco", "experta:vestido_lila"]:
 		var days := []
 		finals.clear()
 		bonds.clear()
@@ -37,6 +37,10 @@ func _run(strategy: String, seed_value: int) -> int:
 	g.event_triggered.connect(func(ev): _resolve(g, ev, strategy))
 	g.game_over.connect(func(e): finals[e["tipo"]] = finals.get(e["tipo"], 0) + 1; bonds.append(g.bond))
 	g.start()
+	if ":" in strategy:
+		g.outfit = strategy.split(":")[1]
+		g.outfits.append(g.outfit)
+		strategy = "experta"
 	while not g.over and g.day < MAX_DAYS:
 		var guard := 0
 		while g.actions_left > 0 and not g.over and guard < 20:

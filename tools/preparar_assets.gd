@@ -81,9 +81,9 @@ func _init() -> void:
 			frame.save_png(base + dir + MOODS[i] + ".png")
 		print(dir, " ", MOODS.size(), " expresiones ", col_w, "x", int(src.get_height() * CUT))
 
-	# Tienda: almacén de fondo, la intendente y dos soldados de guardia.
+	# Tienda: almacén de fondo (ya con los guardias) y la intendente.
 	var alm := Image.load_from_file(base + SRC + "almacen.png")
-	alm.resize(720, 1080, Image.INTERPOLATE_LANCZOS)
+	alm.resize(854, 1280, Image.INTERPOLATE_LANCZOS)
 	alm.save_png(base + "ui/tienda_fondo.png")
 	var chica_s := Image.load_from_file(base + SRC + "chica soldado.png")
 	chica_s.convert(Image.FORMAT_RGBA8)
@@ -93,17 +93,6 @@ func _init() -> void:
 	_fit_height(chica_s, 900)
 	chica_s.save_png(base + "ui/tienda_vendedora.png")
 	print("tienda_vendedora ", chica_s.get_size())
-	var sold := Image.load_from_file(base + SRC + "soldados.png")
-	sold.convert(Image.FORMAT_RGBA8)
-	_trim_alpha(sold, 90, 200)
-	var half := sold.get_width() / 2
-	for i in 2:
-		var one := sold.get_region(Rect2i(i * half, 0, half, sold.get_height()))
-		_keep_largest(one)
-		one = one.get_region(one.get_used_rect())
-		_fit_height(one, 560)
-		one.save_png(base + "ui/tienda_soldado_%d.png" % (i + 1))
-		print("tienda_soldado_%d " % (i + 1), one.get_size())
 	quit()
 
 

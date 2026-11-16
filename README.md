@@ -16,7 +16,7 @@ Abre la carpeta en Godot y pulsa F5, o desde la terminal:
 | `data/personajes/slime.json` | Stats iniciales, afinidades, fórmula de lujuria de la especie, diálogos y finales |
 | `data/items.json` | Tienda: consumibles, pasivos y minijuegos desbloqueables |
 | `data/eventos.json` | Eventos con momento, condiciones, peso y opciones |
-| `data/tienda.json` | Frases de la intendente de la tienda |
+| `data/tienda.json` | Pestañas de la tienda y frases de la intendente (saludo, compra, comentario por artículo al salir) |
 | `scripts/game.gd` | Toda la lógica (sin interfaz) |
 | `scripts/main.gd` | Interfaz construida en código |
 | `scripts/slime_view.gd` | Retrato provisional dibujado |
@@ -57,6 +57,13 @@ Cuando la lujuria llega a 100, el vínculo decide el final:
 El vínculo sube con noches cuidadas (`noche_cuidada`), reacciones buenas (`reaccion_buena`,
 o el `vinculo` propio de la reacción, como la rutina) y minijuegos bien jugados. Baja con
 las trampas, cada noche en Alterada o Crítica y con cada crisis que deja marca (`crisis`).
+
+## Trajes (`trajes_efectos` en el JSON del personaje)
+
+Cada traje añade efectos a ciertas actividades mientras está puesto (sin tolerancia).
+Para la slime: la sudadera calma al pasear pero la altera en casa; el vestido blanco, al revés;
+el de fiesta la acelera al pasear (aunque la alegra) y la calma jugando. El simulador
+prueba la estrategia experta con cada traje puesto.
 
 ## Reacciones de especie (`reacciones` en el JSON del personaje)
 

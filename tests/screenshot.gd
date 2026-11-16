@@ -19,9 +19,20 @@ func _run() -> void:
 	main.game.changed.emit()
 	for i in 20: await process_frame
 	_shot("2_critica")
+	main.game.money = 200
 	main._show_shop()
 	for i in 10: await process_frame
+	main._buy("manzanilla")
+	for i in 10: await process_frame
 	_shot("3_tienda")
+	main._shop_tab("Vestuario")
+	main._buy("traje_vestido_lila")
+	for i in 10: await process_frame
+	_shot("3b_tienda_ropa")
+	main._leave_shop()
+	for i in 40: await process_frame
+	_shot("3c_salida")
+	await create_timer(5.0).timeout
 	main._start_minigame("burbujas")
 	await create_timer(4.0).timeout
 	_shot("4_burbujas")

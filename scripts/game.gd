@@ -179,6 +179,7 @@ func do_activity(id: String) -> void:
 	_log("%s: %s" % [msg, _fmt(real)])
 	today.append(id)
 	_apply_reactions(reactions)
+	_outfit_effects(id)
 	_after_action(id, float(act.get("prob_evento", 0)))
 
 
@@ -210,6 +211,7 @@ func play_minigame(id: String, score: float) -> void:
 		_bond(float(balance["vinculo"]["minijuego"]))
 	today.append("jugar")
 	_apply_reactions(reactions)
+	_outfit_effects("jugar")
 	_after_action("jugar", float(act.get("prob_evento", 0)))
 
 
@@ -245,6 +247,20 @@ func can_buy(id: String) -> bool:
 
 
 ## Cambia de ropa. No afecta a ninguna estadística: es una trampa para el dinero.
+## Efectos del traje puesto sobre una actividad (sin tolerancia: la ropa no se gasta).
+func outfit_effects(t: String) -> Dictionary:
+	return character.get("trajes_efectos", {}).get(t, {})
+
+
+func _outfit_effects(id: String) -> void:
+	var e: Dictionary = outfit_effects(outfit).get(id, {})
+	if e.is_empty():
+		return
+	var real := apply(e, effectiveness())
+	var name: String = character.get("trajes", {}).get(outfit, outfit)
+	_log("[color=#c9b3ff]Con %s:[/color] %s" % [name.to_lower(), _fmt(real)])
+
+
 func wear(t: String) -> void:
 	if over or not outfits.has(t) or t == outfit:
 		return

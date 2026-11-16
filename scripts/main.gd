@@ -5,6 +5,7 @@ extends Control
 const Game := preload("res://scripts/game.gd")
 const Portrait := preload("res://scripts/portrait.gd")
 const Music := preload("res://scripts/music.gd")
+const Shopkeeper := preload("res://scripts/shopkeeper.gd")
 const MINIGAME_SCRIPTS := {
 	"burbujas": preload("res://scripts/minigame_bubbles.gd"),
 	"memoria": preload("res://scripts/minigame_memory.gd"),
@@ -39,6 +40,15 @@ var action_buttons := {}
 var modal: Control
 var music
 var btn_sound: Button
+# Tienda
+var shop: Dictionary
+var shop_cat := ""
+var shop_tabs := {}
+var shop_list: VBoxContainer
+var shop_money: Label
+var shop_said: Label
+var shop_keeper
+var shop_bought := []
 
 
 func _ready() -> void:
@@ -459,26 +469,107 @@ func _wrap(text: String, font_size := 20) -> Label:
 	return l
 
 
-func _show_shop(line := "") -> void:
-	var shop: Dictionary = Game.load_json("res://data/tienda.json")
-	if line == "":
-		line = game._pick(shop["saludo"])
-	var v := _open_scene(shop["nombre"], line, "Tienda   (%d $)" % game.money)
+## Tienda: escena fija con la intendente arriba y una ventana con pestañas abajo.
+func _show_shop() -> void:
+	shop = Game.load_json("res://data/tienda.json")
+	shop_bought = []
+	_close_modal()
 	music.play("tienda")
-	var last_cat := ""
-	var order: Array = game.item_order.duplicate()
-	var cats := []
-	for id in order:
-		if not game.items[id]["categoria"] in cats:
-			cats.append(game.items[id]["categoria"])
-	order.sort_custom(func(x, y): return cats.find(game.items[x]["categoria"]) < cats.find(game.items[y]["categoria"]))
-	for id in order:
+	modal = Control.new()
+	modal.set_anchors_preset(Control.PRESET_FULL_RECT)
+	modal.mouse_filter = Control.MOUSE_FILTER_STOP
+	modal.clip_contents = true
+	add_child(modal)
+	var scene_h := size.y * 0.47
+	modal.add_child(_shop_backdrop(1.0))
+	shop_keeper = Shopkeeper.new()
+	modal.add_child(shop_keeper)
+	shop_keeper.fit(scene_h * 1.12)
+	shop_keeper.position = Vector2(size.x * 0.02, scene_h * 0.02)
+	# Bocadillo.
+	var talk := _pill(Color(0.08, 0.09, 0.07, 0.9), Color("8a8f5a"))
+	talk.position = Vector2(size.x * 0.47, scene_h * 0.06)
+	var tv := VBoxContainer.new()
+	talk.add_child(tv)
+	var who := _label(shop["nombre"], 18)
+	who.add_theme_color_override("font_color", Color("d6c46a"))
+	tv.add_child(who)
+	shop_said = _wrap("«%s»" % game._pick(shop["saludo"]), 20)
+	shop_said.custom_minimum_size = Vector2(size.x * 0.5 - 40, 0)
+	tv.add_child(shop_said)
+	modal.add_child(talk)
+	# Ventana de artículos.
+	var panel := _panel(Color(0.09, 0.1, 0.12, 0.96))
+	panel.position = Vector2(12, scene_h)
+	panel.size = Vector2(size.x - 24, size.y - scene_h - 12)
+	modal.add_child(panel)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 10)
+	panel.add_child(col)
+	var head := HBoxContainer.new()
+	col.add_child(head)
+	var title := _label("Tienda", 28)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	head.add_child(title)
+	shop_money = _label("", 26)
+	shop_money.add_theme_color_override("font_color", Color("f5c842"))
+	head.add_child(shop_money)
+	var tabs := HBoxContainer.new()
+	tabs.add_theme_constant_override("separation", 6)
+	col.add_child(tabs)
+	shop_tabs.clear()
+	for id in game.item_order:
+		var cat: String = game.items[id]["categoria"]
+		if shop_tabs.has(cat):
+			continue
+		var b := Button.new()
+		b.text = shop["pestanas"].get(cat, cat)
+		b.toggle_mode = true
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		b.custom_minimum_size = Vector2(0, 54)
+		b.add_theme_font_size_override("font_size", 19)
+		b.pressed.connect(_shop_tab.bind(cat))
+		tabs.add_child(b)
+		shop_tabs[cat] = b
+	if not shop_tabs.has(shop_cat):
+		shop_cat = shop_tabs.keys()[0]
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	col.add_child(scroll)
+	shop_list = VBoxContainer.new()
+	shop_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	shop_list.add_theme_constant_override("separation", 12)
+	scroll.add_child(shop_list)
+	col.add_child(_button("Salir de la tienda", _leave_shop))
+	_fill_shop()
+
+
+func _shop_backdrop(light: float) -> TextureRect:
+	var bgt := TextureRect.new()
+	bgt.texture = load("res://ui/tienda_fondo.png")
+	bgt.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	bgt.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	bgt.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bgt.modulate = Color(light, light, light)
+	return bgt
+
+
+func _shop_tab(cat: String) -> void:
+	shop_cat = cat
+	_fill_shop()
+
+
+func _fill_shop() -> void:
+	shop_money.text = "%d $" % game.money
+	for cat in shop_tabs:
+		shop_tabs[cat].set_pressed_no_signal(cat == shop_cat)
+	for c in shop_list.get_children():
+		c.queue_free()
+	for id in game.item_order:
 		var it: Dictionary = game.items[id]
-		if it["categoria"] != last_cat:
-			last_cat = it["categoria"]
-			var c := _label(last_cat, 18)
-			c.modulate = TEXT_DIM
-			v.add_child(c)
+		if it["categoria"] != shop_cat:
+			continue
 		var row := HBoxContainer.new()
 		var info := VBoxContainer.new()
 		info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -489,83 +580,103 @@ func _show_shop(line := "") -> void:
 		var d := _wrap(it["descripcion"], 17)
 		d.modulate = TEXT_DIM
 		info.add_child(d)
+		if it["tipo"] == "traje":
+			var fx := _wrap(_outfit_text(it["traje"]), 16)
+			fx.add_theme_color_override("font_color", Color("c9b3ff"))
+			info.add_child(fx)
 		row.add_child(info)
 		var can: bool = game.can_buy(id)
 		var b := _button("%d $" % int(it["precio"]) if can else "Comprado",
 			_buy.bind(id), not can or game.money < int(it["precio"]))
 		b.custom_minimum_size = Vector2(130, 64)
 		row.add_child(b)
-		v.add_child(row)
-	v.add_child(_button("Cerrar", _close_modal))
+		shop_list.add_child(row)
 
 
-## Ventana con escenario: fondo ilustrado, personajes y la lista abajo.
-func _open_scene(speaker: String, line: String, title: String) -> VBoxContainer:
+## Resumen de lo que hace un traje según la actividad.
+func _outfit_text(t: String) -> String:
+	var fx: Dictionary = game.outfit_effects(t)
+	if fx.is_empty():
+		return "Sin efectos."
+	var parts := []
+	for act in fx:
+		var bits := []
+		for k in fx[act]:
+			bits.append("%+d %s" % [int(fx[act][k]), Game.STAT_NAMES.get(k, k).to_lower()])
+		parts.append("%s: %s" % [game.activity(act)["nombre"], ", ".join(bits)])
+	return " · ".join(parts)
+
+
+func _buy(id: String) -> void:
+	if game.buy(id):
+		shop_bought.append(id)
+		shop_said.text = "«%s»" % game._pick(shop["compra"])
+		shop_keeper.react()
+	else:
+		shop_said.text = "«%s»" % game._pick(shop["sin_dinero"])
+	_fill_shop()
+
+
+## Al salir, la intendente comenta la compra mientras "vuelves a casa".
+func _leave_shop() -> void:
+	var lines := []
+	var seen := []
+	for i in range(shop_bought.size() - 1, -1, -1):
+		var id: String = shop_bought[i]
+		if id in seen or not shop["comentarios"].has(id):
+			continue
+		seen.append(id)
+		lines.append(shop["comentarios"][id])
+		if lines.size() == 2:
+			break
+	if lines.is_empty():
+		lines.append(game._pick(shop["sin_compra"]))
+	lines.append(game._pick(shop["cierre"]))
 	_close_modal()
 	modal = Control.new()
 	modal.set_anchors_preset(Control.PRESET_FULL_RECT)
 	modal.mouse_filter = Control.MOUSE_FILTER_STOP
-	modal.clip_contents = true
 	add_child(modal)
-	var back := ColorRect.new()
-	back.color = Color("0d0f14")
-	back.set_anchors_preset(Control.PRESET_FULL_RECT)
-	modal.add_child(back)
-	var scene_h := size.y * 0.5
-	var bgt := TextureRect.new()
-	bgt.texture = load("res://ui/tienda_fondo.png")
-	bgt.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	bgt.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	bgt.position = Vector2.ZERO
-	bgt.size = Vector2(size.x, scene_h + 80)
-	modal.add_child(bgt)
-	# Guardias al fondo, más pequeños y en penumbra.
-	for i in 2:
-		var g := _figure("res://ui/tienda_soldado_%d.png" % (i + 1), scene_h * (0.4 if i == 0 else 0.5))
-		g.modulate = Color(0.55, 0.55, 0.62)
-		g.position = Vector2(size.x * 0.27 if i == 0 else size.x * 0.94 - g.size.x, scene_h * (0.2 if i == 0 else 0.44))
-		modal.add_child(g)
-	var keeper := _figure("res://ui/tienda_vendedora.png", scene_h * 1.08)
-	keeper.position = Vector2(size.x * 0.03, scene_h * 0.06)
+	var black := ColorRect.new()
+	black.color = Color.BLACK
+	black.set_anchors_preset(Control.PRESET_FULL_RECT)
+	modal.add_child(black)
+	modal.add_child(_shop_backdrop(0.35))
+	var keeper := Shopkeeper.new()
 	modal.add_child(keeper)
-	# Bocadillo de la intendente.
-	var talk := _pill(Color(0.08, 0.09, 0.07, 0.9), Color("8a8f5a"))
-	talk.position = Vector2(size.x * 0.46, scene_h * 0.08)
-	talk.custom_minimum_size = Vector2(size.x * 0.5, 0)
-	var tv := VBoxContainer.new()
-	talk.add_child(tv)
-	var who := _label(speaker, 18)
-	who.add_theme_color_override("font_color", Color("d6c46a"))
-	tv.add_child(who)
-	var said := _wrap("«%s»" % line, 20)
-	said.custom_minimum_size = Vector2(size.x * 0.5 - 40, 0)
-	tv.add_child(said)
-	modal.add_child(talk)
-	# Lista de artículos.
-	var panel := _panel(Color(0.09, 0.1, 0.12, 0.94))
-	panel.position = Vector2(12, scene_h)
-	panel.size = Vector2(size.x - 24, size.y - scene_h - 12)
-	modal.add_child(panel)
-	var scroll := ScrollContainer.new()
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	panel.add_child(scroll)
+	keeper.fit(size.y * 0.78)
+	keeper.position = Vector2(size.x * 0.5 - keeper.size.x * 0.5, size.y * 0.02)
+	var box := _panel(Color(0.07, 0.08, 0.07, 0.94))
+	box.position = Vector2(24, size.y * 0.62)
+	box.size = Vector2(size.x - 48, 0)
+	modal.add_child(box)
 	var v := VBoxContainer.new()
-	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	v.add_theme_constant_override("separation", 12)
-	scroll.add_child(v)
-	v.add_child(_label(title, 28))
-	return v
-
-
-func _figure(path: String, h: float) -> TextureRect:
-	var t := TextureRect.new()
-	t.texture = load(path)
-	t.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	t.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
-	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var ts: Vector2 = t.texture.get_size()
-	t.size = Vector2(h * ts.x / ts.y, h)
-	return t
+	v.add_theme_constant_override("separation", 10)
+	box.add_child(v)
+	var who := _label(shop["nombre"], 20)
+	who.add_theme_color_override("font_color", Color("d6c46a"))
+	v.add_child(who)
+	for l in lines:
+		v.add_child(_wrap("«%s»" % l, 22))
+	var loading := _label("Volviendo a casa…", 18)
+	loading.modulate = TEXT_DIM
+	v.add_child(loading)
+	var bar := _bar(Color("d6c46a"), 10)
+	v.add_child(bar)
+	var screen := modal
+	var tw := create_tween()
+	tw.tween_property(bar, "value", 100.0, 1.2 + 1.4 * lines.size())
+	tw.tween_callback(func():
+		if modal == screen:
+			_close_modal())
+	# Tocar la pantalla salta la espera, tras un instante para que no se cierre sin querer.
+	await get_tree().create_timer(0.7).timeout
+	if modal == screen:
+		loading.text = "Volviendo a casa…  (toca para continuar)"
+		screen.gui_input.connect(func(e):
+			if e is InputEventMouseButton and e.pressed and modal == screen:
+				tw.kill()
+				_close_modal())
 
 
 func _show_inventory() -> void:
@@ -611,9 +722,13 @@ func _add_wardrobe(v: VBoxContainer) -> void:
 	var names: Dictionary = game.character.get("trajes", {})
 	for t in game.outfits:
 		var row := HBoxContainer.new()
-		var l := _label(names.get(t, t), 20)
-		l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(l)
+		var info := VBoxContainer.new()
+		info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		info.add_child(_label(names.get(t, t), 20))
+		var fx := _wrap(_outfit_text(t), 16)
+		fx.add_theme_color_override("font_color", Color("c9b3ff"))
+		info.add_child(fx)
+		row.add_child(info)
 		var worn: bool = t == game.outfit
 		var b := _button("Puesto" if worn else "Vestir", _wear.bind(t), worn)
 		b.custom_minimum_size = Vector2(130, 56)
@@ -688,15 +803,6 @@ func _show_event(ev: Dictionary) -> void:
 		var b := _button(opt["texto"], _choose.bind(i), not game.option_available(opt))
 		b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		v.add_child(b)
-
-
-func _buy(id: String) -> void:
-	var shop: Dictionary = Game.load_json("res://data/tienda.json")
-	var kind: String = "traje" if game.items[id]["tipo"] == "traje" else "compra"
-	if game.buy(id):
-		_show_shop(game._pick(shop[kind]))
-	else:
-		_show_shop(game._pick(shop["sin_dinero"]))
 
 
 func _use(id: String) -> void:
