@@ -52,16 +52,58 @@ var shop_bought := []
 func _ready() -> void:
 	game = Game.new()
 	game.setup(CHARACTER)
-	music = Music.new()
-	add_child(music)
+	# La música vive en un autoload para no cortarse entre pantallas;
+	# si no existe (pruebas con -s), se crea aquí.
+	music = get_node_or_null("/root/Musica")
+	if music == null:
+		music = Music.new()
+		add_child(music)
 	_build_ui()
 	music.play("lobby")
 	game.changed.connect(_refresh)
+	game.changed.connect(_autosave)
 	game.log_message.connect(func(t): log_box.append_text(t + "\n"))
 	game.event_triggered.connect(_show_event)
 	game.game_over.connect(_show_game_over)
-	game.start()
+	var loaded := false
+	if Engine.get_meta("continuar", false):
+		Engine.set_meta("continuar", false)
+		var d = Game.load_json(Game.SAVE_PATH) if FileAccess.file_exists(Game.SAVE_PATH) else null
+		loaded = d is Dictionary and game.from_dict(d)
+	if not loaded:
+		game.start()
 	_refresh()
+	if loaded and not game.pending_event.is_empty():
+		_show_event(game.pending_event)
+
+
+## Guarda tras cada cambio; al terminar la partida, la borra.
+func _autosave() -> void:
+	if game.over:
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(Game.SAVE_PATH))
+		return
+	var f := FileAccess.open(Game.SAVE_PATH, FileAccess.WRITE)
+	if f:
+		f.store_string(JSON.stringify(game.to_dict()))
+
+
+func _to_menu() -> void:
+	_autosave()
+	get_tree().change_scene_to_file("res://scenes/menu.tscn")
+
+
+func _show_pause() -> void:
+	var v := _open_modal("Pausa")
+	v.add_child(_button("Seguir jugando", _close_modal))
+	var snd := _button(_sound_label(), func(): pass)
+	snd.pressed.connect(func():
+		music.toggle_mute()
+		snd.text = _sound_label())
+	v.add_child(snd)
+	var note := _wrap("La partida se guarda sola después de cada acción.", 17)
+	note.modulate = TEXT_DIM
+	v.add_child(note)
+	v.add_child(_button("Volver al menú principal", _to_menu))
 
 
 # ================================================================ construcción
@@ -95,10 +137,8 @@ func _build_ui() -> void:
 	btn_sound = Button.new()
 	btn_sound.add_theme_font_size_override("font_size", 20)
 	btn_sound.custom_minimum_size = Vector2(120, 0)
-	btn_sound.text = _sound_label()
-	btn_sound.pressed.connect(func():
-		music.toggle_mute()
-		btn_sound.text = _sound_label())
+	btn_sound.text = "Menú"
+	btn_sound.pressed.connect(_show_pause)
 	top_row.add_child(btn_sound)
 
 	# Retrato con fondo y elementos superpuestos
@@ -834,6 +874,7 @@ func _show_game_over(ending: Dictionary) -> void:
 	finals.modulate = TEXT_DIM
 	v.add_child(finals)
 	v.add_child(_button("Nueva partida", get_tree().reload_current_scene))
+	v.add_child(_button("Menú principal", _to_menu))
 	fade.queue_free()
 
 

@@ -52,6 +52,39 @@ var outfits: Array = []
 var bond := 0.0
 
 
+## Estado que se guarda en la partida (todo lo demás sale de los JSON de datos).
+const SAVE_FIELDS := ["stats", "day", "actions_left", "money", "total_money", "inventory",
+	"passives", "minigames", "known_affinity", "events_seen", "times_today", "pending_event",
+	"tolerance", "curse_mark", "marked", "today", "discovered", "outfit", "outfits", "bond",
+	"current_line"]
+const INT_FIELDS := ["day", "actions_left", "money", "total_money"]
+const SAVE_VERSION := 1
+const SAVE_PATH := "user://partida.json"
+
+
+func to_dict() -> Dictionary:
+	var d := {"version": SAVE_VERSION, "personaje": character["id"], "rng": str(rng.state)}
+	for f in SAVE_FIELDS:
+		d[f] = get(f)
+	return d
+
+
+## Restaura una partida guardada. Devuelve false si no es compatible.
+func from_dict(d: Dictionary) -> bool:
+	if int(d.get("version", 0)) != SAVE_VERSION or d.get("personaje", "") != character["id"]:
+		return false
+	for f in SAVE_FIELDS:
+		if not d.has(f):
+			continue
+		set(f, int(d[f]) if f in INT_FIELDS else d[f])
+	for s in STATS:
+		stats[s] = float(stats.get(s, character["stats_iniciales"].get(s, 50)))
+	rng.state = int(d.get("rng", "0"))
+	_log("Día %d. Partida recuperada." % day)
+	changed.emit()
+	return true
+
+
 static func load_json(path: String) -> Variant:
 	var f := FileAccess.open(path, FileAccess.READ)
 	if f == null:

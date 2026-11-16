@@ -17,7 +17,10 @@ Abre la carpeta en Godot y pulsa F5, o desde la terminal:
 | `data/items.json` | Tienda: consumibles, pasivos y minijuegos desbloqueables |
 | `data/eventos.json` | Eventos con momento, condiciones, peso y opciones |
 | `data/tienda.json` | Pestañas de la tienda y frases de la intendente (saludo, compra, comentario por artículo al salir) |
-| `scripts/game.gd` | Toda la lógica (sin interfaz) |
+| `data/intro.json` | Diálogos de la introducción (la intendente explica el Proyecto Waifu) |
+| `data/menu.json` | Créditos del menú principal |
+| `scripts/menu.gd`, `scripts/intro.gd` | Menú principal y la introducción (escenas `menu.tscn` e `intro.tscn`) |
+| `scripts/game.gd` | Toda la lógica (sin interfaz) y el guardado (`user://partida.json`) |
 | `scripts/main.gd` | Interfaz construida en código |
 | `scripts/slime_view.gd` | Retrato provisional dibujado |
 | `scripts/minigame_*.gd` | Minijuegos |

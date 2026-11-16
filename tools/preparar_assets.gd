@@ -26,6 +26,14 @@ const SHEETS := {
 	"Hoja de expresiones de chica slime vestido 1": "vestido_blanco",
 	"Hoja de expresiones de chica slime vestido 2": "vestido_lila",
 }
+## Menú principal: franjas verticales (desde, hasta) de cada pieza en la imagen de 941x1672.
+const MENU := {
+	"logo": Vector2i(0, 690),
+	"nueva": Vector2i(695, 925),
+	"continuar": Vector2i(925, 1146),
+	"opciones": Vector2i(1146, 1371),
+	"creditos": Vector2i(1371, 1610),
+}
 const MOODS := ["neutral", "feliz", "triste", "cansada", "inquieta", "alterada", "critica"]
 const CUT := 0.84   # fracción de altura que se conserva (corta a la altura de la cintura)
 
@@ -93,6 +101,14 @@ func _init() -> void:
 	_fit_height(chica_s, 900)
 	chica_s.save_png(base + "ui/tienda_vendedora.png")
 	print("tienda_vendedora ", chica_s.get_size())
+
+	# Menú principal: logo y cuatro botones, en las franjas de la imagen original.
+	var menu := Image.load_from_file(base + SRC + "Menú principal Proyecto Waifu.png")
+	menu.convert(Image.FORMAT_RGBA8)
+	for part in MENU:
+		var band: Vector2i = MENU[part]
+		menu.get_region(Rect2i(0, band.x, menu.get_width(), band.y - band.x)).save_png(base + "ui/menu_%s.png" % part)
+	print("menu ", MENU.size(), " piezas")
 	quit()
 
 
