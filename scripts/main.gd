@@ -105,7 +105,7 @@ func _build_ui() -> void:
 
 	# Retrato con fondo y elementos superpuestos
 	var stage := Control.new()
-	stage.custom_minimum_size = Vector2(0, 470)
+	stage.custom_minimum_size = Vector2(0, 380)
 	stage.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	stage.size_flags_stretch_ratio = 3.0
 	root.add_child(stage)
@@ -207,7 +207,7 @@ func _build_ui() -> void:
 	bsb.content_margin_bottom = 16
 	bubble.add_theme_stylebox_override("panel", bsb)
 	root.add_child(bubble)
-	lbl_line = _label("", 23)
+	lbl_line = _label("", 21)
 	lbl_line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	lbl_line.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	bubble.add_child(lbl_line)
@@ -246,7 +246,7 @@ func _build_ui() -> void:
 	lsb.set_texture_margin_all(30)
 	lsb.set_content_margin_all(22)
 	log_panel.add_theme_stylebox_override("panel", lsb)
-	log_panel.custom_minimum_size = Vector2(0, 130)
+	log_panel.custom_minimum_size = Vector2(0, 96)
 	log_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	root.add_child(log_panel)
 	log_box = RichTextLabel.new()
@@ -268,7 +268,7 @@ func _build_ui() -> void:
 	]
 	for d in defs:
 		var b := Button.new()
-		b.custom_minimum_size = Vector2(0, 150)
+		b.custom_minimum_size = Vector2(0, 138)
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		b.icon = load("res://ui/btn_%s.png" % d[0])
 		b.expand_icon = true
