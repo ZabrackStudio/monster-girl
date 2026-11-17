@@ -1,4 +1,4 @@
-## Música de fondo con fundido entre pistas y botón de silencio.
+## Música de fondo con fundido entre pistas, volumen y botón de silencio.
 ## Busca res://audio/<pista>.mp3, .ogg o .wav (Ogg Vorbis; Godot no lee Ogg Opus).
 ## Si una pista no existe, simplemente no suena nada.
 extends Node
@@ -12,6 +12,7 @@ var active := 0
 var current := ""
 var target := ""
 var muted := false
+var volume := 0.8          # 0..1, volumen general (bus Master)
 var tween: Tween
 var cache := {}
 
@@ -27,7 +28,9 @@ func _ready() -> void:
 		var d = JSON.parse_string(f.get_as_text())
 		if d is Dictionary:
 			muted = bool(d.get("silencio", false))
+			volume = clampf(float(d.get("volumen", volume)), 0.0, 1.0)
 	AudioServer.set_bus_mute(0, muted)
+	_apply_volume()
 
 
 ## Pide una pista. El cambio se aplica al final del frame, así varias
@@ -39,10 +42,24 @@ func play(track: String) -> void:
 func toggle_mute() -> bool:
 	muted = not muted
 	AudioServer.set_bus_mute(0, muted)
+	_save()
+	return muted
+
+
+func set_volume(v: float) -> void:
+	volume = clampf(v, 0.0, 1.0)
+	_apply_volume()
+	_save()
+
+
+func _apply_volume() -> void:
+	AudioServer.set_bus_volume_db(0, linear_to_db(maxf(volume, 0.0001)))
+
+
+func _save() -> void:
 	var f := FileAccess.open(PREFS_PATH, FileAccess.WRITE)
 	if f:
-		f.store_string(JSON.stringify({"silencio": muted}))
-	return muted
+		f.store_string(JSON.stringify({"silencio": muted, "volumen": volume}))
 
 
 func _process(_delta: float) -> void:

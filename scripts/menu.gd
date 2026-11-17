@@ -90,6 +90,7 @@ func _on_opciones() -> void:
 		music.toggle_mute()
 		snd.text = _sound_label())
 	v.add_child(snd)
+	v.add_child(_volume_row())
 	v.add_child(_button("Ver la introducción", func():
 		Engine.set_meta("intro_desde_menu", true)
 		Fade.go(get_tree(), "res://scenes/intro.tscn")))
@@ -208,3 +209,38 @@ func _button(text: String, cb: Callable) -> Button:
 	b.add_theme_font_size_override("font_size", 20)
 	b.pressed.connect(cb)
 	return b
+
+## Fila de volumen: deslizador 0-100 % que se guarda al soltarlo.
+func _volume_row() -> HBoxContainer:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	var l := _label("Volumen", 20)
+	row.add_child(l)
+	var slider := HSlider.new()
+	slider.min_value = 0
+	slider.max_value = 100
+	slider.step = 5
+	slider.value = roundi(music.volume * 100)
+	slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	slider.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	slider.custom_minimum_size = Vector2(0, 48)
+	# Pista gruesa y de color, más fácil de ver y de tocar en el móvil.
+	var track := StyleBoxFlat.new()
+	track.bg_color = Color("343d5e")
+	track.set_corner_radius_all(6)
+	track.content_margin_top = 6
+	track.content_margin_bottom = 6
+	slider.add_theme_stylebox_override("slider", track)
+	var fill := track.duplicate()
+	fill.bg_color = Color("f07ac0")
+	slider.add_theme_stylebox_override("grabber_area", fill)
+	slider.add_theme_stylebox_override("grabber_area_highlight", fill)
+	row.add_child(slider)
+	var pct := _label("%d%%" % slider.value, 20)
+	pct.custom_minimum_size = Vector2(64, 0)
+	pct.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	row.add_child(pct)
+	slider.value_changed.connect(func(v):
+		pct.text = "%d%%" % v
+		music.set_volume(v / 100.0))
+	return row

@@ -27,6 +27,7 @@ func _ready() -> void:
 	grid.columns = 3
 	grid.add_theme_constant_override("h_separation", 10)
 	grid.add_theme_constant_override("v_separation", 10)
+	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL   # las cartas llenan la ventana
 	add_child(grid)
 	for i in WORDS.size():
 		cards.append(i)
@@ -36,7 +37,8 @@ func _ready() -> void:
 		var b := Button.new()
 		b.custom_minimum_size = Vector2(0, 96)
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		b.add_theme_font_size_override("font_size", 26)
+		b.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		b.add_theme_font_size_override("font_size", 28)
 		b.text = "?"
 		b.pressed.connect(_flip.bind(i))
 		grid.add_child(b)

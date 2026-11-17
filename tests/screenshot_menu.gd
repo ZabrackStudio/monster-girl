@@ -24,6 +24,16 @@ func _run() -> void:
 	current_scene._show_pause()
 	await create_timer(0.4).timeout
 	_shot("m4_pausa")
+	current_scene._close_modal()
+	current_scene._start_minigame("burbujas")
+	await create_timer(4.0).timeout
+	_shot("m4b_burbujas")
+	current_scene._close_modal()
+	await create_timer(0.3).timeout
+	current_scene._start_minigame("memoria")
+	await create_timer(0.5).timeout
+	_shot("m4c_memoria")
+	current_scene._close_modal()
 	current_scene._to_menu()
 	await create_timer(1.2).timeout
 	print("MENU guardado existe: ", FileAccess.file_exists("user://partida.json"))

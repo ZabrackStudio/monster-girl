@@ -105,6 +105,7 @@ func _show_pause() -> void:
 		music.toggle_mute()
 		snd.text = _sound_label())
 	v.add_child(snd)
+	v.add_child(_volume_row())
 	var note := _wrap("La partida se guarda sola después de cada acción.", 17)
 	note.modulate = TEXT_DIM
 	v.add_child(note)
@@ -464,7 +465,17 @@ func _open_modal(title: String, dim := 0.65) -> VBoxContainer:
 	scroll.add_child(v)
 	if title != "":
 		v.add_child(_label(title, 30))
+	_fit_scroll.call_deferred(scroll, v, scroll.custom_minimum_size.y)
 	return v
+
+
+## La ventana se ajusta a su contenido, con el alto máximo de antes como tope.
+func _fit_scroll(scroll: ScrollContainer, v: Control, max_h: float) -> void:
+	# Espera a que se distribuya: los textos con ajuste de línea se miden con su ancho real.
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if is_instance_valid(scroll) and is_instance_valid(v):
+		scroll.custom_minimum_size.y = minf(v.get_combined_minimum_size().y, max_h)
 
 
 func _close_modal() -> void:
@@ -869,7 +880,9 @@ func _show_minigame_select() -> void:
 func _start_minigame(id: String) -> void:
 	var v := _open_modal(game.balance["minijuegos"][id]["nombre"], 0.85)
 	var mg: Control = MINIGAME_SCRIPTS[id].new()
-	mg.custom_minimum_size = Vector2(0, maxf(560, size.y - 300))
+	# Cabe justo en la ventana: alto de la zona con scroll menos el título.
+	mg.custom_minimum_size = Vector2(0, minf(size.y - 160, 1000) - 64)
+	mg.clip_contents = true
 	mg.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	v.add_child(mg)
 	mg.finished.connect(_on_minigame_done.bind(id))
@@ -965,3 +978,38 @@ func _save_record(ending: Dictionary) -> Dictionary:
 	var out := r.duplicate()
 	out["nuevo"] = nuevo
 	return out
+
+## Fila de volumen: deslizador 0-100 % que se guarda al soltarlo.
+func _volume_row() -> HBoxContainer:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	var l := _label("Volumen", 20)
+	row.add_child(l)
+	var slider := HSlider.new()
+	slider.min_value = 0
+	slider.max_value = 100
+	slider.step = 5
+	slider.value = roundi(music.volume * 100)
+	slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	slider.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	slider.custom_minimum_size = Vector2(0, 48)
+	# Pista gruesa y de color, más fácil de ver y de tocar en el móvil.
+	var track := StyleBoxFlat.new()
+	track.bg_color = Color("343d5e")
+	track.set_corner_radius_all(6)
+	track.content_margin_top = 6
+	track.content_margin_bottom = 6
+	slider.add_theme_stylebox_override("slider", track)
+	var fill := track.duplicate()
+	fill.bg_color = Color("f07ac0")
+	slider.add_theme_stylebox_override("grabber_area", fill)
+	slider.add_theme_stylebox_override("grabber_area_highlight", fill)
+	row.add_child(slider)
+	var pct := _label("%d%%" % slider.value, 20)
+	pct.custom_minimum_size = Vector2(64, 0)
+	pct.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	row.add_child(pct)
+	slider.value_changed.connect(func(v):
+		pct.text = "%d%%" % v
+		music.set_volume(v / 100.0))
+	return row
