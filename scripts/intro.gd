@@ -4,6 +4,7 @@ extends Control
 
 const Shopkeeper := preload("res://scripts/shopkeeper.gd")
 const Game := preload("res://scripts/game.gd")
+const Fade := preload("res://scripts/transicion.gd")
 const CHARS_PER_SEC := 45.0
 
 var lines: Array = []
@@ -37,6 +38,13 @@ func _ready() -> void:
 	add_child(keeper)
 	keeper.fit(size.y * 0.8)
 	keeper.position = Vector2(size.x * 0.5 - keeper.size.x * 0.5, size.y * 0.02)
+	# Entra desde la izquierda mientras aparece.
+	var target_x := keeper.position.x
+	keeper.position.x -= 60
+	keeper.modulate.a = 0.0
+	var tw := create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tw.tween_property(keeper, "position:x", target_x, 0.7)
+	tw.tween_property(keeper, "modulate:a", 1.0, 0.6)
 
 	var box := PanelContainer.new()
 	var sb := StyleBoxFlat.new()
@@ -50,6 +58,8 @@ func _ready() -> void:
 	box.size = Vector2(size.x - 40, size.y * 0.3)
 	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(box)
+	box.modulate.a = 0.0
+	create_tween().tween_property(box, "modulate:a", 1.0, 0.5).set_delay(0.3)
 	var v := VBoxContainer.new()
 	v.add_theme_constant_override("separation", 10)
 	box.add_child(v)
@@ -125,6 +135,6 @@ func _finish() -> void:
 	# Si se abrió desde Opciones, vuelve al menú; si no, empieza la partida.
 	if Engine.get_meta("intro_desde_menu", false):
 		Engine.set_meta("intro_desde_menu", false)
-		get_tree().change_scene_to_file("res://scenes/menu.tscn")
+		Fade.go(get_tree(), "res://scenes/menu.tscn")
 	else:
-		get_tree().change_scene_to_file("res://scenes/main.tscn")
+		Fade.go(get_tree(), "res://scenes/main.tscn")

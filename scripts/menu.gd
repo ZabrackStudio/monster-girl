@@ -3,6 +3,7 @@ extends Control
 
 const Game := preload("res://scripts/game.gd")
 const Music := preload("res://scripts/music.gd")
+const Fade := preload("res://scripts/transicion.gd")
 const RECORDS_PATH := "user://records.json"
 const SRC_W := 941.0   # ancho de la imagen original del menú
 const PIECES := [["logo", 0], ["nueva", 695], ["continuar", 925], ["opciones", 1146], ["creditos", 1371]]
@@ -74,12 +75,12 @@ func _on_nueva() -> void:
 
 func _start_new() -> void:
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(Game.SAVE_PATH))
-	get_tree().change_scene_to_file("res://scenes/intro.tscn")
+	Fade.go(get_tree(), "res://scenes/intro.tscn")
 
 
 func _on_continuar() -> void:
 	Engine.set_meta("continuar", true)
-	get_tree().change_scene_to_file("res://scenes/main.tscn")
+	Fade.go(get_tree(), "res://scenes/main.tscn")
 
 
 func _on_opciones() -> void:
@@ -91,7 +92,7 @@ func _on_opciones() -> void:
 	v.add_child(snd)
 	v.add_child(_button("Ver la introducción", func():
 		Engine.set_meta("intro_desde_menu", true)
-		get_tree().change_scene_to_file("res://scenes/intro.tscn")))
+		Fade.go(get_tree(), "res://scenes/intro.tscn")))
 	v.add_child(HSeparator.new())
 	v.add_child(_label("Récords", 24))
 	var rec := _records_text()
@@ -108,7 +109,7 @@ func _confirm_wipe() -> void:
 	v.add_child(_button("Sí, borrar", func():
 		for path in [Game.SAVE_PATH, RECORDS_PATH]:
 			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
-		get_tree().reload_current_scene()))
+		Fade.go(get_tree())))
 	v.add_child(_button("Cancelar", _on_opciones))
 
 
@@ -144,12 +145,16 @@ func _sound_label() -> String:
 # ---------------------------------------------------------------- ventanas
 
 func _open_modal(title: String) -> VBoxContainer:
-	_close_modal()
+	var replacing := modal != null   # de una ventana a otra: cambio directo
+	_close_modal(replacing)
 	modal = ColorRect.new()
 	modal.color = Color(0, 0, 0, 0.7)
 	modal.set_anchors_preset(Control.PRESET_FULL_RECT)
 	modal.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(modal)
+	if not replacing:
+		modal.modulate.a = 0.0
+		create_tween().tween_property(modal, "modulate:a", 1.0, 0.18)
 	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
 	modal.add_child(center)
@@ -170,10 +175,17 @@ func _open_modal(title: String) -> VBoxContainer:
 	return v
 
 
-func _close_modal() -> void:
+func _close_modal(instant := false) -> void:
 	if modal:
-		modal.queue_free()
+		var old := modal
 		modal = null
+		if instant:
+			old.queue_free()
+			return
+		old.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var tw := create_tween()
+		tw.tween_property(old, "modulate:a", 0.0, 0.15)
+		tw.tween_callback(old.queue_free)
 
 
 func _label(text: String, font_size := 20) -> Label:

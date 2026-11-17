@@ -5,6 +5,7 @@ extends Control
 const Game := preload("res://scripts/game.gd")
 const Portrait := preload("res://scripts/portrait.gd")
 const Music := preload("res://scripts/music.gd")
+const Fade := preload("res://scripts/transicion.gd")
 const Shopkeeper := preload("res://scripts/shopkeeper.gd")
 const MINIGAME_SCRIPTS := {
 	"burbujas": preload("res://scripts/minigame_bubbles.gd"),
@@ -47,6 +48,10 @@ var shop_money: Label
 var shop_said: Label
 var shop_keeper
 var shop_bought := []
+var transitions := true   # las pruebas automáticas las desactivan
+var sleeping := false
+var closing: Control
+var closing_frame := -1
 
 
 func _ready() -> void:
@@ -89,7 +94,7 @@ func _autosave() -> void:
 
 func _to_menu() -> void:
 	_autosave()
-	get_tree().change_scene_to_file("res://scenes/menu.tscn")
+	Fade.go(get_tree(), "res://scenes/menu.tscn")
 
 
 func _show_pause() -> void:
@@ -423,7 +428,7 @@ func _on_action(id: String) -> void:
 		"tienda": _show_shop()
 		"objetos": _show_inventory()
 		"jugar": _show_minigame_select()
-		"dormir": game.sleep()
+		"dormir": _night()
 		_: game.do_activity(id)
 
 
@@ -436,6 +441,7 @@ func _open_modal(title: String, dim := 0.65) -> VBoxContainer:
 	modal.set_anchors_preset(Control.PRESET_FULL_RECT)
 	modal.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(modal)
+	_fade_in(modal)
 	var margin := MarginContainer.new()
 	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "right"]:
@@ -463,10 +469,68 @@ func _open_modal(title: String, dim := 0.65) -> VBoxContainer:
 
 func _close_modal() -> void:
 	if modal:
-		modal.queue_free()
+		var old := modal
 		modal = null
+		closing = old
+		closing_frame = Engine.get_process_frames()
+		_fade_out(old)
 	if not game.over:
 		music.play("lobby")
+
+
+## Las ventanas aparecen y desaparecen con un fundido corto.
+func _fade_in(c: CanvasItem, dur := 0.18, force := false) -> void:
+	if not transitions:
+		return
+	# Si sustituye a otra ventana en el mismo instante (p. ej. al refrescarla), cambio directo.
+	if not force and closing_frame == Engine.get_process_frames():
+		if is_instance_valid(closing):
+			closing.queue_free()
+		return
+	c.modulate.a = 0.0
+	create_tween().tween_property(c, "modulate:a", 1.0, dur)
+
+
+func _fade_out(c: Control, dur := 0.15) -> void:
+	if not transitions:
+		c.queue_free()
+		return
+	c.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var tw := create_tween()
+	tw.tween_property(c, "modulate:a", 0.0, dur)
+	tw.tween_callback(c.queue_free)
+
+
+## Paso de la noche: fundido a oscuro, el día cambia a escondidas y vuelve la luz.
+func _night() -> void:
+	if not transitions:
+		game.sleep()
+		return
+	if sleeping or game.over or not game.pending_event.is_empty():
+		return
+	sleeping = true
+	var shade := ColorRect.new()
+	shade.color = Color("05060c")
+	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
+	shade.mouse_filter = Control.MOUSE_FILTER_STOP
+	shade.modulate.a = 0.0
+	add_child(shade)
+	var lbl := _label("Día %d" % (game.day + 1), 44)
+	lbl.set_anchors_preset(Control.PRESET_FULL_RECT)
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	lbl.modulate.a = 0.0
+	shade.add_child(lbl)
+	var tw := create_tween()
+	tw.tween_property(shade, "modulate:a", 1.0, 0.45)
+	tw.tween_property(lbl, "modulate:a", 1.0, 0.3)
+	await tw.finished
+	game.sleep()
+	await get_tree().create_timer(0.6).timeout
+	tw = create_tween()
+	tw.tween_property(shade, "modulate:a", 0.0, 2.0 if game.over else 0.6)
+	tw.tween_callback(shade.queue_free)
+	sleeping = false
 
 
 func _tolerance_text(f: float) -> String:
@@ -505,6 +569,7 @@ func _show_shop() -> void:
 	modal.mouse_filter = Control.MOUSE_FILTER_STOP
 	modal.clip_contents = true
 	add_child(modal)
+	_fade_in(modal)
 	var scene_h := size.y * 0.47
 	modal.add_child(_shop_backdrop(1.0))
 	shop_keeper = Shopkeeper.new()
@@ -662,6 +727,7 @@ func _leave_shop() -> void:
 	modal.set_anchors_preset(Control.PRESET_FULL_RECT)
 	modal.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(modal)
+	_fade_in(modal, 0.4, true)
 	var black := ColorRect.new()
 	black.color = Color.BLACK
 	black.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -873,7 +939,7 @@ func _show_game_over(ending: Dictionary) -> void:
 	var finals := _label("Finales descubiertos: %d/%d" % [record["finales"].size(), game.character["finales"].size()], 20)
 	finals.modulate = TEXT_DIM
 	v.add_child(finals)
-	v.add_child(_button("Nueva partida", get_tree().reload_current_scene))
+	v.add_child(_button("Nueva partida", func(): Fade.go(get_tree())))
 	v.add_child(_button("Menú principal", _to_menu))
 	fade.queue_free()
 

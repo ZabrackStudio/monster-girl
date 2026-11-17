@@ -15,6 +15,8 @@ var t := 0.0
 
 var bg: TextureRect
 var sprite: TextureRect
+var prev: TextureRect      # expresión anterior, que se desvanece encima de la nueva
+var prev_tween: Tween
 var fallback: Control
 var textures := {}
 
@@ -34,6 +36,12 @@ func setup(id: String, color: Color) -> void:
 	sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	add_child(sprite)
+	prev = TextureRect.new()
+	prev.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	prev.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	prev.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	prev.visible = false
+	add_child(prev)
 	fallback = SlimeView.new()
 	fallback.base_color = color
 	fallback.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -45,6 +53,15 @@ func set_state(new_mood: String, new_level: int, new_outfit: String = "") -> voi
 	level = new_level
 	outfit = new_outfit
 	var tex := _texture_for(mood)
+	if tex != sprite.texture and sprite.texture != null and tex != null and is_inside_tree():
+		prev.texture = sprite.texture
+		prev.modulate = sprite.modulate
+		prev.visible = true
+		if prev_tween:
+			prev_tween.kill()
+		prev_tween = create_tween()
+		prev_tween.tween_property(prev, "modulate:a", 0.0, 0.35)
+		prev_tween.tween_callback(func(): prev.visible = false)
 	sprite.texture = tex
 	sprite.visible = tex != null
 	fallback.visible = tex == null
@@ -80,6 +97,9 @@ func _process(delta: float) -> void:
 		shake = Vector2(randf_range(-2, 2), randf_range(-1, 1))
 	sprite.size = Vector2(w, h)
 	sprite.position = Vector2((size.x - w) / 2, size.y - h + 6 + breathe) + shake
+	if prev.visible:
+		prev.size = sprite.size
+		prev.position = sprite.position
 	# Más lujuria, más rosa; en estado crítico, además, late.
 	var pink := Color("ff8fc8")
 	var amount := level * 0.14 + (0.08 * (0.5 + 0.5 * sin(t * 4.0)) if level >= 3 else 0.0)

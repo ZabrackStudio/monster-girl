@@ -8,11 +8,10 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://tests/capturas"))
 	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida.json"))
 	change_scene_to_file("res://scenes/menu.tscn")
-	for i in 20: await process_frame
+	await create_timer(1.0).timeout
 	_shot("m1_menu")
 	current_scene._on_nueva()
-	for i in 20: await process_frame
-	await create_timer(2.5).timeout
+	await create_timer(3.0).timeout
 	_shot("m2_intro")
 	for i in 4:
 		current_scene._advance()
@@ -20,21 +19,26 @@ func _run() -> void:
 	await create_timer(0.3).timeout
 	_shot("m3_intro_avanzada")
 	current_scene._finish()
-	for i in 20: await process_frame
+	await create_timer(1.2).timeout
 	current_scene.game.do_activity("comer")
 	current_scene._show_pause()
-	for i in 10: await process_frame
+	await create_timer(0.4).timeout
 	_shot("m4_pausa")
 	current_scene._to_menu()
-	for i in 20: await process_frame
+	await create_timer(1.2).timeout
 	print("MENU guardado existe: ", FileAccess.file_exists("user://partida.json"))
 	current_scene._on_opciones()
-	for i in 10: await process_frame
+	await create_timer(0.4).timeout
 	_shot("m5_opciones")
 	current_scene._on_continuar()
-	for i in 20: await process_frame
+	await create_timer(1.2).timeout
 	print("MENU continuar: día ", current_scene.game.day, " acciones ", current_scene.game.actions_left)
 	_shot("m6_continuar")
+	current_scene._on_action("dormir")
+	await create_timer(0.9).timeout
+	_shot("m7_noche")
+	await create_timer(1.5).timeout
+	_shot("m8_dia_siguiente")
 	quit()
 
 func _shot(name: String) -> void:

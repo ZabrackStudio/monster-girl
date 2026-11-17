@@ -7,6 +7,7 @@ func _init() -> void:
 
 func _run() -> void:
 	var main = load("res://scenes/main.tscn").instantiate()
+	main.transitions = false
 	root.add_child(main)
 	await process_frame
 	var g = main.game
