@@ -50,13 +50,14 @@ var outfit := ""
 var outfits: Array = []
 # Vínculo: lo único que puede salvarla cuando la maldición llegue al máximo.
 var bond := 0.0
+var talked_today := false           # la charla que cuenta es una al día
 
 
 ## Estado que se guarda en la partida (todo lo demás sale de los JSON de datos).
 const SAVE_FIELDS := ["stats", "day", "actions_left", "money", "total_money", "inventory",
 	"passives", "minigames", "known_affinity", "events_seen", "times_today", "pending_event",
 	"tolerance", "curse_mark", "marked", "today", "discovered", "outfit", "outfits", "bond",
-	"current_line"]
+	"current_line", "talked_today"]
 const INT_FIELDS := ["day", "actions_left", "money", "total_money"]
 const SAVE_VERSION := 1
 const SAVE_PATH := "user://partida.json"
@@ -116,6 +117,7 @@ func start() -> void:
 	minigames = [character["minijuego_inicial"]]
 	outfit = character.get("traje_inicial", "")
 	outfits = [outfit]
+	bond = float(balance["vinculo"].get("inicial", 0))
 	_say("inicio")
 	_log("Día 1. %s (%s) se muda contigo." % [character["nombre"], character["especie"]])
 	changed.emit()
@@ -147,8 +149,68 @@ func mood() -> String:
 	if stats["tristeza"] > 60: return "triste"
 	if actions_left == 0 and not over: return "cansada"   # al final del día
 	if lv == 1: return "inquieta"
-	if stats["felicidad"] > 65: return "feliz"
+	# Sin maldición a la vista, la cara depende de cómo te trata.
+	var att := attitude_index()
+	if att == 0: return "triste"
+	if att >= 3 or (att == 2 and stats["felicidad"] > 65): return "feliz"
 	return "neutral"
+
+
+## Actitud actual según el vínculo: de Arisca (peor) a Unida (mejor).
+func attitude_index() -> int:
+	var list: Array = balance["vinculo"]["actitudes"]
+	var out := 0
+	for i in list.size():
+		if bond >= float(list[i]["min"]):
+			out = i
+	return out
+
+
+func attitude() -> Dictionary:
+	return balance["vinculo"]["actitudes"][attitude_index()]
+
+
+## Tramo de la maldición para elegir qué dice: calma, alterada o crítica.
+func lust_band() -> String:
+	var lv := level()
+	return "critica" if lv >= 3 else ("alterada" if lv == 2 else "calma")
+
+
+## Frase al tocarla, según su actitud y su lujuria.
+func touch_line() -> String:
+	return _pick(character["charla"]["toque"][attitude()["id"]][lust_band()])
+
+
+func can_talk() -> bool:
+	return not over and pending_event.is_empty() and not talked_today
+
+
+## Con la maldición alta manda el estado; si no, manda la actitud.
+func talk_key() -> String:
+	var band := lust_band()
+	return attitude()["id"] if band == "calma" else band
+
+
+## Responde en la charla del día. Devuelve lo que contesta ella.
+func talk(reply: String) -> String:
+	if not can_talk():
+		return ""
+	talked_today = true
+	var key := talk_key()
+	var quality: String = character["charla"]["ajuste"][key][reply]
+	var fx: Dictionary = balance["vinculo"]["charla"][quality]
+	_bond(float(fx["vinculo"]))
+	var real := apply({"lujuria": fx["lujuria"]})
+	if quality == "buena" and not discovered.has("charla_" + key):
+		discovered["charla_" + key] = true
+		_log("[color=#f2c14e](nueva nota en el diario)[/color]")
+	if not real.is_empty() and absf(real["lujuria"]) >= 0.5:
+		_log("Charla: %s" % _fmt(real))
+	var line := _pick(character["charla"]["respuestas"][key][quality])
+	current_line = line
+	_check_consumed()
+	changed.emit()
+	return line
 
 
 func activity(id: String) -> Dictionary:
@@ -349,6 +411,7 @@ func sleep() -> void:
 	actions_left = int(balance["acciones_por_dia"])
 	times_today.clear()
 	today.clear()
+	talked_today = false
 	var diff := {}
 	for s in STATS:
 		diff[s] = stats[s] - before[s]
@@ -359,7 +422,7 @@ func sleep() -> void:
 	if _check_consumed():
 		return
 	if not quiet:
-		current_line = _pick(character["dialogos"].get("nivel_%d" % level(), [""]))
+		current_line = touch_line()
 	_try_event("noche", float(d["prob_evento_noche"]))
 	changed.emit()
 
@@ -544,7 +607,7 @@ func tolerance_factor(source: String) -> float:
 
 
 func _mult_for(id: String) -> float:
-	return effectiveness() * pow(float(balance["repeticion_mult"]), times_today.get(id, 0))
+	return effectiveness() * float(attitude()["efectividad"]) * pow(float(balance["repeticion_mult"]), times_today.get(id, 0))
 
 
 func _count(id: String) -> void:
@@ -560,7 +623,8 @@ func _after_action(moment: String, prob: float) -> void:
 
 func _check_consumed() -> bool:
 	var niveles: Array = balance["niveles"]
-	if not marked and stats["lujuria"] >= float(niveles[3]["min"]):
+	# Si ya llega al máximo no hay crisis que marcar: el final se decide con el vínculo que tenía.
+	if not marked and stats["lujuria"] >= float(niveles[3]["min"]) and stats["lujuria"] < 100:
 		marked = true
 		curse_mark = minf(curse_mark + float(balance["maldicion"]["marca"]), float(balance["maldicion"]["marca_max"]))
 		_log("[color=#ef7d86]La maldición deja una marca: la lujuria ya no bajará de %d.[/color]" % roundi(curse_mark))
@@ -569,7 +633,8 @@ func _check_consumed() -> bool:
 		marked = false
 	if not over and stats["lujuria"] >= 100:
 		# Solo un vínculo muy fuerte le deja elegir irse en vez de cazarte.
-		_end("marea" if bond >= bond_goal() else "poseida")
+		# Sin él, cómo acaba depende de cuánto llegó a quererte.
+		_end("marea" if bond >= bond_goal() else ("lucha" if attitude_index() >= 2 else "poseida"))
 	return over
 
 
@@ -578,6 +643,8 @@ func _end(kind: String) -> void:
 	var ending: Dictionary = character["finales"][kind].duplicate()
 	ending["tipo"] = kind
 	ending["dias"] = day
+	ending["vinculo"] = bond
+	ending["actitud"] = attitude()["nombre"]
 	changed.emit()
 	game_over.emit(ending)
 
@@ -611,8 +678,9 @@ func _say(key: String) -> void:
 	if quiet:
 		return
 	var lines: Array = character["dialogos"].get(key, [])
+	lines = character.get("dialogos_actitud", {}).get(attitude()["id"], {}).get(key, lines)
 	if level() >= 2 and key != "inicio":
-		lines = character["dialogos"].get("nivel_%d" % level(), lines)
+		lines = character["charla"]["toque"][attitude()["id"]][lust_band()]
 	if not lines.is_empty():
 		current_line = _pick(lines)
 

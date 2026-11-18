@@ -42,6 +42,7 @@ func _run(strategy: String, seed_value: int) -> int:
 		g.outfits.append(g.outfit)
 		strategy = "experta"
 	while not g.over and g.day < MAX_DAYS:
+		_talk(g, strategy)
 		var guard := 0
 		while g.actions_left > 0 and not g.over and guard < 20:
 			guard += 1
@@ -50,6 +51,19 @@ func _run(strategy: String, seed_value: int) -> int:
 		if not g.over:
 			g.sleep()
 	return g.day
+
+
+## Charla diaria: al azar habla la mitad de los días y sin criterio; la básica
+## contesta sin criterio; la experta conoce la respuesta buena.
+func _talk(g, strategy: String) -> void:
+	if not g.can_talk():
+		return
+	var opts: Array = g.character["charla"]["opciones"].keys()
+	if strategy.begins_with("experta"):
+		var table: Dictionary = g.character["charla"]["ajuste"][g.talk_key()]
+		g.talk(table.find_key("buena"))
+	elif strategy == "basica" or g.rng.randf() < 0.5:
+		g.talk(opts[g.rng.randi() % opts.size()])
 
 
 func _resolve(g, ev: Dictionary, strategy: String) -> void:

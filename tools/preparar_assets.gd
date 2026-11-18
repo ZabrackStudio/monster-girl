@@ -35,6 +35,7 @@ const MENU := {
 	"creditos": Vector2i(1371, 1610),
 }
 const MOODS := ["neutral", "feliz", "triste", "cansada", "inquieta", "alterada", "critica"]
+const FRAME_W := 460   # ancho común de cada expresión
 const CUT := 0.84   # fracción de altura que se conserva (corta a la altura de la cintura)
 
 
@@ -82,12 +83,22 @@ func _init() -> void:
 			_remove_dark_bg(src)
 		var dir := "personajes/slime/trajes/%s/" % SHEETS[sheet]
 		DirAccess.make_dir_recursive_absolute(base + dir)
-		var col_w := src.get_width() / MOODS.size()
+		var cut_h := int(src.get_height() * CUT)
+		var runs := _figure_runs(src, cut_h)
+		if runs.size() != MOODS.size():
+			push_error("%s: %d figuras detectadas en vez de %d" % [sheet, runs.size(), MOODS.size()])
+			quit(1)
+			return
 		for i in MOODS.size():
-			var frame := src.get_region(Rect2i(i * col_w, 0, col_w, int(src.get_height() * CUT)))
-			_isolate(frame)
-			frame.save_png(base + dir + MOODS[i] + ".png")
-		print(dir, " ", MOODS.size(), " expresiones ", col_w, "x", int(src.get_height() * CUT))
+			var fig := src.get_region(Rect2i(runs[i].x, 0, runs[i].y - runs[i].x, cut_h))
+			_isolate(fig)
+			# Todas sobre el mismo lienzo, centradas por el cuerpo: así la cara cambia sin que salte.
+			var band := fig.get_region(Rect2i(0, cut_h - 150, fig.get_width(), 140)).get_used_rect()
+			var canvas := Image.create(FRAME_W, cut_h, false, Image.FORMAT_RGBA8)
+			var dx := FRAME_W / 2 - (band.position.x + band.size.x / 2)
+			canvas.blit_rect(fig, Rect2i(Vector2i.ZERO, fig.get_size()), Vector2i(dx, 0))
+			canvas.save_png(base + dir + MOODS[i] + ".png")
+		print(dir, " ", runs)
 
 	# Tienda: almacén de fondo (ya con los guardias) y la intendente.
 	var alm := Image.load_from_file(base + SRC + "almacen.png")
@@ -110,6 +121,33 @@ func _init() -> void:
 		menu.get_region(Rect2i(0, band.x, menu.get_width(), band.y - band.x)).save_png(base + "ui/menu_%s.png" % part)
 	print("menu ", MENU.size(), " piezas")
 	quit()
+
+
+## Tramos horizontales (desde, hasta) ocupados por cada figura de la hoja.
+func _figure_runs(img: Image, h: int) -> Array[Vector2i]:
+	var w := img.get_width()
+	var data := img.get_data()
+	var runs: Array[Vector2i] = []
+	var start := -1
+	var empty := 0
+	for x in w + 8:
+		var used := false
+		if x < w:
+			for y in range(0, h, 2):
+				if data[(y * w + x) * 4 + 3] > 40:
+					used = true
+					break
+		if used:
+			if start < 0:
+				start = x
+			empty = 0
+		elif start >= 0:
+			empty += 1
+			if empty >= 8:
+				if x - empty - start > 120:
+					runs.append(Vector2i(maxi(start - 4, 0), mini(x - empty + 5, w)))
+				start = -1
+	return runs
 
 
 ## Quita el halo semitransparente: lo muy transparente fuera; rampa suave hasta lo opaco.

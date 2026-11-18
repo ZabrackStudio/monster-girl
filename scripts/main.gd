@@ -28,6 +28,8 @@ var lbl_level: Label
 var level_pill: PanelContainer
 var lust_bar: ProgressBar
 var lbl_lust: Label
+var name_lbl: Label
+var talk_pill: PanelContainer
 var lbl_moon: Label
 var moon_pill: PanelContainer
 var lbl_line: Label
@@ -157,6 +159,7 @@ func _build_ui() -> void:
 	portrait.set_anchors_preset(Control.PRESET_FULL_RECT)
 	stage.add_child(portrait)
 	portrait.setup(game.character["id"], Color(game.character["color"]))
+	portrait.gui_input.connect(_on_portrait_input)
 	var frame := Panel.new()
 	frame.set_anchors_preset(Control.PRESET_FULL_RECT)
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -180,7 +183,7 @@ func _build_ui() -> void:
 	var pills := HBoxContainer.new()
 	ov.add_child(pills)
 	var name_pill := _pill(Color(0.17, 0.12, 0.3, 0.88), Color("a88bf0"))
-	var name_lbl := _label("%s · %s" % [game.character["nombre"], game.character["especie"]], 26)
+	name_lbl = _label("", 26)
 	name_pill.add_child(name_lbl)
 	pills.add_child(name_pill)
 	pills.add_theme_constant_override("separation", 8)
@@ -200,6 +203,10 @@ func _build_ui() -> void:
 	gap.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ov.add_child(gap)
+	talk_pill = _pill(Color(0.3, 0.1, 0.24, 0.92), Color("f07ac0"))
+	talk_pill.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	talk_pill.add_child(_label("Tócala para hablar", 20))
+	ov.add_child(talk_pill)
 	var lust_pill := _pill(Color(0.1, 0.08, 0.2, 0.9), BORDER)
 	ov.add_child(lust_pill)
 	var lust_row := HBoxContainer.new()
@@ -375,6 +382,8 @@ func _refresh() -> void:
 	lbl_top.text = "Día %d   ·   Acciones: %d/%d   ·   %d $" % [
 		game.day, game.actions_left, int(game.balance["acciones_por_dia"]), game.money]
 	lbl_level.text = info["nombre"]
+	name_lbl.text = "%s · %s" % [game.character["nombre"], game.attitude()["nombre"]]
+	talk_pill.visible = game.can_talk()
 	var psb := level_pill.get_theme_stylebox("panel") as StyleBoxFlat
 	psb.bg_color = lv_color
 	psb.border_color = lv_color.lightened(0.35)
@@ -487,6 +496,46 @@ func _close_modal() -> void:
 		_fade_out(old)
 	if not game.over:
 		music.play("lobby")
+
+
+## Tocar a la chica: la charla del día o, si ya hablasteis, solo una frase.
+func _on_portrait_input(event: InputEvent) -> void:
+	if not (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT):
+		return
+	if modal != null or sleeping or game.over or not game.pending_event.is_empty() or not portrait.hit(event.position):
+		return
+	portrait.poke()
+	var line: String = game.touch_line()
+	if game.can_talk():
+		_show_talk(line)
+	else:
+		game.current_line = line
+		_refresh()
+
+
+func _show_talk(line: String) -> void:
+	var v := _open_modal("")
+	v.add_child(_talk_tag())
+	v.add_child(_wrap("«%s»" % line, 24))
+	var opts: Dictionary = game.character["charla"]["opciones"]
+	for id in opts:
+		v.add_child(_button(opts[id], _talk_reply.bind(id)))
+
+
+func _talk_tag() -> Label:
+	var tag := _label("%s · %s" % [game.character["nombre"], game.attitude()["nombre"]], 20)
+	tag.add_theme_color_override("font_color", Color("f5a8d8"))
+	return tag
+
+
+func _talk_reply(id: String) -> void:
+	var answer: String = game.talk(id)
+	if game.over:
+		return
+	var v := _open_modal("")
+	v.add_child(_talk_tag())
+	v.add_child(_wrap("«%s»" % answer, 24))
+	v.add_child(_button("Seguir", _close_modal))
 
 
 ## Las ventanas aparecen y desaparecen con un fundido corto.
@@ -850,6 +899,11 @@ func _add_diary(v: VBoxContainer) -> void:
 		var l := _wrap(r["nota"], 18)
 		l.add_theme_color_override("font_color", Color("f2a65a") if trap else Color("9fd8ff"))
 		v.add_child(l)
+	for key in game.character["charla"]["notas"]:
+		if game.discovered.has("charla_" + key):
+			var note := _wrap(game.character["charla"]["notas"][key], 18)
+			note.add_theme_color_override("font_color", Color("f5a8d8"))
+			v.add_child(note)
 	var left: int = game.reactions_total() - known
 	var hint := _wrap("Quedan %d reacciones por descubrir. Prueba a combinar actividades en distinto orden." % left
 		if left > 0 else "Ya lo sabes todo de ella.", 17)
@@ -945,6 +999,7 @@ func _show_game_over(ending: Dictionary) -> void:
 	v.add_child(_wrap(ending["texto"], 21))
 	v.add_child(HSeparator.new())
 	v.add_child(_label("Días sobrevividos: %d" % ending["dias"], 24))
+	v.add_child(_label("Vínculo final: %d/%d · %s" % [roundi(ending["vinculo"]), roundi(game.bond_goal()), ending["actitud"]], 20))
 	var rec := _label("Récord con %s: %d días%s" % [game.character["nombre"], record["mejor_dias"],
 		"  ¡Nuevo récord!" if record["nuevo"] else ""], 20)
 	rec.modulate = TEXT_DIM

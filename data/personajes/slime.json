@@ -109,6 +109,11 @@
 			"titulo": "Final malo: Poseída",
 			"musica": "final_malo",
 			"texto": "Esa noche no hay bolita en el sofá.\n\nLa oyes antes de verla: un goteo lento que cruza el pasillo. En el marco de la puerta, Reme ya no tiene contornos. Brilla con un rosa que no es suyo.\n\nDices su nombre. Sonríe con tu voz, no con la suya.\n\nLa puerta del cuarto no tiene cerrojo. Tampoco habría servido: un slime pasa por debajo.\n\nFundido a negro.\n\n—\n\nAl amanecer, Reme recupera la forma sola, en tu cama. No recuerda la noche. Solo sabe que la casa está demasiado callada y que tus zapatillas siguen junto a la puerta.\n\nLa maldición no entiende de cariño. Tú tampoco le diste tiempo de aprenderlo."
+		},
+		"lucha": {
+			"titulo": "Final malo: Lo intentó",
+			"musica": "final_malo",
+			"texto": "Esa noche, Reme te despierta desde el otro lado de la puerta.\n\n«Corre», dice. Es su voz, todavía. «Coge las llaves y corre. Yo… yo me quedo aquí. Aguanto.»\n\nOyes cómo se pega al marco, cómo se agarra a la madera para no entrar. Aguanta un minuto. Aguanta dos. Te da tiempo a encontrar un zapato.\n\nLa madera cede despacio.\n\n«Perdón», dice. Y ya no vuelve a decir nada con su voz.\n\nFundido a negro.\n\n—\n\nAl amanecer, Reme recupera la forma sola, en el pasillo. Junto a la puerta hay una zapatilla. La otra sigue en tu mano.\n\nTe quiso. Solo le faltó un poco más de tiempo contigo."
 		}
 	},
 	"reacciones": [
@@ -251,6 +256,327 @@
 				"lujuria": -4,
 				"felicidad": 4
 			}
+		}
+	},
+	"charla": {
+		"opciones": {
+			"escuchar": "Escucharla sin interrumpir.",
+			"animar": "Decirle algo bonito.",
+			"bromear": "Hacerla reír.",
+			"distancia": "Darle su espacio."
+		},
+		"ajuste": {
+			"arisca": {
+				"distancia": "buena",
+				"escuchar": "regular",
+				"animar": "mala",
+				"bromear": "mala"
+			},
+			"distante": {
+				"escuchar": "buena",
+				"distancia": "regular",
+				"bromear": "regular",
+				"animar": "mala"
+			},
+			"confiada": {
+				"bromear": "buena",
+				"escuchar": "regular",
+				"animar": "regular",
+				"distancia": "mala"
+			},
+			"carinosa": {
+				"animar": "buena",
+				"bromear": "regular",
+				"escuchar": "regular",
+				"distancia": "mala"
+			},
+			"unida": {
+				"escuchar": "buena",
+				"animar": "regular",
+				"bromear": "regular",
+				"distancia": "mala"
+			},
+			"alterada": {
+				"bromear": "buena",
+				"escuchar": "regular",
+				"distancia": "regular",
+				"animar": "mala"
+			},
+			"critica": {
+				"distancia": "buena",
+				"escuchar": "regular",
+				"animar": "mala",
+				"bromear": "mala"
+			}
+		},
+		"notas": {
+			"arisca": "Cuando está arisca, lo que mejor le sienta es que le des su espacio.",
+			"distante": "Cuando está distante, necesita que la escuches sin más.",
+			"confiada": "Cuando confía en ti, hacerla reír la acerca.",
+			"carinosa": "Cuando está cariñosa, le hace bien oír algo bonito.",
+			"unida": "Cuando estáis unidos, basta con escucharla.",
+			"alterada": "Alterada, una broma la distrae de la maldición.",
+			"critica": "En estado crítico, apártate: es lo único que la ayuda."
+		},
+		"toque": {
+			"arisca": {
+				"calma": [
+					"¿Ahora te acuerdas de que existo?",
+					"No me toques. Bastante pegajosa soy yo sola.",
+					"Déjalo. Ya me apaño."
+				],
+				"alterada": [
+					"Hoy no. Hoy no respondo de mí, y a ti te da igual.",
+					"Algo me sube por dentro. Tampoco es que preguntes."
+				],
+				"critica": [
+					"Vete. Y si no te vas, luego no me culpes.",
+					"Nunca te importó. Ahora ya es tarde para que me importe a mí."
+				]
+			},
+			"distante": {
+				"calma": [
+					"Estoy bien. Supongo.",
+					"¿Querías algo?",
+					"Aquí sigo. Mirando la pared. Se le da bien callarse."
+				],
+				"alterada": [
+					"No sé qué me pasa. Tampoco sé si contártelo.",
+					"Estoy rara. Se me pasará. O no."
+				],
+				"critica": [
+					"Mejor no te acerques. No te conozco lo bastante para pedirte ayuda.",
+					"Algo tira de mí. No sé si tú podrías pararlo."
+				]
+			},
+			"confiada": {
+				"calma": [
+					"¡Eh! Hoy he aprendido a poner la cara del vecino. Mira.",
+					"Si me pinchas, ondulo. Es ciencia.",
+					"¿Sabes? Esta casa ya huele un poco a mí."
+				],
+				"alterada": [
+					"Estoy nerviosa. ¿Me cuentas algo? Lo que sea.",
+					"Me cuesta quedarme quieta. Distráeme, anda."
+				],
+				"critica": [
+					"Tengo miedo. Quédate lejos, pero no te vayas.",
+					"Si dejo de contestarte, enciérrate. Prométemelo."
+				]
+			},
+			"carinosa": {
+				"calma": [
+					"¡Has venido! Te había guardado el sitio del sofá. Lo tengo un poco absorbido.",
+					"He practicado tu risa toda la tarde. Todavía me sale mejor la tuya.",
+					"Cuando llegas, me pongo más brillante. Yo no lo decido."
+				],
+				"alterada": [
+					"Hoy me cuesta. Pero contigo cerca se me olvida un poco.",
+					"Dime que mañana seguiré siendo yo."
+				],
+				"critica": [
+					"No me toques, por favor. Es justo porque te quiero.",
+					"Sigo aquí dentro. Háblame desde la puerta."
+				]
+			},
+			"unida": {
+				"calma": [
+					"No hace falta que digas nada. Ya te he entendido.",
+					"Antes imitaba a todo el mundo. Ahora solo quiero parecerme a mí, contigo al lado.",
+					"Eres mi sitio favorito. Y conozco muchos frascos."
+				],
+				"alterada": [
+					"Lo noto subir. Tranquilo: todavía mando yo.",
+					"Si me ves rara, no te asustes. Te lo diré antes de perderme."
+				],
+				"critica": [
+					"Ya casi no me queda sitio aquí dentro. El que queda es tuyo.",
+					"Si llega el momento, sabré qué hacer. Confía en mí una vez más."
+				]
+			}
+		},
+		"respuestas": {
+			"arisca": {
+				"buena": [
+					"…Gracias por no insistir.",
+					"Vale. Así sí."
+				],
+				"regular": [
+					"Ya. Oyes, pero no sé si escuchas."
+				],
+				"mala": [
+					"No me vengas con eso ahora.",
+					"Qué fácil es sonreír cuando no eres tú quien se queda sola."
+				]
+			},
+			"distante": {
+				"buena": [
+					"Nadie me había dejado terminar una frase. Es raro. Es agradable.",
+					"Bueno… quizá te cuente más mañana."
+				],
+				"regular": [
+					"Ah. Vale.",
+					"Mm. Lo tendré en cuenta."
+				],
+				"mala": [
+					"No hace falta que digas lo que crees que quiero oír."
+				]
+			},
+			"confiada": {
+				"buena": [
+					"¡Pff! Se me ha salido un trozo de la risa. Espera, que lo recojo.",
+					"Otra. Cuéntame otra."
+				],
+				"regular": [
+					"Se está bien aquí, ¿verdad?",
+					"Gracias. De verdad."
+				],
+				"mala": [
+					"Ah… ¿he hecho algo mal?"
+				]
+			},
+			"carinosa": {
+				"buena": [
+					"Me lo voy a guardar dentro. Literalmente: ahí se queda.",
+					"Dímelo otra vez mañana, ¿sí?"
+				],
+				"regular": [
+					"Me gusta cuando estamos así.",
+					"Ji. Eres muy tú."
+				],
+				"mala": [
+					"Si quieres que me vaya a otro cuarto, dímelo."
+				]
+			},
+			"unida": {
+				"buena": [
+					"Gracias por estar. Es lo único que te pido.",
+					"Contigo no tengo que imitar a nadie."
+				],
+				"regular": [
+					"Lo sé. Yo también.",
+					"No hacía falta. Pero me gusta."
+				],
+				"mala": [
+					"¿Te he asustado? Puedes decírmelo."
+				]
+			},
+			"alterada": {
+				"buena": [
+					"Ja… sí. Por un momento se me ha olvidado.",
+					"Sigue, sigue. Mientras me río, no lo oigo."
+				],
+				"regular": [
+					"Gracias. Sigue ahí, aunque cueste.",
+					"Un poco mejor. Solo un poco."
+				],
+				"mala": [
+					"No digas esas cosas ahora. Hoy no me ayudan."
+				]
+			},
+			"critica": {
+				"buena": [
+					"Sí. Atrás. Más atrás. Gracias.",
+					"Quédate en la puerta. Ahí estás a salvo."
+				],
+				"regular": [
+					"Te oigo. Desde muy lejos, pero te oigo."
+				],
+				"mala": [
+					"¡No te acerques! No… no sé cuánto aguanto.",
+					"Para. Por favor, para."
+				]
+			}
+		}
+	},
+	"dialogos_actitud": {
+		"arisca": {
+			"trabajar": [
+				"Vete. Total, ya estoy acostumbrada.",
+				"Trae dinero. Es lo único que traes."
+			],
+			"comer": [
+				"Déjalo ahí. Comeré cuando no mires.",
+				"No creas que esto arregla nada."
+			],
+			"pasear": [
+				"Camino detrás. No hace falta que me mires.",
+				"Salgo porque me aburre la pared. No por ti."
+			],
+			"limpiar": [
+				"Puedo sola.",
+				"Date prisa y acabemos."
+			],
+			"jugar": [
+				"Juego. No significa que me caigas bien.",
+				"¿Ya? ¿Te sientes mejor persona?"
+			]
+		},
+		"distante": {
+			"trabajar": [
+				"Hasta luego, supongo.",
+				"Vale. Aquí estaré."
+			],
+			"comer": [
+				"Gracias. Está bien.",
+				"Sabe a algo. Creo que bien."
+			],
+			"pasear": [
+				"Hay mucha gente. Iré a tu lado, si no molesto.",
+				"Fuera todo es más grande."
+			],
+			"limpiar": [
+				"Vale. Si crees que hace falta.",
+				"Se está mejor así. Un poco."
+			],
+			"jugar": [
+				"Bueno. Una partida.",
+				"No se me da mal. Creo."
+			]
+		},
+		"carinosa": {
+			"trabajar": [
+				"¡Vuelve pronto! Te guardo un abrazo en el congelador.",
+				"Voy a imitar tu voz para que la casa no se quede callada."
+			],
+			"comer": [
+				"¡Mira! Se ve la comida bajar. Es mi truco para ti.",
+				"Lo mejor de comer es que me lo das tú."
+			],
+			"pasear": [
+				"Dame la mano. Prometo devolvértela entera.",
+				"¡Vamos por donde fuimos ayer! Quiero enseñarte un charco."
+			],
+			"limpiar": [
+				"Quedo tan brillante que te vas a ver reflejado.",
+				"Hazme las burbujas grandes, porfa."
+			],
+			"jugar": [
+				"¡Esta vez te gano! Y si no, hago trampas.",
+				"Me encanta cuando te concentras. Pones una cara rarísima."
+			]
+		},
+		"unida": {
+			"trabajar": [
+				"Ve tranquilo. Sé cuidarme mientras vuelves.",
+				"Aquí te espero. No me voy a ninguna parte."
+			],
+			"comer": [
+				"Comemos juntos, que sabe mejor.",
+				"Te he dejado la mitad. Casi sin absorber."
+			],
+			"pasear": [
+				"Da igual adónde. Ya estoy donde quería.",
+				"Hoy no me hago opaca. Que me vean contigo."
+			],
+			"limpiar": [
+				"Gracias por cuidarme todos los días.",
+				"Antes me daba miedo el agua. Contigo ya no."
+			],
+			"jugar": [
+				"Gane quien gane, mañana repetimos.",
+				"No hace falta que me dejes ganar. Lo noto."
+			]
 		}
 	}
 }

@@ -35,8 +35,8 @@ Cambia los JSON y ejecuta el simulador (200 partidas por estrategia):
 
 Para simular solo algunas estrategias: `flatpak run --env=SIM_STRATS=basica,experta org.godotengine.Godot ...`
 
-Resultado actual: al azar ~9 días, estrategia básica ~42, experta (conoce la rutina y evita las trampas) ~153.
-Final bueno: 0 % al azar, 0 % básica, ~28 % experta (40–52 % con un traje que encaje). El resto acaba en un final malo.
+Resultado actual: al azar ~8 días, estrategia básica ~44, experta (conoce la rutina, las trampas y la charla) ~172.
+Final bueno: 0 % al azar, 0 % básica, ~32 % experta (36–50 % con traje). El resto acaba en un final malo.
 
 ## Fórmula de lujuria nocturna
 
@@ -51,17 +51,22 @@ Cada "k" está en el JSON de la especie, así cada chica monstruo reacciona dist
 - **Luna llena:** cada `ciclo_luna` días suma `luna_base` + día × `luna_por_dia`.
 - **Marca:** al llegar a Crítica, el mínimo de lujuria sube `marca` (hasta `marca_max`) y ya no se puede bajar de ahí.
 
-## Finales y vínculo (`vinculo` en balance.json)
+## Vínculo, actitud y finales (`vinculo` en balance.json)
+
+El vínculo empieza en `inicial` y marca la **actitud** de la chica (`actitudes`): Arisca, Distante,
+Confiada, Cariñosa y Unida. La actitud cambia sus frases y su cara, y multiplica lo que rinden
+los cuidados (`efectividad`): cuanto más bajo el vínculo, peor te trata y menos caso hace.
+
+**Charla** (`charla` en el JSON del personaje): al tocarla se abre una conversación que cuenta una vez al día.
+La respuesta buena depende de su actitud y, con la lujuria alta, de si está Alterada o Crítica (`ajuste`).
+El resultado aplica `vinculo.charla` y la primera respuesta buena deja una nota en el diario.
 
 Cuando la lujuria llega a 100, el vínculo decide el final:
 
-- **Vínculo ≥ `final`** → *Marea interior* (bueno): ella se va para no hacerte daño.
-- **Vínculo menor** → *Poseída* (malo): la maldición la lleva hasta ti.
+- **Vínculo ≥ `final`** → *Marea interior* (bueno): se va para no hacerte daño.
+- **Confiada o Cariñosa** → *Lo intentó* (malo): te avisa y aguanta todo lo que puede.
+- **Arisca o Distante** → *Poseída* (malo): la maldición la lleva hasta ti.
 - Elegir «Ceder» en el evento de acercamiento → *Disuelto* (malo).
-
-El vínculo sube con noches cuidadas (`noche_cuidada`), reacciones buenas (`reaccion_buena`,
-o el `vinculo` propio de la reacción, como la rutina) y minijuegos bien jugados. Baja con
-las trampas, cada noche en Alterada o Crítica y con cada crisis que deja marca (`crisis`).
 
 ## Trajes (`trajes_efectos` en el JSON del personaje)
 

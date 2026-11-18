@@ -17,6 +17,7 @@ var bg: TextureRect
 var sprite: TextureRect
 var prev: TextureRect      # expresión anterior, que se desvanece encima de la nueva
 var prev_tween: Tween
+var jelly := 0.0          # temblor de gelatina al tocarla
 var fallback: Control
 var textures := {}
 
@@ -69,6 +70,15 @@ func set_state(new_mood: String, new_level: int, new_outfit: String = "") -> voi
 	fallback.level = level
 
 
+## ¿El toque ha caído sobre ella?
+func hit(pos: Vector2) -> bool:
+	return sprite.visible and sprite.get_rect().has_point(pos)
+
+
+func poke() -> void:
+	jelly = 1.0
+
+
 func _texture_for(m: String) -> Texture2D:
 	var key := outfit + "/" + m
 	if not textures.has(key):
@@ -95,11 +105,17 @@ func _process(delta: float) -> void:
 	var shake := Vector2.ZERO
 	if level >= 3:
 		shake = Vector2(randf_range(-2, 2), randf_range(-1, 1))
+	jelly = maxf(0.0, jelly - delta * 1.8)
+	var wobble := sin(jelly * 18.0) * jelly * 0.05
 	sprite.size = Vector2(w, h)
+	sprite.pivot_offset = Vector2(w * 0.5, h)
+	sprite.scale = Vector2(1.0 + wobble, 1.0 - wobble)
 	sprite.position = Vector2((size.x - w) / 2, size.y - h + 6 + breathe) + shake
 	if prev.visible:
 		prev.size = sprite.size
 		prev.position = sprite.position
+		prev.pivot_offset = sprite.pivot_offset
+		prev.scale = sprite.scale
 	# Más lujuria, más rosa; en estado crítico, además, late.
 	var pink := Color("ff8fc8")
 	var amount := level * 0.14 + (0.08 * (0.5 + 0.5 * sin(t * 4.0)) if level >= 3 else 0.0)
