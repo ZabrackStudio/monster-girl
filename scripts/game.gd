@@ -29,13 +29,12 @@ var total_money := 0
 var inventory: Dictionary = {}      # id -> cantidad
 var passives: Array = []            # ids de objetos pasivos comprados
 var minigames: Array = []           # ids de minijuegos desbloqueados
-var known_affinity: Dictionary = {} # minijuegos ya probados (se muestra la afinidad)
+var known_affinity: Dictionary = {} # minijuegos ya probados
 var events_seen: Dictionary = {}
 var times_today: Dictionary = {}
 var pending_event: Dictionary = {}
 var over := false
 var current_line := ""
-var last_lust_breakdown: Dictionary = {}
 var rng := RandomNumberGenerator.new()
 var quiet := false                  # el simulador lo activa para no generar textos
 # La maldición
@@ -53,14 +52,14 @@ var bond := 0.0
 var talked_today := false           # la charla que cuenta es una al día
 var pokes_today := 0                # toques de hoy después de la charla
 var warned := false                 # ya amenazó con denunciarte
-var annoyed_today := false          # el aviso de molestia sale una vez al día
+var ever_talked := false            # el aviso de «tócala» solo sale hasta la primera charla
 
 
 ## Estado que se guarda en la partida (todo lo demás sale de los JSON de datos).
 const SAVE_FIELDS := ["stats", "day", "actions_left", "money", "total_money", "inventory",
 	"passives", "minigames", "known_affinity", "events_seen", "times_today", "pending_event",
 	"tolerance", "curse_mark", "marked", "today", "discovered", "outfit", "outfits", "bond",
-	"current_line", "talked_today", "pokes_today", "warned", "annoyed_today"]
+	"current_line", "talked_today", "pokes_today", "warned", "ever_talked"]
 const INT_FIELDS := ["day", "actions_left", "money", "total_money"]
 const SAVE_VERSION := 1
 const SAVE_PATH := "user://partida.json"
@@ -84,7 +83,7 @@ func from_dict(d: Dictionary) -> bool:
 	for s in STATS:
 		stats[s] = float(stats.get(s, character["stats_iniciales"].get(s, 50)))
 	rng.state = int(d.get("rng", "0"))
-	_log("Día %d. Partida recuperada." % day)
+	_log("[b]— Día %d —[/b]" % day)
 	changed.emit()
 	return true
 
@@ -122,7 +121,7 @@ func start() -> void:
 	outfits = [outfit]
 	bond = float(balance["vinculo"].get("inicial", 0))
 	_say("inicio")
-	_log("Día 1. %s (%s) se muda contigo." % [character["nombre"], character["especie"]])
+	_log("[b]— Día 1 —[/b]")
 	changed.emit()
 
 
@@ -202,14 +201,10 @@ func poke() -> void:
 		return
 	var m: Dictionary = balance["vinculo"]["molestia"]
 	# Con poco vínculo se enfada enseguida; con mucho, solo si insistes el doble.
-	var before := bond
 	if attitude_index() <= 2:
-		_bond(float(m["vinculo_bajo"]), true, true)
+		_bond(float(m["vinculo_bajo"]), true)
 	elif pokes_today > patience * 2:
-		_bond(float(m["vinculo_alto"]), true, true)
-	if bond < before and not annoyed_today:
-		annoyed_today = true
-		_log("[color=#ef7d86]%s se está hartando de que la toques: el vínculo baja.[/color]" % character["nombre"])
+		_bond(float(m["vinculo_alto"]), true)
 	if band != "calma":
 		apply({"lujuria": m["lujuria_" + band]})
 	current_line = _pick(character["charla"]["molesta"][talk_key()])
@@ -219,7 +214,6 @@ func poke() -> void:
 	if bond <= float(m["aviso"]) and not warned:
 		warned = true
 		current_line = character["charla"]["aviso"]
-		_log("[color=#ef7d86]%s ha encontrado la tarjeta de H.A.R.E.M. y no le quita ojo.[/color]" % character["nombre"])
 	elif bond > float(m["aviso"]):
 		warned = false
 	_check_consumed()
@@ -241,16 +235,15 @@ func talk(reply: String) -> String:
 	if not can_talk():
 		return ""
 	talked_today = true
+	ever_talked = true
 	var key := talk_key()
 	var quality: String = character["charla"]["ajuste"][key][reply]
 	var fx: Dictionary = balance["vinculo"]["charla"][quality]
 	_bond(float(fx["vinculo"]))
-	var real := apply({"lujuria": fx["lujuria"]})
+	apply({"lujuria": fx["lujuria"]})
 	if quality == "buena" and not discovered.has("charla_" + key):
 		discovered["charla_" + key] = true
-		_log("[color=#f2c14e](nueva nota en el diario)[/color]")
-	if not real.is_empty() and absf(real["lujuria"]) >= 0.5:
-		_log("Charla: %s" % _fmt(real))
+		_log("[color=#f2c14e]Nueva nota en el diario.[/color]")
 	var line := _pick(character["charla"]["respuestas"][key][quality])
 	current_line = line
 	_check_consumed()
@@ -304,16 +297,10 @@ func do_activity(id: String) -> void:
 	total_money += earned
 	var reactions := _match_reactions(id)
 	var mult := _mult_for(id) * float(character["afinidades"].get(id, 1.0))
-	var real := apply(act["efectos"], mult, _tolerance_use(id))
-	var extra: Dictionary = character["efectos_extra"].get(id, {})
-	if not extra.is_empty():
-		real.merge(apply(extra), false)
+	apply(act["efectos"], mult, _tolerance_use(id))
+	apply(character["efectos_extra"].get(id, {}))
 	_count(id)
 	_say(id)
-	var msg: String = act["nombre"]
-	if earned > 0:
-		msg += " (+%d $)" % earned
-	_log("%s: %s" % [msg, _fmt(real)])
 	today.append(id)
 	_apply_reactions(reactions)
 	_outfit_effects(id)
@@ -338,12 +325,11 @@ func play_minigame(id: String, score: float) -> void:
 		eff[k] = eff.get(k, 0.0) + float(mg["efectos_bonus"][k]) * score
 	var reactions := _match_reactions("jugar")
 	var mult := _mult_for("jugar") * minigame_affinity(id)
-	var real := apply(eff, mult, _tolerance_use("mj_" + id))
-	real.merge(apply(act["efectos"]), false)
+	apply(eff, mult, _tolerance_use("mj_" + id))
+	apply(act["efectos"])
 	known_affinity[id] = true
 	_count("jugar")
 	_say("jugar")
-	_log("%s (%d%%): %s" % [mg["nombre"], int(score * 100), _fmt(real)])
 	if score >= float(balance["vinculo"]["minijuego_min"]):
 		_bond(float(balance["vinculo"]["minijuego"]))
 	today.append("jugar")
@@ -366,7 +352,6 @@ func buy(id: String) -> bool:
 			minigames.append(it["minijuego"])
 		"traje":
 			outfits.append(it["traje"])
-	_log("Compras: %s (-%d $)" % [it["nombre"], int(it["precio"])])
 	changed.emit()
 	return true
 
@@ -393,9 +378,7 @@ func _outfit_effects(id: String) -> void:
 	var e: Dictionary = outfit_effects(outfit).get(id, {})
 	if e.is_empty():
 		return
-	var real := apply(e, effectiveness())
-	var name: String = character.get("trajes", {}).get(outfit, outfit)
-	_log("[color=#c9b3ff]Con %s:[/color] %s" % [name.to_lower(), _fmt(real)])
+	apply(e, effectiveness())
 
 
 func wear(t: String) -> void:
@@ -403,7 +386,6 @@ func wear(t: String) -> void:
 		return
 	outfit = t
 	_say("vestir")
-	_log("%s se pone: %s." % [character["nombre"], character.get("trajes", {}).get(t, t)])
 	changed.emit()
 
 
@@ -416,9 +398,9 @@ func use_item(id: String) -> void:
 	var it: Dictionary = items[id]
 	var mult := 1.3 if character["id"] in it.get("favorito", []) else 1.0
 	# Usar el mismo objeto varias veces el mismo día rinde cada vez menos.
-	var real := apply(it["efectos"], mult * _mult_for("objeto_" + id), _tolerance_use("objeto_" + id))
+	apply(it["efectos"], mult * _mult_for("objeto_" + id), _tolerance_use("objeto_" + id))
 	_count("objeto_" + id)
-	_log("Usas %s: %s" % [it["nombre"], _fmt(real)])
+	_log("Usas: %s." % it["nombre"])
 	_check_consumed()
 	changed.emit()
 
@@ -427,7 +409,6 @@ func sleep() -> void:
 	if over or not pending_event.is_empty():
 		return
 	var d: Dictionary = balance["dia"]
-	var before := stats.duplicate()
 	_say("dormir")
 	_add("hambre", float(d["hambre_diaria"]))
 	_add("higiene", -(float(d["higiene_diaria"]) + passive_sum("higiene_diaria")))
@@ -458,14 +439,9 @@ func sleep() -> void:
 	today.clear()
 	talked_today = false
 	pokes_today = 0
-	annoyed_today = false
-	var diff := {}
-	for s in STATS:
-		diff[s] = stats[s] - before[s]
-	_log("[b]— Día %d —[/b] Durante la noche: %s" % [day, _fmt(diff)])
+	_log("[b]— Día %d —[/b]" % day)
 	if full_moon:
-		_log("[color=#ef7d86]Luna llena: la maldición despierta con fuerza.[/color]")
-	_log(_explain_lust())
+		_log("[color=#ef7d86]Luna llena.[/color]")
 	if _check_consumed():
 		return
 	if not quiet:
@@ -490,7 +466,6 @@ func lust_delta() -> float:
 	if is_full_moon():
 		b["luna llena"] = float(m["luna_base"]) + day * float(m["luna_por_dia"])
 	b["azar"] = rng.randf_range(-float(l["ruido"]), float(l["ruido"]))
-	last_lust_breakdown = b
 	var total := 0.0
 	for k in b:
 		total += b[k]
@@ -522,19 +497,15 @@ func _match_reactions(id: String) -> Array:
 func _apply_reactions(list: Array) -> void:
 	for r in list:
 		var good: bool = float(r["efectos"].get("lujuria", 0)) < 0
-		var real := apply(r["efectos"], effectiveness() if good else 1.0,
+		apply(r["efectos"], effectiveness() if good else 1.0,
 			_tolerance_use("reaccion_" + r["id"]) if good else 1.0)
 		var first := not discovered.has(r["id"])
 		discovered[r["id"]] = true
 		var color := "#9fd8ff" if good else "#f2a65a"
-		var note := "  [color=#f2c14e](nueva nota en el diario)[/color]" if first else ""
-		_log("[color=%s]%s[/color] %s%s" % [color, r["texto"], _fmt(real), note])
+		var note := "  [color=#f2c14e]Nueva nota en el diario.[/color]" if first else ""
+		_log("[color=%s]%s[/color]%s" % [color, r["texto"], note])
 		var vb: Dictionary = balance["vinculo"]
 		_bond(float(r.get("vinculo", vb["reaccion_buena"] if good else vb["reaccion_trampa"])))
-
-
-func reactions_total() -> int:
-	return character.get("reacciones", []).size()
 
 
 # ---------------------------------------------------------------- eventos
@@ -552,9 +523,9 @@ func resolve_event(index: int) -> void:
 	if opt.has("final"):
 		_end(opt["final"])
 		return
-	var real := apply(opt.get("efectos", {}), effectiveness())
-	var txt: String = opt.get("resultado", "")
-	_log("%s %s" % [txt, _fmt(real)])
+	apply(opt.get("efectos", {}), effectiveness())
+	if opt.get("resultado", "") != "":
+		_log(opt["resultado"])
 	_check_consumed()
 	changed.emit()
 
@@ -674,7 +645,7 @@ func _check_consumed() -> bool:
 	if not marked and stats["lujuria"] >= float(niveles[3]["min"]) and stats["lujuria"] < 100:
 		marked = true
 		curse_mark = minf(curse_mark + float(balance["maldicion"]["marca"]), float(balance["maldicion"]["marca_max"]))
-		_log("[color=#ef7d86]La maldición deja una marca: la lujuria ya no bajará de %d.[/color]" % roundi(curse_mark))
+		_log("[color=#ef7d86]La maldición deja una marca.[/color]")
 		_bond(float(balance["vinculo"]["crisis"]))
 	elif marked and stats["lujuria"] < float(niveles[2]["min"]):
 		marked = false
@@ -702,13 +673,9 @@ func bond_goal() -> float:
 
 
 ## Solo molestarla puede dejar el vínculo en negativo; descuidarla lo deja, como mucho, en 0.
-func _bond(v: float, can_go_negative := false, silent := false) -> void:
-	var before := bond
+func _bond(v: float, can_go_negative := false) -> void:
 	var low := -100.0 if can_go_negative else minf(bond, 0.0)
 	bond = clampf(bond + v, low, 100.0)
-	var real := bond - before
-	if absf(real) >= 0.5 and not silent:
-		_log("[color=%s]%+d vínculo[/color]" % ["#f07ac0" if real > 0 else "#9a8aa8", roundi(real)])
 
 
 ## Por la noche: una casa cuidada lo refuerza; la maldición lo erosiona.
@@ -741,24 +708,3 @@ func _pick(arr: Array) -> String:
 func _log(text: String) -> void:
 	if not quiet:
 		log_message.emit(text)
-
-
-func _fmt(diff: Dictionary) -> String:
-	var parts := []
-	for k in STATS:
-		if diff.has(k) and absf(diff[k]) >= 0.5:
-			var v: float = diff[k]
-			var good: bool = (v > 0) == (k in GOOD_UP)
-			parts.append("[color=%s]%+d %s[/color]" % ["#7ddc9a" if good else "#ef7d86", roundi(v), STAT_NAMES[k].to_lower()])
-	return ", ".join(parts) if not parts.is_empty() else "sin cambios"
-
-
-func _explain_lust() -> String:
-	var parts := []
-	var total := 0.0
-	for k in last_lust_breakdown:
-		var v: float = last_lust_breakdown[k]
-		total += v
-		if absf(v) >= 1.0 and k != "azar":
-			parts.append("%s %+.0f" % [k, v])
-	return "Lujuria %+.0f esta noche (%s)." % [total, ", ".join(parts)]

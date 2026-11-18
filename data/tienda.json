@@ -9,13 +9,13 @@
 	},
 	"saludo": [
 		"Pagas, te lo llevas. Sin preguntas.",
-		"¿Otra vez tú? Mientras la tengas a raya, me da igual.",
-		"Todo lo de aquí ha frenado a algún monstruo. Casi todo.",
-		"No fío. No devuelvo. No pregunto."
+		"¿Otra vez tú? Mientras la tengas a raya, me da lo mismo.",
+		"Todo lo de aquí ya frenó a algún monstruo. Casi todo.",
+		"Aquí no se fía, no se devuelve y no se pregunta."
 	],
 	"compra": [
-		"Apuntado.",
-		"Hecho. Siguiente.",
+		"Anotado.",
+		"Listo. Siguiente.",
 		"Eso aguanta."
 	],
 	"sin_dinero": [
@@ -28,22 +28,22 @@
 	],
 	"comentarios": {
 		"gelatina": "La gelatina, mejor fría. A los slimes les gusta notar algo más frío que ellos.",
-		"caramelos": "Caramelos. Un capricho no salva a nadie, pero tampoco mata.",
+		"caramelos": "Caramelos. Un antojo no salva a nadie, pero tampoco mata.",
 		"agua": "Agua mineral. Para ella es casi un baño; no la desperdicies.",
 		"jabon": "Jabón neutro. Una slime sucia se pone nerviosa. Una nerviosa, peor.",
 		"manzanilla": "Manzanilla. Funciona, pero cada vez menos. Que no se acostumbre.",
 		"almohada": "La almohada de gel. Quien duerme abrazado no sale a cazar de noche.",
 		"pecera": "La pecera. Mirar peces calma más de lo que parece.",
 		"lampara": "La lámpara de lava. Sentimental. Me gusta.",
-		"frasco": "El frasco hermético. No es una jaula: es un sitio donde se siente a salvo.",
+		"frasco": "El frasco hermético. No es una jaula: ahí se siente a salvo.",
 		"mj_memoria": "Juego de memoria. Una cabeza ocupada no piensa en otras cosas.",
 		"traje_casual": "Sudadera y shorts. En la calle pasará desapercibida. En casa, vigílala.",
-		"traje_vestido_blanco": "El vestido blanco. Fuera la mirarán todos. Mejor para estar en casa.",
-		"traje_vestido_lila": "¿El de fiesta? La pondrá contenta en la calle. Y acelerada. Avisado quedas."
+		"traje_vestido_blanco": "El vestido blanco. Afuera la van a mirar todos. Mejor para estar en casa.",
+		"traje_vestido_lila": "¿El de fiesta? En la calle se va a poner contenta. Y acelerada. Quedas advertido."
 	},
 	"cierre": [
-		"Vuelve entera. Y que ella también.",
-		"Mantén la puerta cerrada por la noche.",
+		"Vuelve entero. Y ella también.",
+		"En la noche, mantén la puerta cerrada.",
 		"Si un día no vienes, ya sabré por qué."
 	]
 }

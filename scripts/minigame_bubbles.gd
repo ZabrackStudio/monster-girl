@@ -78,7 +78,6 @@ func _draw() -> void:
 		draw_circle(b.pos + Vector2(-b.r * 0.35, -b.r * 0.35), b.r * 0.18, Color(1, 1, 1, 0.6))
 	var hud := "Tiempo: %d   Puntos: %d" % [ceili(maxf(time_left, 0)), points]
 	draw_string(font, Vector2(16, 36), hud, HORIZONTAL_ALIGNMENT_LEFT, -1, 26)
-	draw_string(font, Vector2(16, size.y - 16), "Doradas x2 · moradas -2", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color(1, 1, 1, 0.6))
 	if not running:
 		draw_string(font, Vector2(0, size.y / 2), "¡%d%%!" % int(score() * 100), HORIZONTAL_ALIGNMENT_CENTER, size.x, 64)
 

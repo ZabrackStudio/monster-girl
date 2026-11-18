@@ -2,7 +2,7 @@
 	"id": "slime",
 	"nombre": "Reme",
 	"especie": "Slime",
-	"personalidad": "Curiosa y pegajosa. Imita todo lo que ve, absorbe lo que toca y lleva fatal quedarse sola.",
+	"personalidad": "Curiosa y pegajosa. Imita todo lo que ve, absorbe lo que toca y sufre cuando se queda sola.",
 	"color": "6fd3c1",
 	"stats_iniciales": {
 		"salud": 80,
@@ -44,28 +44,28 @@
 			"Ah, ¡hola! Me llamo Reme. Bueno, me lo puse yo: era lo primero que ponía en un frasco de la farmacia. ¿Vivimos juntos ahora?"
 		],
 		"trabajar": [
-			"¿Otra vez te vas? Vale... te espero pegada a la puerta.",
+			"¿Otra vez te vas? Bueno… te espero pegada a la puerta.",
 			"Intentaré no absorber el sofá mientras no estás.",
 			"Trae algo rico, ¿sí?"
 		],
 		"comer": [
 			"¡Ñam! Se nota cómo baja por dentro. Literalmente: soy transparente.",
 			"Esto está buenísimo. ¿Puedo absorber también el plato?",
-			"Ya no me siento tan... blandurria."
+			"Ya no me siento tan… aguada."
 		],
 		"pasear": [
 			"¡Mira, un charco! Es como un primo lejano.",
 			"Hay mucha gente. Me pongo un poquito más opaca para que no me miren.",
-			"El aire fresco me sienta genial. Me noto más firme."
+			"El aire fresco me hace muy bien. Me siento más firme."
 		],
 		"limpiar": [
-			"Me sacudo las pelusas... ¡Ay, que se me quedan dentro!",
+			"Me sacudo las pelusas… ¡Ay, se me quedan adentro!",
 			"Ahora brillo. ¡Mírame! Bueno, mira a través de mí.",
 			"Limpia por fuera, limpia por dentro. Es lo bueno de ser slime."
 		],
 		"jugar": [
 			"¡Otra! ¡Otra!",
-			"Eso ha sido divertidísimo.",
+			"Eso estuvo divertidísimo.",
 			"Me encanta cuando hacemos cosas juntos."
 		],
 		"dormir": [
@@ -77,20 +77,20 @@
 			"Todo bien por aquí."
 		],
 		"nivel_1": [
-			"Estoy un poco... temblorosa. No sé por qué.",
+			"Estoy un poco… temblorosa. No sé por qué.",
 			"¿Te puedes quedar un rato cerca?"
 		],
 		"nivel_2": [
-			"Noto que me cuesta mantener la forma.",
-			"Perdona, me quedo mirándote sin querer."
+			"Siento que me cuesta mantener la forma.",
+			"Perdón, me quedé mirándote sin querer."
 		],
 		"nivel_3": [
-			"No te acerques demasiado... o sí... no sé.",
+			"No te acerques demasiado… o sí… no sé.",
 			"Me estoy derritiendo por dentro. Ayúdame a distraerme."
 		],
 		"vestir": [
 			"¿Me queda bien? Me queda bien. Me queda bien, ¿verdad?",
-			"Lo he absorbido un poquito al ponérmelo... no se nota, ¿no?",
+			"Lo absorbí un poquito al ponérmelo… no se nota, ¿verdad?",
 			"¡Ropa nueva! Ahora soy otra slime. Bueno, la misma, pero con lazo."
 		]
 	},
@@ -98,27 +98,27 @@
 		"carnal": {
 			"titulo": "Final malo: Disuelto",
 			"musica": "final_malo",
-			"texto": "Te dices que solo es un abrazo.\n\nReme se cierra a tu alrededor, fría al principio, después no. Busca tus ojos y ya no los encuentra: no te mira, solo te desea.\n\nAlgo empieza a escocer en la piel. Intentas apartarte, pero su cuerpo no tiene bordes de donde empujar.\n\n«Espera», dices. Ella ya no oye nada.\n\nFundido a negro.\n\n—\n\nAl amanecer, Reme recupera la forma sola en el sofá. Brilla más que nunca y no entiende por qué la casa está tan callada. Junto a la puerta siguen tus zapatillas.\n\nUn slime disuelve lo que abraza. Ella lo sabía. Tú también."
+			"texto": "Te dices que solo es un abrazo.\n\nReme se cierra a tu alrededor, fría al principio, después no. Busca tus ojos y ya no los encuentra: no te mira, solo te desea.\n\nAlgo empieza a arder en la piel. Intentas apartarte, pero su cuerpo no tiene bordes de donde empujar.\n\n«Espera», dices. Ella ya no oye nada.\n\nFundido a negro.\n\n—\n\nAl amanecer, Reme recupera la forma sola en el sofá. Brilla más que nunca y no entiende por qué la casa está tan callada. Junto a la puerta siguen tus pantuflas."
 		},
 		"marea": {
 			"titulo": "Final bueno: Marea interior",
 			"musica": "final_bueno",
-			"texto": "Esa noche, Reme no se hace una bolita.\n\nLa ves en el marco de la puerta, sin contornos, con un brillo que no le conocías. Da un paso hacia ti. Se detiene.\n\n«Si me quedo, te hago daño», dice. Ya no imita tu voz; la suya tiembla. «Y tú eres lo único que no quiero romper.»\n\nRetrocede. La luz del pasillo se apaga.\n\n—\n\nPor la mañana el piso huele a lluvia. En la nevera hay una nota con una letra que se escurre: «Me voy a donde no pueda alcanzarte. No me busques. Te quise más de lo que te deseé.»"
+			"texto": "Esa noche, Reme no se hace una bolita.\n\nLa ves en el marco de la puerta, sin contornos, con un brillo que no le conocías. Da un paso hacia ti. Se detiene.\n\n«Si me quedo, te hago daño», dice. Ya no imita tu voz; la suya tiembla. «Y tú eres lo único que no quiero romper.»\n\nRetrocede. La luz del pasillo se apaga.\n\n—\n\nEn la mañana, la casa huele a lluvia. En el refrigerador hay una nota con una letra que se escurre: «Me voy a donde no pueda alcanzarte. No me busques. Te quise más de lo que te deseé.»"
 		},
 		"poseida": {
 			"titulo": "Final malo: Poseída",
 			"musica": "final_malo",
-			"texto": "Esa noche no hay bolita en el sofá.\n\nLa oyes antes de verla: un goteo lento que cruza el pasillo. En el marco de la puerta, Reme ya no tiene contornos. Brilla con un rosa que no es suyo.\n\nDices su nombre. Sonríe con tu voz, no con la suya.\n\nLa puerta del cuarto no tiene cerrojo. Tampoco habría servido: un slime pasa por debajo.\n\nFundido a negro.\n\n—\n\nAl amanecer, Reme recupera la forma sola, en tu cama. No recuerda la noche. Solo sabe que la casa está demasiado callada y que tus zapatillas siguen junto a la puerta.\n\nLa maldición no entiende de cariño. Tú tampoco le diste tiempo de aprenderlo."
+			"texto": "Esa noche no hay bolita en el sofá.\n\nLa oyes antes de verla: un goteo lento que cruza el pasillo. En el marco de la puerta, Reme ya no tiene contornos. Brilla con un rosa que no es suyo.\n\nDices su nombre. Sonríe con tu voz, no con la suya.\n\nLa puerta del cuarto no tiene cerrojo. Tampoco habría servido: un slime pasa por debajo.\n\nFundido a negro.\n\n—\n\nAl amanecer, Reme recupera la forma sola, en tu cama. No recuerda la noche. Solo sabe que la casa está demasiado callada y que tus pantuflas siguen junto a la puerta."
 		},
 		"lucha": {
 			"titulo": "Final malo: Lo intentó",
 			"musica": "final_malo",
-			"texto": "Esa noche, Reme te despierta desde el otro lado de la puerta.\n\n«Corre», dice. Es su voz, todavía. «Coge las llaves y corre. Yo… yo me quedo aquí. Aguanto.»\n\nOyes cómo se pega al marco, cómo se agarra a la madera para no entrar. Aguanta un minuto. Aguanta dos. Te da tiempo a encontrar un zapato.\n\nLa madera cede despacio.\n\n«Perdón», dice. Y ya no vuelve a decir nada con su voz.\n\nFundido a negro.\n\n—\n\nAl amanecer, Reme recupera la forma sola, en el pasillo. Junto a la puerta hay una zapatilla. La otra sigue en tu mano.\n\nTe quiso. Solo le faltó un poco más de tiempo contigo."
+			"texto": "Esa noche, Reme te despierta desde el otro lado de la puerta.\n\n«Corre», dice. Es su voz, todavía. «Toma las llaves y corre. Yo… yo me quedo aquí. Aguanto.»\n\nOyes cómo se pega al marco, cómo se aferra a la madera para no entrar. Aguanta un minuto. Aguanta dos. Alcanzas a encontrar un zapato.\n\nLa madera cede despacio.\n\n«Perdón», dice. Y ya no vuelve a decir nada con su voz.\n\nFundido a negro.\n\n—\n\nAl amanecer, Reme recupera la forma sola, en el pasillo. Junto a la puerta hay una pantufla. La otra sigue en tu mano."
 		},
 		"denuncia": {
 			"titulo": "Final malo: Denuncia",
 			"musica": "final_malo",
-			"texto": "A las seis y cuarto de la mañana llaman a la puerta. Es un decir: la puerta ya está abierta.\n\nBotas en el pasillo. Dos soldados y, detrás, la intendente con una carpeta bajo el brazo.\n\n«Denuncia presentada por la propia asignada», lee. «Molestias reiteradas pese a sus avisos. Trae fechas y horas.» Pasa la hoja. «Aprendió a usar el teléfono imitándote a ti.»\n\nReme está en la cocina, compacta y opaca, dentro de su frasco. Cierra la tapa desde dentro cuando pasas esposado. No te mira.\n\n—\n\nEXPEDIENTE H.A.R.E.M. · PROYECTO WAIFU\nCuidador: retirado de la beta y retenido a disposición del mando.\nAsignada: trasladada. Apta para convivir con otro cuidador.\n\nAl margen, a mano: «La maldición no tuvo nada que ver. Fuiste tú.»"
+			"texto": "A las seis y cuarto de la mañana llaman a la puerta. Es un decir: la puerta ya está abierta.\n\nBotas en el pasillo. Dos soldados y, detrás, la intendente con una carpeta bajo el brazo.\n\n«Denuncia presentada por la propia asignada», lee. «Molestias reiteradas pese a sus avisos. Trae fechas y horas.» Pasa la hoja. «Aprendió a usar el teléfono imitándote a ti.»\n\nReme está en la cocina, compacta y opaca, dentro de su frasco. Cierra la tapa desde adentro cuando pasas esposado. No te mira.\n\n—\n\nEXPEDIENTE H.A.R.E.M. · PROYECTO WAIFU\nCuidador: retirado de la beta y retenido a disposición del mando.\nAsignada: trasladada. Apta para convivir con otro cuidador.\n\nAl margen, a mano: «La maldición no tuvo nada que ver. Fuiste tú.»"
 		}
 	},
 	"reacciones": [
@@ -133,8 +133,8 @@
 				"lujuria": -5,
 				"felicidad": 4
 			},
-			"texto": "Con la tripa llena, el paseo la deja firme y tranquila.",
-			"nota": "Comer y después pasear la calma."
+			"texto": "Con la panza llena, el paseo la deja firme y tranquila.",
+			"nota": "Comer y luego pasear la calma."
 		},
 		{
 			"id": "juego_tras_paseo",
@@ -148,7 +148,7 @@
 				"felicidad": 3
 			},
 			"texto": "Llega del paseo con ganas de jugar y se le olvida todo lo demás.",
-			"nota": "Jugar justo después de pasear la distrae más."
+			"nota": "Jugar al volver del paseo la distrae."
 		},
 		{
 			"id": "bano_relajado",
@@ -178,8 +178,8 @@
 				"tristeza": -6,
 				"felicidad": 6
 			},
-			"texto": "Comer, pasear, jugar y bañarse: la rutina completa. Reme se queda quieta a tu lado, en paz.",
-			"nota": "Comer, pasear, jugar y limpiar, seguidos y en ese orden: la rutina que más la calma.",
+			"texto": "Reme se queda quieta a tu lado, en paz.",
+			"nota": "Comer, pasear, jugar y limpiar, en ese orden.",
 			"vinculo": 4
 		},
 		{
@@ -190,7 +190,7 @@
 				"lujuria": 7
 			},
 			"texto": "Absorbe el agua del baño, se hincha y se pone nerviosa.",
-			"nota": "Trampa: bañarla sin más la altera. El jabón de la tienda no tiene ese problema."
+			"nota": "Bañarla sin más la altera."
 		},
 		{
 			"id": "empacho",
@@ -203,7 +203,7 @@
 				"salud": -2
 			},
 			"texto": "Come sin hambre y se hincha: lo que absorbe de más se le sube a la cabeza.",
-			"nota": "Trampa: darle de comer sin hambre la altera."
+			"nota": "Darle de comer sin hambre la altera."
 		},
 		{
 			"id": "calle_sucia",
@@ -215,7 +215,7 @@
 				"lujuria": 6
 			},
 			"texto": "Sucia como está, absorbe todo lo que toca por la calle.",
-			"nota": "Trampa: sacarla a pasear sucia la altera."
+			"nota": "Sacarla a pasear sucia la altera."
 		}
 	],
 	"traje_inicial": "inicial",
@@ -321,24 +321,24 @@
 			}
 		},
 		"notas": {
-			"arisca": "Cuando está arisca, lo que mejor le sienta es que le des su espacio.",
-			"distante": "Cuando está distante, necesita que la escuches sin más.",
-			"confiada": "Cuando confía en ti, hacerla reír la acerca.",
-			"carinosa": "Cuando está cariñosa, le hace bien oír algo bonito.",
-			"unida": "Cuando estáis unidos, basta con escucharla.",
-			"alterada": "Alterada, una broma la distrae de la maldición.",
-			"critica": "En estado crítico, apártate: es lo único que la ayuda.",
-			"hostil": "Cuando está hostil, lo único que acepta es que la dejes en paz."
+			"arisca": "Arisca: dale su espacio.",
+			"distante": "Distante: escúchala.",
+			"confiada": "Confiada: hazla reír.",
+			"carinosa": "Cariñosa: dile algo bonito.",
+			"unida": "Unida: basta con escucharla.",
+			"alterada": "Alterada: una broma la distrae.",
+			"critica": "Crítica: aléjate.",
+			"hostil": "Hostil: déjala en paz."
 		},
 		"toque": {
 			"arisca": {
 				"calma": [
 					"¿Ahora te acuerdas de que existo?",
-					"No me toques. Bastante pegajosa soy yo sola.",
-					"Déjalo. Ya me apaño."
+					"No me toques. Ya soy bastante pegajosa sola.",
+					"Déjalo. Yo me las arreglo."
 				],
 				"alterada": [
-					"Hoy no. Hoy no respondo de mí, y a ti te da igual.",
+					"Hoy no. Hoy no respondo por mí, y a ti te da lo mismo.",
 					"Algo me sube por dentro. Tampoco es que preguntes."
 				],
 				"critica": [
@@ -350,7 +350,7 @@
 				"calma": [
 					"Estoy bien. Supongo.",
 					"¿Querías algo?",
-					"Aquí sigo. Mirando la pared. Se le da bien callarse."
+					"Aquí sigo. Mirando la pared. Es buena para callarse."
 				],
 				"alterada": [
 					"No sé qué me pasa. Tampoco sé si contártelo.",
@@ -358,18 +358,18 @@
 				],
 				"critica": [
 					"Mejor no te acerques. No te conozco lo bastante para pedirte ayuda.",
-					"Algo tira de mí. No sé si tú podrías pararlo."
+					"Algo tira de mí. No sé si tú podrías detenerlo."
 				]
 			},
 			"confiada": {
 				"calma": [
-					"¡Eh! Hoy he aprendido a poner la cara del vecino. Mira.",
-					"Si me pinchas, ondulo. Es ciencia.",
+					"¡Oye! Hoy aprendí a poner la cara del vecino. Mira.",
+					"Si me picas, ondulo. Es ciencia.",
 					"¿Sabes? Esta casa ya huele un poco a mí."
 				],
 				"alterada": [
 					"Estoy nerviosa. ¿Me cuentas algo? Lo que sea.",
-					"Me cuesta quedarme quieta. Distráeme, anda."
+					"Me cuesta quedarme quieta. Distráeme, ¿sí?"
 				],
 				"critica": [
 					"Tengo miedo. Quédate lejos, pero no te vayas.",
@@ -378,8 +378,8 @@
 			},
 			"carinosa": {
 				"calma": [
-					"¡Has venido! Te había guardado el sitio del sofá. Lo tengo un poco absorbido.",
-					"He practicado tu risa toda la tarde. Todavía me sale mejor la tuya.",
+					"¡Viniste! Te guardé tu lugar en el sofá. Lo tengo un poco absorbido.",
+					"Practiqué tu risa toda la tarde. Todavía te sale mejor a ti.",
 					"Cuando llegas, me pongo más brillante. Yo no lo decido."
 				],
 				"alterada": [
@@ -388,29 +388,29 @@
 				],
 				"critica": [
 					"No me toques, por favor. Es justo porque te quiero.",
-					"Sigo aquí dentro. Háblame desde la puerta."
+					"Sigo aquí adentro. Háblame desde la puerta."
 				]
 			},
 			"unida": {
 				"calma": [
-					"No hace falta que digas nada. Ya te he entendido.",
+					"No hace falta que digas nada. Ya te entendí.",
 					"Antes imitaba a todo el mundo. Ahora solo quiero parecerme a mí, contigo al lado.",
-					"Eres mi sitio favorito. Y conozco muchos frascos."
+					"Eres mi lugar favorito. Y conozco muchos frascos."
 				],
 				"alterada": [
-					"Lo noto subir. Tranquilo: todavía mando yo.",
+					"Lo siento subir. Tranquilo: todavía mando yo.",
 					"Si me ves rara, no te asustes. Te lo diré antes de perderme."
 				],
 				"critica": [
-					"Ya casi no me queda sitio aquí dentro. El que queda es tuyo.",
+					"Ya casi no me queda lugar aquí adentro. El que queda es tuyo.",
 					"Si llega el momento, sabré qué hacer. Confía en mí una vez más."
 				]
 			},
 			"hostil": {
 				"calma": [
 					"No me hables.",
-					"Lo estoy apuntando todo. Día y hora.",
-					"Aparta la mano."
+					"Lo estoy anotando todo. Día y hora.",
+					"Quita la mano."
 				],
 				"alterada": [
 					"Hoy no te conviene estar cerca. Y a mí tampoco me conviene avisarte.",
@@ -426,10 +426,10 @@
 			"arisca": {
 				"buena": [
 					"…Gracias por no insistir.",
-					"Vale. Así sí."
+					"Bueno. Así sí."
 				],
 				"regular": [
-					"Ya. Oyes, pero no sé si escuchas."
+					"Ajá. Oyes, pero no sé si escuchas."
 				],
 				"mala": [
 					"No me vengas con eso ahora.",
@@ -442,7 +442,7 @@
 					"Bueno… quizá te cuente más mañana."
 				],
 				"regular": [
-					"Ah. Vale.",
+					"Ah. Bueno.",
 					"Mm. Lo tendré en cuenta."
 				],
 				"mala": [
@@ -451,20 +451,20 @@
 			},
 			"confiada": {
 				"buena": [
-					"¡Pff! Se me ha salido un trozo de la risa. Espera, que lo recojo.",
+					"¡Pff! Se me salió un pedazo de la risa. Espera, ya lo recojo.",
 					"Otra. Cuéntame otra."
 				],
 				"regular": [
-					"Se está bien aquí, ¿verdad?",
+					"Qué bien se está aquí, ¿verdad?",
 					"Gracias. De verdad."
 				],
 				"mala": [
-					"Ah… ¿he hecho algo mal?"
+					"Ah… ¿hice algo mal?"
 				]
 			},
 			"carinosa": {
 				"buena": [
-					"Me lo voy a guardar dentro. Literalmente: ahí se queda.",
+					"Me lo voy a guardar adentro. Literalmente: ahí se queda.",
 					"Dímelo otra vez mañana, ¿sí?"
 				],
 				"regular": [
@@ -485,12 +485,12 @@
 					"No hacía falta. Pero me gusta."
 				],
 				"mala": [
-					"¿Te he asustado? Puedes decírmelo."
+					"¿Te asusté? Puedes decírmelo."
 				]
 			},
 			"alterada": {
 				"buena": [
-					"Ja… sí. Por un momento se me ha olvidado.",
+					"Ja… sí. Por un momento se me olvidó.",
 					"Sigue, sigue. Mientras me río, no lo oigo."
 				],
 				"regular": [
@@ -511,7 +511,7 @@
 				],
 				"mala": [
 					"¡No te acerques! No… no sé cuánto aguanto.",
-					"Para. Por favor, para."
+					"Basta. Por favor, basta."
 				]
 			},
 			"hostil": {
@@ -523,7 +523,7 @@
 					"No me interesa lo que tengas que decir."
 				],
 				"mala": [
-					"Eso también lo voy a apuntar.",
+					"Eso también lo voy a anotar.",
 					"Ni se te ocurra."
 				]
 			}
@@ -535,19 +535,19 @@
 				"¿Sabes quién contesta en ese número? Pronto lo sabrás."
 			],
 			"arisca": [
-				"Te he dicho que no.",
+				"Te dije que no.",
 				"Quita.",
 				"¿Qué parte de «déjame» no imitas bien?"
 			],
 			"distante": [
-				"Para, por favor.",
+				"Ya basta, por favor.",
 				"No me gusta eso.",
 				"¿Puedes dejar de hacerlo?"
 			],
 			"confiada": [
-				"¡Eh, que me deformas!",
-				"Ya vale, pesado.",
-				"Una vez tiene gracia. Veinte, no."
+				"¡Oye, me deformas!",
+				"Ya basta, pesado.",
+				"Una vez da risa. Veinte, no."
 			],
 			"carinosa": [
 				"Me haces cosquillas… pero ya, ¿eh?",
@@ -556,12 +556,12 @@
 			],
 			"unida": [
 				"Estoy aquí, no hace falta comprobarlo.",
-				"Vale, vale. Ya sé que eres tú.",
-				"Te lo digo con cariño: para."
+				"Sí, sí. Ya sé que eres tú.",
+				"Te lo digo con cariño: basta."
 			],
 			"alterada": [
 				"No me toques ahora. Lo empeoras.",
-				"¡Para! Cada vez que me tocas, sube.",
+				"¡Basta! Cada vez que me tocas, sube.",
 				"Por favor. Me cuesta mucho aguantar."
 			],
 			"critica": [
@@ -570,7 +570,7 @@
 				"Aléjate. Aléjate ya."
 			]
 		},
-		"aviso": "He encontrado la tarjeta de H.A.R.E.M. Una vez más y marco."
+		"aviso": "Encontré la tarjeta de H.A.R.E.M. Una vez más y marco."
 	},
 	"dialogos_actitud": {
 		"arisca": {
@@ -588,7 +588,7 @@
 			],
 			"limpiar": [
 				"Puedo sola.",
-				"Date prisa y acabemos."
+				"Apúrate y terminemos."
 			],
 			"jugar": [
 				"Juego. No significa que me caigas bien.",
@@ -598,7 +598,7 @@
 		"distante": {
 			"trabajar": [
 				"Hasta luego, supongo.",
-				"Vale. Aquí estaré."
+				"Bueno. Aquí estaré."
 			],
 			"comer": [
 				"Gracias. Está bien.",
@@ -606,15 +606,15 @@
 			],
 			"pasear": [
 				"Hay mucha gente. Iré a tu lado, si no molesto.",
-				"Fuera todo es más grande."
+				"Afuera todo es más grande."
 			],
 			"limpiar": [
-				"Vale. Si crees que hace falta.",
+				"Bueno. Si crees que hace falta.",
 				"Se está mejor así. Un poco."
 			],
 			"jugar": [
 				"Bueno. Una partida.",
-				"No se me da mal. Creo."
+				"No soy mala para esto. Creo."
 			]
 		},
 		"carinosa": {
@@ -628,7 +628,7 @@
 			],
 			"pasear": [
 				"Dame la mano. Prometo devolvértela entera.",
-				"¡Vamos por donde fuimos ayer! Quiero enseñarte un charco."
+				"¡Vamos por donde fuimos ayer! Quiero mostrarte un charco."
 			],
 			"limpiar": [
 				"Quedo tan brillante que te vas a ver reflejado.",
@@ -646,10 +646,10 @@
 			],
 			"comer": [
 				"Comemos juntos, que sabe mejor.",
-				"Te he dejado la mitad. Casi sin absorber."
+				"Te dejé la mitad. Casi sin absorber."
 			],
 			"pasear": [
-				"Da igual adónde. Ya estoy donde quería.",
+				"Da lo mismo adónde. Ya estoy donde quería.",
 				"Hoy no me hago opaca. Que me vean contigo."
 			],
 			"limpiar": [
@@ -675,12 +675,12 @@
 				"Si me tocas en la calle, grito."
 			],
 			"limpiar": [
-				"Lo hago yo. Fuera.",
+				"Lo hago yo. Vete.",
 				"No me pongas una mano encima."
 			],
 			"jugar": [
 				"Juego porque me obligan. Consta en mis notas.",
-				"Acaba ya."
+				"Termina ya."
 			]
 		}
 	}

@@ -27,6 +27,11 @@ Abre la carpeta en Godot y pulsa F5, o desde la terminal:
 | `personajes/slime/expresiones/` | Suelta aquí los PNG y sustituyen al dibujo (ver README dentro) |
 | `tests/` | Simulador de equilibrio, prueba de humo y capturas |
 
+## Textos
+
+Español neutro latinoamericano con tuteo y «ustedes». En partida se muestra lo mínimo: sin cifras de efectos
+ni instrucciones; el jugador aprende observando a la chica y con las notas de su diario.
+
 ## Equilibrar
 
 Cambia los JSON y ejecuta el simulador (200 partidas por estrategia):

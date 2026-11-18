@@ -5,7 +5,7 @@
 		"categoria": "Alimentación",
 		"tipo": "consumible",
 		"precio": 14,
-		"descripcion": "Su comida favorita. Quita hambre y la pone contenta.",
+		"descripcion": "Su comida favorita.",
 		"efectos": {
 			"hambre": -25,
 			"felicidad": 10
@@ -20,7 +20,7 @@
 		"categoria": "Alimentación",
 		"tipo": "consumible",
 		"precio": 8,
-		"descripcion": "Un capricho rápido. Alegra un poco, alimenta poco.",
+		"descripcion": "Un antojo rápido.",
 		"efectos": {
 			"hambre": -8,
 			"felicidad": 6,
@@ -33,7 +33,7 @@
 		"categoria": "Cuidado personal",
 		"tipo": "consumible",
 		"precio": 10,
-		"descripcion": "Hidrata y refresca. Para un slime, es casi un baño.",
+		"descripcion": "Para una slime, es casi un baño.",
 		"efectos": {
 			"salud": 6,
 			"higiene": 12,
@@ -46,7 +46,7 @@
 		"categoria": "Cuidado personal",
 		"tipo": "consumible",
 		"precio": 12,
-		"descripcion": "Limpieza a fondo sin gastar una acción.",
+		"descripcion": "Limpia en un momento.",
 		"efectos": {
 			"higiene": 35
 		}
@@ -57,7 +57,7 @@
 		"categoria": "Artículos especiales",
 		"tipo": "consumible",
 		"precio": 22,
-		"descripcion": "Calma los nervios. Reduce la lujuria al momento.",
+		"descripcion": "Calma los nervios.",
 		"efectos": {
 			"lujuria": -10
 		}
@@ -68,7 +68,7 @@
 		"categoria": "Cuidado personal",
 		"tipo": "pasivo",
 		"precio": 60,
-		"descripcion": "Duerme abrazada a ella. Cada noche bien cuidada, +1 de vínculo extra.",
+		"descripcion": "Duerme abrazada a ella.",
 		"pasivo": {
 			"vinculo_noche": 1
 		}
@@ -79,7 +79,7 @@
 		"categoria": "Entretenimiento",
 		"tipo": "pasivo",
 		"precio": 90,
-		"descripcion": "Se queda horas mirando los peces. -2 de lujuria cada día.",
+		"descripcion": "Se queda horas mirando los peces.",
 		"pasivo": {
 			"lujuria_diaria": -2
 		}
@@ -90,7 +90,7 @@
 		"categoria": "Entretenimiento",
 		"tipo": "pasivo",
 		"precio": 70,
-		"descripcion": "Dice que es como verse en un espejo. La tristeza baja 3 cada día.",
+		"descripcion": "Dice que es como verse en un espejo.",
 		"pasivo": {
 			"tristeza_diaria": -3
 		}
@@ -102,7 +102,7 @@
 		"tipo": "pasivo",
 		"precio": 120,
 		"especie": "slime",
-		"descripcion": "Un sitio fresco donde compactarse. Pierde 3 puntos menos de higiene al día y la lujuria baja 1 cada día.",
+		"descripcion": "Un lugar fresco donde compactarse.",
 		"pasivo": {
 			"higiene_diaria": -3,
 			"lujuria_diaria": -1
@@ -114,7 +114,7 @@
 		"categoria": "Entretenimiento",
 		"tipo": "minijuego",
 		"precio": 50,
-		"descripcion": "Desbloquea el minijuego de parejas.",
+		"descripcion": "Un juego de parejas.",
 		"minijuego": "memoria"
 	},
 	{
@@ -125,7 +125,7 @@
 		"precio": 80,
 		"especie": "slime",
 		"traje": "casual",
-		"descripcion": "Cómoda para salir: en la calle nadie la mira y se calma. En casa, tan a gusto, se relaja demasiado."
+		"descripcion": "Cómoda para salir. En casa, quizá demasiado."
 	},
 	{
 		"id": "traje_vestido_blanco",
@@ -135,7 +135,7 @@
 		"precio": 120,
 		"especie": "slime",
 		"traje": "vestido_blanco",
-		"descripcion": "Fuera llama la atención y eso la altera. En casa se siente arreglada y se serena."
+		"descripcion": "Afuera llama la atención. En casa se siente arreglada."
 	},
 	{
 		"id": "traje_vestido_lila",
@@ -145,6 +145,6 @@
 		"precio": 150,
 		"especie": "slime",
 		"traje": "vestido_lila",
-		"descripcion": "De fiesta: en la calle se pone muy contenta… y muy acelerada. Jugando en casa, en cambio, se calma."
+		"descripcion": "Para salir de fiesta. O para jugar en casa."
 	}
 ]

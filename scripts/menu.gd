@@ -130,7 +130,7 @@ func _on_creditos() -> void:
 func _records_text() -> String:
 	var data = Game.load_json(RECORDS_PATH) if FileAccess.file_exists(RECORDS_PATH) else null
 	if not data is Dictionary or data.is_empty():
-		return "Todavía no has terminado ninguna partida."
+		return "Todavía no terminas ninguna partida."
 	var out := []
 	for cid in data:
 		var r: Dictionary = data[cid]

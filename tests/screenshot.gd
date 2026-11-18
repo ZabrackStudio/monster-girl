@@ -29,6 +29,7 @@ func _run() -> void:
 	main._buy("traje_vestido_lila")
 	for i in 10: await process_frame
 	_shot("3b_tienda_ropa")
+	main.shop_bought = []
 	main._leave_shop()
 	for i in 40: await process_frame
 	_shot("3c_salida")

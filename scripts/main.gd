@@ -36,7 +36,6 @@ var lbl_line: Label
 var log_box: RichTextLabel
 var portrait: Control
 var stat_bars := {}
-var stat_values := {}
 var action_buttons := {}
 var modal: Control
 var music
@@ -109,9 +108,6 @@ func _show_pause() -> void:
 		snd.text = _sound_label())
 	v.add_child(snd)
 	v.add_child(_volume_row())
-	var note := _wrap("La partida se guarda sola después de cada acción.", 17)
-	note.modulate = TEXT_DIM
-	v.add_child(note)
 	v.add_child(_button("Volver al menú principal", _to_menu))
 
 
@@ -267,13 +263,8 @@ func _build_ui() -> void:
 		bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		row.add_child(bar)
-		var v := _label("", 19)
-		v.custom_minimum_size = Vector2(64, 0)
-		v.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		row.add_child(v)
 		grid.add_child(cell)
 		stat_bars[s] = bar
-		stat_values[s] = v
 
 	# Registro dentro del marco del kit
 	var log_panel := PanelContainer.new()
@@ -384,7 +375,7 @@ func _refresh() -> void:
 		game.day, game.actions_left, int(game.balance["acciones_por_dia"]), game.money]
 	lbl_level.text = info["nombre"]
 	name_lbl.text = "%s · %s" % [game.character["nombre"], game.attitude()["nombre"]]
-	talk_pill.visible = game.can_talk()
+	talk_pill.visible = game.can_talk() and not game.ever_talked
 	var psb := level_pill.get_theme_stylebox("panel") as StyleBoxFlat
 	psb.bg_color = lv_color
 	psb.border_color = lv_color.lightened(0.35)
@@ -405,12 +396,8 @@ func _refresh() -> void:
 			stat_bars[s].max_value = -float(game.balance["vinculo"]["molestia"]["denuncia"]) if negative else game.bond_goal()
 			stat_bars[s].value = absf(game.bond)
 			(stat_bars[s].get_theme_stylebox("fill") as StyleBoxFlat).bg_color = Color("d9434f") if negative else Color(STAT_COLORS[s])
-			stat_values[s].text = "%d/%d" % [roundi(game.bond), roundi(game.bond_goal())]
-			# Sin símbolos especiales (la fuente web no los trae): al llegar a la meta cambia de color.
-			stat_values[s].add_theme_color_override("font_color", Color("ffb3dd") if game.bond >= game.bond_goal() else (Color("ef7d86") if game.bond < 0 else Color.WHITE))
 		else:
 			stat_bars[s].value = game.stats[s]
-			stat_values[s].text = "%d%%" % roundi(game.stats[s])
 	lbl_line.text = "«%s»" % game.current_line if game.current_line != "" else ""
 	bg.color = BG.lerp(Color("3a1424"), game.level() * 0.18)
 	portrait.set_state(game.mood(), game.level(), game.outfit)
@@ -426,11 +413,11 @@ func _refresh() -> void:
 				var n := 0
 				for k in game.inventory:
 					n += game.inventory[k]
-				b.text = "%s (%d)" % [label, n]
+				b.text = "%s (%d)" % [label, n] if n > 0 else label
 				b.disabled = game.over
 			_:
 				var act: Dictionary = game.activity(id)
-				b.text = "%s (%d)" % [label, int(act["costo"])]
+				b.text = "%s (%d)" % [label, int(act["costo"])] if int(act["costo"]) > 1 else label
 				b.disabled = not game.can_do(id)
 				b.tooltip_text = game.why_not(id)
 
@@ -600,11 +587,6 @@ func _night() -> void:
 	sleeping = false
 
 
-func _tolerance_text(f: float) -> String:
-	var txt := "Calma la maldición al %d%%" % roundi(f * 100)
-	return txt + (" (se ha acostumbrado)" if f < 0.75 else "")
-
-
 func _sound_label() -> String:
 	return "Sonido: no" if music.muted else "Sonido: sí"
 
@@ -737,10 +719,6 @@ func _fill_shop() -> void:
 		var d := _wrap(it["descripcion"], 17)
 		d.modulate = TEXT_DIM
 		info.add_child(d)
-		if it["tipo"] == "traje":
-			var fx := _wrap(_outfit_text(it["traje"]), 16)
-			fx.add_theme_color_override("font_color", Color("c9b3ff"))
-			info.add_child(fx)
 		row.add_child(info)
 		var can: bool = game.can_buy(id)
 		var b := _button("%d $" % int(it["precio"]) if can else "Comprado",
@@ -748,20 +726,6 @@ func _fill_shop() -> void:
 		b.custom_minimum_size = Vector2(130, 64)
 		row.add_child(b)
 		shop_list.add_child(row)
-
-
-## Resumen de lo que hace un traje según la actividad.
-func _outfit_text(t: String) -> String:
-	var fx: Dictionary = game.outfit_effects(t)
-	if fx.is_empty():
-		return "Sin efectos."
-	var parts := []
-	for act in fx:
-		var bits := []
-		for k in fx[act]:
-			bits.append("%+d %s" % [int(fx[act][k]), Game.STAT_NAMES.get(k, k).to_lower()])
-		parts.append("%s: %s" % [game.activity(act)["nombre"], ", ".join(bits)])
-	return " · ".join(parts)
 
 
 func _buy(id: String) -> void:
@@ -835,17 +799,13 @@ func _show_inventory() -> void:
 	var v := _open_modal("Objetos y diario")
 	music.play("tienda")
 	if game.inventory.is_empty():
-		v.add_child(_wrap("No tienes objetos. Compra algo en la tienda."))
+		v.add_child(_wrap("No tienes objetos."))
 	for id in game.inventory:
 		var it: Dictionary = game.items[id]
 		var row := HBoxContainer.new()
 		var info := VBoxContainer.new()
 		info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		info.add_child(_label("%s ×%d" % [it["nombre"], game.inventory[id]], 22))
-		if float(it["efectos"].get("lujuria", 0)) < 0:
-			var r := _label(_tolerance_text(game.tolerance_factor("objeto_" + id)), 17)
-			r.modulate = TEXT_DIM
-			info.add_child(r)
 		var d := _wrap(it["descripcion"], 17)
 		d.modulate = TEXT_DIM
 		info.add_child(d)
@@ -874,13 +834,9 @@ func _add_wardrobe(v: VBoxContainer) -> void:
 	var names: Dictionary = game.character.get("trajes", {})
 	for t in game.outfits:
 		var row := HBoxContainer.new()
-		var info := VBoxContainer.new()
-		info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		info.add_child(_label(names.get(t, t), 20))
-		var fx := _wrap(_outfit_text(t), 16)
-		fx.add_theme_color_override("font_color", Color("c9b3ff"))
-		info.add_child(fx)
-		row.add_child(info)
+		var l := _label(names.get(t, t), 20)
+		l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(l)
 		var worn: bool = t == game.outfit
 		var b := _button("Puesto" if worn else "Vestir", _wear.bind(t), worn)
 		b.custom_minimum_size = Vector2(130, 56)
@@ -897,11 +853,9 @@ func _wear(t: String) -> void:
 func _add_diary(v: VBoxContainer) -> void:
 	v.add_child(HSeparator.new())
 	v.add_child(_label("Diario de %s" % game.character["nombre"], 24))
-	var known := 0
 	for r in game.character.get("reacciones", []):
 		if not game.discovered.has(r["id"]):
 			continue
-		known += 1
 		var trap: bool = float(r["efectos"].get("lujuria", 0)) > 0
 		var l := _wrap(r["nota"], 18)
 		l.add_theme_color_override("font_color", Color("f2a65a") if trap else Color("9fd8ff"))
@@ -911,30 +865,13 @@ func _add_diary(v: VBoxContainer) -> void:
 			var note := _wrap(game.character["charla"]["notas"][key], 18)
 			note.add_theme_color_override("font_color", Color("f5a8d8"))
 			v.add_child(note)
-	var left: int = game.reactions_total() - known
-	var hint := _wrap("Quedan %d reacciones por descubrir. Prueba a combinar actividades en distinto orden." % left
-		if left > 0 else "Ya lo sabes todo de ella.", 17)
-	hint.modulate = TEXT_DIM
-	v.add_child(hint)
 
 
 func _show_minigame_select() -> void:
 	var v := _open_modal("¿A qué jugamos?")
 	for id in game.minigames:
 		var mg: Dictionary = game.balance["minijuegos"][id]
-		var aff := "Afinidad: ?"
-		if game.known_affinity.has(id):
-			var a: float = game.minigame_affinity(id)
-			aff = "Le encanta" if a >= 1.2 else ("Le gusta" if a >= 0.95 else "No le entusiasma")
-		v.add_child(_label(mg["nombre"], 24))
-		var d := _wrap("%s  ·  %s  ·  %s" % [mg["descripcion"], aff,
-			_tolerance_text(game.tolerance_factor("mj_" + id))], 17)
-		d.modulate = TEXT_DIM
-		v.add_child(d)
-		v.add_child(_button("Jugar", _start_minigame.bind(id)))
-	var hint := _wrap("Puedes comprar más minijuegos en la tienda.", 17)
-	hint.modulate = TEXT_DIM
-	v.add_child(hint)
+		v.add_child(_button(mg["nombre"], _start_minigame.bind(id)))
 	v.add_child(_button("Cancelar", _close_modal))
 
 
@@ -1006,7 +943,7 @@ func _show_game_over(ending: Dictionary) -> void:
 	v.add_child(_wrap(ending["texto"], 21))
 	v.add_child(HSeparator.new())
 	v.add_child(_label("Días sobrevividos: %d" % ending["dias"], 24))
-	v.add_child(_label("Vínculo final: %d/%d · %s" % [roundi(ending["vinculo"]), roundi(game.bond_goal()), ending["actitud"]], 20))
+	v.add_child(_label("Actitud final: %s" % ending["actitud"], 20))
 	var rec := _label("Récord con %s: %d días%s" % [game.character["nombre"], record["mejor_dias"],
 		"  ¡Nuevo récord!" if record["nuevo"] else ""], 20)
 	rec.modulate = TEXT_DIM
