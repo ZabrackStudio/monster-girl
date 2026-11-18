@@ -97,12 +97,12 @@
 	},
 	{
 		"id": "frasco",
-		"nombre": "Frasco hermético",
+		"nombre": "Tina fresca",
 		"categoria": "Artículos especiales",
 		"tipo": "pasivo",
 		"precio": 120,
 		"especie": "slime",
-		"descripcion": "Un lugar fresco donde compactarse.",
+		"descripcion": "Un lugar fresco donde reposar.",
 		"pasivo": {
 			"higiene_diaria": -3,
 			"lujuria_diaria": -1

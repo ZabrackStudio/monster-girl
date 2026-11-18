@@ -11,9 +11,9 @@
 		{ "texto": "Deja que lo acaricie.", "efectos": { "felicidad": 12, "tristeza": -6, "lujuria": -4 }, "resultado": "El perro le da un lengüetazo. Reme se ríe tanto que tiembla entera." }
 	  ] },
 	{ "id": "miradas", "tipo": "negativo", "momento": ["pasear"], "peso": 2, "condiciones": { "dia_min": 3 },
-	  "texto": "Unos muchachos señalan a Reme y se ríen. Ella se encoge hasta hacerse pequeña.",
+	  "texto": "Unos muchachos señalan a Reme y se ríen. Ella baja la mirada y se abraza los brazos.",
 	  "opciones": [
-		{ "texto": "Volver a casa enseguida.", "efectos": { "tristeza": 6 }, "resultado": "Ya en casa, tarda un rato en recuperar su tamaño." },
+		{ "texto": "Volver a casa enseguida.", "efectos": { "tristeza": 6 }, "resultado": "Ya en casa, tarda un rato en volver a hablar." },
 		{ "texto": "Ponerte delante y seguir paseando.", "efectos": { "felicidad": 6, "tristeza": -2 }, "resultado": "«Gracias», te susurra. Sigue algo opaca, pero camina a tu lado." }
 	  ] },
 	{ "id": "calor", "tipo": "especie", "momento": ["pasear", "noche"], "peso": 2, "condiciones": { "dia_min": 4 },

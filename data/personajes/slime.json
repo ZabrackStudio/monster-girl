@@ -125,7 +125,7 @@
 			"titulo": "Final malo: Denuncia",
 			"imagen": "res://ui/finales/denuncia.png",
 			"musica": "final_malo",
-			"texto": "A las seis y cuarto de la mañana llaman a la puerta. Es un decir: la puerta ya está abierta.\n\nBotas en el pasillo. Dos soldados y, detrás, la intendente con una carpeta bajo el brazo.\n\n«Denuncia presentada por la propia asignada», lee. «Molestias reiteradas pese a sus avisos. Trae fechas y horas.» Pasa la hoja. «Aprendió a usar el teléfono imitándote a ti.»\n\nReme está en la cocina, compacta y opaca, dentro de su frasco. Cierra la tapa desde adentro cuando pasas esposado. No te mira.\n\n—\n\nEXPEDIENTE H.A.R.E.M. · PROYECTO WAIFU\nCuidador: retirado de la beta y retenido a disposición del mando.\nAsignada: trasladada. Apta para convivir con otro cuidador.\n\nAl margen, a mano: «La maldición no tuvo nada que ver. Fuiste tú.»"
+			"texto": "A las seis y cuarto de la mañana llaman a la puerta. Es un decir: la puerta ya está abierta.\n\nBotas en el pasillo. Dos soldados y, detrás, la intendente con una carpeta bajo el brazo.\n\n«Denuncia presentada por la propia asignada», lee. «Molestias reiteradas pese a sus avisos. Trae fechas y horas.» Pasa la hoja. «Aprendió a usar el teléfono imitándote a ti.»\n\nEl teléfono sigue sobre la mesa de la cocina, con el auricular todavía húmedo. Cuando pasas esposado, Reme cierra desde adentro la puerta de su cuarto. No sale a verte.\n\n—\n\nEXPEDIENTE H.A.R.E.M. · PROYECTO WAIFU\nCuidador: retirado de la beta y retenido a disposición del mando.\nAsignada: trasladada. Apta para convivir con otro cuidador.\n\nAl margen, a mano: «La maldición no tuvo nada que ver. Fuiste tú.»"
 		}
 	},
 	"reacciones": [
@@ -402,7 +402,7 @@
 				"calma": [
 					"No hace falta que digas nada. Ya te entendí.",
 					"Antes imitaba a todo el mundo. Ahora solo quiero parecerme a mí, contigo al lado.",
-					"Eres mi lugar favorito. Y conozco muchos frascos."
+					"Eres mi lugar favorito. Y conozco muchas tinas."
 				],
 				"alterada": [
 					"Lo siento subir. Tranquilo: todavía mando yo.",
