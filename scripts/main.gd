@@ -55,6 +55,7 @@ var sleeping := false
 var last_poke := -1000
 var closing: Control
 var closing_frame := -1
+var held: Control         # ventana anterior, a la vista mientras se mide la nueva
 
 
 func _ready() -> void:
@@ -431,13 +432,24 @@ func _on_action(id: String) -> void:
 # ================================================================ ventanas
 
 func _open_modal(title: String, dim := 0.65) -> VBoxContainer:
-	_close_modal()
+	# La ventana anterior sigue a la vista hasta que la nueva esté medida.
+	var just_closed: bool = closing_frame == Engine.get_process_frames() and is_instance_valid(closing)
+	if is_instance_valid(held):
+		if modal:
+			modal.queue_free()
+	elif modal:
+		held = modal
+	elif just_closed:
+		held = closing
+	modal = null
+	if not game.over:
+		music.play("lobby")
 	modal = ColorRect.new()
 	modal.color = Color(0, 0, 0, dim)
 	modal.set_anchors_preset(Control.PRESET_FULL_RECT)
 	modal.mouse_filter = Control.MOUSE_FILTER_STOP
+	modal.modulate.a = 0.0
 	add_child(modal)
-	_fade_in(modal)
 	var margin := MarginContainer.new()
 	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "right"]:
@@ -460,20 +472,35 @@ func _open_modal(title: String, dim := 0.65) -> VBoxContainer:
 	scroll.add_child(v)
 	if title != "":
 		v.add_child(_label(title, 30))
-	_fit_scroll.call_deferred(scroll, v, scroll.custom_minimum_size.y)
+	_fit_scroll.call_deferred(modal, scroll, v, scroll.custom_minimum_size.y)
 	return v
 
 
-## La ventana se ajusta a su contenido, con el alto máximo de antes como tope.
-func _fit_scroll(scroll: ScrollContainer, v: Control, max_h: float) -> void:
+## La ventana se ajusta a su contenido, con el alto máximo como tope, y solo entonces se muestra.
+func _fit_scroll(window: Control, scroll: ScrollContainer, v: Control, max_h: float) -> void:
 	# Espera a que se distribuya: los textos con ajuste de línea se miden con su ancho real.
 	await get_tree().process_frame
 	await get_tree().process_frame
-	if is_instance_valid(scroll) and is_instance_valid(v):
-		scroll.custom_minimum_size.y = minf(v.get_combined_minimum_size().y, max_h)
+	if not is_instance_valid(window) or window != modal:
+		return
+	scroll.custom_minimum_size.y = minf(v.get_combined_minimum_size().y, max_h)
+	await get_tree().process_frame
+	if not is_instance_valid(window) or window != modal:
+		return
+	if is_instance_valid(held):
+		held.queue_free()
+		held = null
+		window.modulate.a = 1.0
+	elif transitions:
+		create_tween().tween_property(window, "modulate:a", 1.0, 0.18)
+	else:
+		window.modulate.a = 1.0
 
 
 func _close_modal() -> void:
+	if is_instance_valid(held):
+		_fade_out(held)
+		held = null
 	if modal:
 		var old := modal
 		modal = null
