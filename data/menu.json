@@ -1,8 +1,11 @@
 {
 	"creditos": [
 		["Proyecto Waifu: Simulador de Cuidado", "Prototipo en desarrollo"],
-		["Idea y dirección", "Zabrack Studio"],
-		["Programación", "Hecho en Godot Engine con ayuda de Claude (Anthropic)"],
-		["Arte y música", "Material provisional generado con IA para el prototipo"]
+		["Idea", "Neftali Baleriano"],
+		["Programación", "Zabrack Studio"],
+		["Asistencia de programación", "Claude (Anthropic)"],
+		["Imágenes", "ChatGPT (OpenAI)"],
+		["Música", "Material provisional generado con IA para el prototipo"],
+		["Motor", "Godot Engine"]
 	]
 }
