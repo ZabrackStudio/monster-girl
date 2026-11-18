@@ -114,6 +114,11 @@
 			"titulo": "Final malo: Lo intentó",
 			"musica": "final_malo",
 			"texto": "Esa noche, Reme te despierta desde el otro lado de la puerta.\n\n«Corre», dice. Es su voz, todavía. «Coge las llaves y corre. Yo… yo me quedo aquí. Aguanto.»\n\nOyes cómo se pega al marco, cómo se agarra a la madera para no entrar. Aguanta un minuto. Aguanta dos. Te da tiempo a encontrar un zapato.\n\nLa madera cede despacio.\n\n«Perdón», dice. Y ya no vuelve a decir nada con su voz.\n\nFundido a negro.\n\n—\n\nAl amanecer, Reme recupera la forma sola, en el pasillo. Junto a la puerta hay una zapatilla. La otra sigue en tu mano.\n\nTe quiso. Solo le faltó un poco más de tiempo contigo."
+		},
+		"denuncia": {
+			"titulo": "Final malo: Denuncia",
+			"musica": "final_malo",
+			"texto": "A las seis y cuarto de la mañana llaman a la puerta. Es un decir: la puerta ya está abierta.\n\nBotas en el pasillo. Dos soldados y, detrás, la intendente con una carpeta bajo el brazo.\n\n«Denuncia presentada por la propia asignada», lee. «Molestias reiteradas pese a sus avisos. Trae fechas y horas.» Pasa la hoja. «Aprendió a usar el teléfono imitándote a ti.»\n\nReme está en la cocina, compacta y opaca, dentro de su frasco. Cierra la tapa desde dentro cuando pasas esposado. No te mira.\n\n—\n\nEXPEDIENTE H.A.R.E.M. · PROYECTO WAIFU\nCuidador: retirado de la beta y retenido a disposición del mando.\nAsignada: trasladada. Apta para convivir con otro cuidador.\n\nAl margen, a mano: «La maldición no tuvo nada que ver. Fuiste tú.»"
 		}
 	},
 	"reacciones": [
@@ -307,6 +312,12 @@
 				"escuchar": "regular",
 				"animar": "mala",
 				"bromear": "mala"
+			},
+			"hostil": {
+				"distancia": "buena",
+				"escuchar": "regular",
+				"animar": "mala",
+				"bromear": "mala"
 			}
 		},
 		"notas": {
@@ -316,7 +327,8 @@
 			"carinosa": "Cuando está cariñosa, le hace bien oír algo bonito.",
 			"unida": "Cuando estáis unidos, basta con escucharla.",
 			"alterada": "Alterada, una broma la distrae de la maldición.",
-			"critica": "En estado crítico, apártate: es lo único que la ayuda."
+			"critica": "En estado crítico, apártate: es lo único que la ayuda.",
+			"hostil": "Cuando está hostil, lo único que acepta es que la dejes en paz."
 		},
 		"toque": {
 			"arisca": {
@@ -392,6 +404,21 @@
 				"critica": [
 					"Ya casi no me queda sitio aquí dentro. El que queda es tuyo.",
 					"Si llega el momento, sabré qué hacer. Confía en mí una vez más."
+				]
+			},
+			"hostil": {
+				"calma": [
+					"No me hables.",
+					"Lo estoy apuntando todo. Día y hora.",
+					"Aparta la mano."
+				],
+				"alterada": [
+					"Hoy no te conviene estar cerca. Y a mí tampoco me conviene avisarte.",
+					"Sigue así y verás lo que tardo en dejar de contenerme."
+				],
+				"critica": [
+					"Fuera de mi vista. Es el último favor que te hago.",
+					"Ya no sé qué llegará antes: ellos o yo."
 				]
 			}
 		},
@@ -486,8 +513,64 @@
 					"¡No te acerques! No… no sé cuánto aguanto.",
 					"Para. Por favor, para."
 				]
+			},
+			"hostil": {
+				"buena": [
+					"Eso. Lejos.",
+					"Por fin entiendes algo."
+				],
+				"regular": [
+					"No me interesa lo que tengas que decir."
+				],
+				"mala": [
+					"Eso también lo voy a apuntar.",
+					"Ni se te ocurra."
+				]
 			}
-		}
+		},
+		"molesta": {
+			"hostil": [
+				"Otra vez. Queda anotado.",
+				"Sigue. Me falta poco para llenar la hoja.",
+				"¿Sabes quién contesta en ese número? Pronto lo sabrás."
+			],
+			"arisca": [
+				"Te he dicho que no.",
+				"Quita.",
+				"¿Qué parte de «déjame» no imitas bien?"
+			],
+			"distante": [
+				"Para, por favor.",
+				"No me gusta eso.",
+				"¿Puedes dejar de hacerlo?"
+			],
+			"confiada": [
+				"¡Eh, que me deformas!",
+				"Ya vale, pesado.",
+				"Una vez tiene gracia. Veinte, no."
+			],
+			"carinosa": [
+				"Me haces cosquillas… pero ya, ¿eh?",
+				"Si sigues, te absorbo el dedo.",
+				"Sé que me quieres. Ahora quiero estar quieta."
+			],
+			"unida": [
+				"Estoy aquí, no hace falta comprobarlo.",
+				"Vale, vale. Ya sé que eres tú.",
+				"Te lo digo con cariño: para."
+			],
+			"alterada": [
+				"No me toques ahora. Lo empeoras.",
+				"¡Para! Cada vez que me tocas, sube.",
+				"Por favor. Me cuesta mucho aguantar."
+			],
+			"critica": [
+				"¡SUÉLTAME! ¡No sabes lo que estás despertando!",
+				"Una vez más y no respondo.",
+				"Aléjate. Aléjate ya."
+			]
+		},
+		"aviso": "He encontrado la tarjeta de H.A.R.E.M. Una vez más y marco."
 	},
 	"dialogos_actitud": {
 		"arisca": {
@@ -576,6 +659,28 @@
 			"jugar": [
 				"Gane quien gane, mañana repetimos.",
 				"No hace falta que me dejes ganar. Lo noto."
+			]
+		},
+		"hostil": {
+			"trabajar": [
+				"Vete. Aprovecharé para hacer una llamada.",
+				"Mejor. Sin ti se respira."
+			],
+			"comer": [
+				"Déjalo en el suelo y sal.",
+				"No confundas esto con perdonarte."
+			],
+			"pasear": [
+				"A tres pasos. Ni uno menos.",
+				"Si me tocas en la calle, grito."
+			],
+			"limpiar": [
+				"Lo hago yo. Fuera.",
+				"No me pongas una mano encima."
+			],
+			"jugar": [
+				"Juego porque me obligan. Consta en mis notas.",
+				"Acaba ya."
 			]
 		}
 	}

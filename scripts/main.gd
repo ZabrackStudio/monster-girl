@@ -52,6 +52,7 @@ var shop_keeper
 var shop_bought := []
 var transitions := true   # las pruebas automáticas las desactivan
 var sleeping := false
+var last_poke := -1000
 var closing: Control
 var closing_frame := -1
 
@@ -399,11 +400,14 @@ func _refresh() -> void:
 	(lust_bar.get_theme_stylebox("fill") as StyleBoxFlat).bg_color = lv_color
 	for s in BAR_STATS:
 		if s == "vinculo":
-			stat_bars[s].max_value = game.bond_goal()
-			stat_bars[s].value = game.bond
+			# En negativo, la barra se llena en rojo hacia la denuncia.
+			var negative: bool = game.bond < 0
+			stat_bars[s].max_value = -float(game.balance["vinculo"]["molestia"]["denuncia"]) if negative else game.bond_goal()
+			stat_bars[s].value = absf(game.bond)
+			(stat_bars[s].get_theme_stylebox("fill") as StyleBoxFlat).bg_color = Color("d9434f") if negative else Color(STAT_COLORS[s])
 			stat_values[s].text = "%d/%d" % [roundi(game.bond), roundi(game.bond_goal())]
 			# Sin símbolos especiales (la fuente web no los trae): al llegar a la meta cambia de color.
-			stat_values[s].add_theme_color_override("font_color", Color("ffb3dd") if game.bond >= game.bond_goal() else Color.WHITE)
+			stat_values[s].add_theme_color_override("font_color", Color("ffb3dd") if game.bond >= game.bond_goal() else (Color("ef7d86") if game.bond < 0 else Color.WHITE))
 		else:
 			stat_bars[s].value = game.stats[s]
 			stat_values[s].text = "%d%%" % roundi(game.stats[s])
@@ -504,13 +508,16 @@ func _on_portrait_input(event: InputEvent) -> void:
 		return
 	if modal != null or sleeping or game.over or not game.pending_event.is_empty() or not portrait.hit(event.position):
 		return
+	# Un toque real cada cuarto de segundo: un doble contacto no cuenta como dos.
+	var now := Time.get_ticks_msec()
+	if now - last_poke < 250:
+		return
+	last_poke = now
 	portrait.poke()
-	var line: String = game.touch_line()
 	if game.can_talk():
-		_show_talk(line)
+		_show_talk(game.touch_line())
 	else:
-		game.current_line = line
-		_refresh()
+		game.poke()
 
 
 func _show_talk(line: String) -> void:

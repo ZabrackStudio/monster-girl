@@ -51,13 +51,16 @@ var outfits: Array = []
 # Vínculo: lo único que puede salvarla cuando la maldición llegue al máximo.
 var bond := 0.0
 var talked_today := false           # la charla que cuenta es una al día
+var pokes_today := 0                # toques de hoy después de la charla
+var warned := false                 # ya amenazó con denunciarte
+var annoyed_today := false          # el aviso de molestia sale una vez al día
 
 
 ## Estado que se guarda en la partida (todo lo demás sale de los JSON de datos).
 const SAVE_FIELDS := ["stats", "day", "actions_left", "money", "total_money", "inventory",
 	"passives", "minigames", "known_affinity", "events_seen", "times_today", "pending_event",
 	"tolerance", "curse_mark", "marked", "today", "discovered", "outfit", "outfits", "bond",
-	"current_line", "talked_today"]
+	"current_line", "talked_today", "pokes_today", "warned", "annoyed_today"]
 const INT_FIELDS := ["day", "actions_left", "money", "total_money"]
 const SAVE_VERSION := 1
 const SAVE_PATH := "user://partida.json"
@@ -151,12 +154,12 @@ func mood() -> String:
 	if lv == 1: return "inquieta"
 	# Sin maldición a la vista, la cara depende de cómo te trata.
 	var att := attitude_index()
-	if att == 0: return "triste"
-	if att >= 3 or (att == 2 and stats["felicidad"] > 65): return "feliz"
+	if att <= 1: return "triste"
+	if att >= 4 or (att == 3 and stats["felicidad"] > 65): return "feliz"
 	return "neutral"
 
 
-## Actitud actual según el vínculo: de Arisca (peor) a Unida (mejor).
+## Actitud actual según el vínculo: de Hostil (peor) a Unida (mejor).
 func attitude_index() -> int:
 	var list: Array = balance["vinculo"]["actitudes"]
 	var out := 0
@@ -179,6 +182,48 @@ func lust_band() -> String:
 ## Frase al tocarla, según su actitud y su lujuria.
 func touch_line() -> String:
 	return _pick(character["charla"]["toque"][attitude()["id"]][lust_band()])
+
+
+## Tocarla de más: cuánto aguanta depende de su actitud y de la maldición.
+func poke() -> void:
+	if over or not pending_event.is_empty():
+		return
+	pokes_today += 1
+	var att := attitude()
+	var band := lust_band()
+	var patience := int(att["paciencia"])
+	if band == "alterada":
+		patience = mini(patience, 2)
+	elif band == "critica":
+		patience = mini(patience, 1)
+	if pokes_today <= patience:
+		current_line = touch_line()
+		changed.emit()
+		return
+	var m: Dictionary = balance["vinculo"]["molestia"]
+	# Con poco vínculo se enfada enseguida; con mucho, solo si insistes el doble.
+	var before := bond
+	if attitude_index() <= 2:
+		_bond(float(m["vinculo_bajo"]), true, true)
+	elif pokes_today > patience * 2:
+		_bond(float(m["vinculo_alto"]), true, true)
+	if bond < before and not annoyed_today:
+		annoyed_today = true
+		_log("[color=#ef7d86]%s se está hartando de que la toques: el vínculo baja.[/color]" % character["nombre"])
+	if band != "calma":
+		apply({"lujuria": m["lujuria_" + band]})
+	current_line = _pick(character["charla"]["molesta"][talk_key()])
+	if bond <= float(m["denuncia"]):
+		_end("denuncia")
+		return
+	if bond <= float(m["aviso"]) and not warned:
+		warned = true
+		current_line = character["charla"]["aviso"]
+		_log("[color=#ef7d86]%s ha encontrado la tarjeta de H.A.R.E.M. y no le quita ojo.[/color]" % character["nombre"])
+	elif bond > float(m["aviso"]):
+		warned = false
+	_check_consumed()
+	changed.emit()
 
 
 func can_talk() -> bool:
@@ -412,6 +457,8 @@ func sleep() -> void:
 	times_today.clear()
 	today.clear()
 	talked_today = false
+	pokes_today = 0
+	annoyed_today = false
 	var diff := {}
 	for s in STATS:
 		diff[s] = stats[s] - before[s]
@@ -634,7 +681,7 @@ func _check_consumed() -> bool:
 	if not over and stats["lujuria"] >= 100:
 		# Solo un vínculo muy fuerte le deja elegir irse en vez de cazarte.
 		# Sin él, cómo acaba depende de cuánto llegó a quererte.
-		_end("marea" if bond >= bond_goal() else ("lucha" if attitude_index() >= 2 else "poseida"))
+		_end("marea" if bond >= bond_goal() else ("lucha" if attitude_index() >= 3 else "poseida"))
 	return over
 
 
@@ -654,11 +701,13 @@ func bond_goal() -> float:
 	return float(balance["vinculo"]["final"])
 
 
-func _bond(v: float) -> void:
+## Solo molestarla puede dejar el vínculo en negativo; descuidarla lo deja, como mucho, en 0.
+func _bond(v: float, can_go_negative := false, silent := false) -> void:
 	var before := bond
-	bond = clampf(bond + v, 0.0, 100.0)
+	var low := -100.0 if can_go_negative else minf(bond, 0.0)
+	bond = clampf(bond + v, low, 100.0)
 	var real := bond - before
-	if absf(real) >= 0.5:
+	if absf(real) >= 0.5 and not silent:
 		_log("[color=%s]%+d vínculo[/color]" % ["#f07ac0" if real > 0 else "#9a8aa8", roundi(real)])
 
 

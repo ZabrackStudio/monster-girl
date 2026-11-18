@@ -150,34 +150,46 @@
 		"inicial": 15,
 		"actitudes": [
 			{
+				"id": "hostil",
+				"nombre": "Hostil",
+				"min": -100,
+				"efectividad": 0.7,
+				"paciencia": 0
+			},
+			{
 				"id": "arisca",
 				"nombre": "Arisca",
 				"min": 0,
-				"efectividad": 0.8
+				"efectividad": 0.8,
+				"paciencia": 1
 			},
 			{
 				"id": "distante",
 				"nombre": "Distante",
 				"min": 10,
-				"efectividad": 0.9
+				"efectividad": 0.9,
+				"paciencia": 2
 			},
 			{
 				"id": "confiada",
 				"nombre": "Confiada",
 				"min": 25,
-				"efectividad": 1.0
+				"efectividad": 1.0,
+				"paciencia": 4
 			},
 			{
 				"id": "carinosa",
 				"nombre": "Cariñosa",
 				"min": 45,
-				"efectividad": 1.05
+				"efectividad": 1.05,
+				"paciencia": 6
 			},
 			{
 				"id": "unida",
 				"nombre": "Unida",
 				"min": 76,
-				"efectividad": 1.1
+				"efectividad": 1.1,
+				"paciencia": 8
 			}
 		],
 		"charla": {
@@ -193,6 +205,14 @@
 				"vinculo": -2,
 				"lujuria": 2
 			}
+		},
+		"molestia": {
+			"vinculo_bajo": -2,
+			"vinculo_alto": -1,
+			"lujuria_alterada": 2,
+			"lujuria_critica": 3,
+			"aviso": -15,
+			"denuncia": -25
 		}
 	}
 }

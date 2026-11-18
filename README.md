@@ -54,12 +54,17 @@ Cada "k" está en el JSON de la especie, así cada chica monstruo reacciona dist
 ## Vínculo, actitud y finales (`vinculo` en balance.json)
 
 El vínculo empieza en `inicial` y marca la **actitud** de la chica (`actitudes`): Arisca, Distante,
-Confiada, Cariñosa y Unida. La actitud cambia sus frases y su cara, y multiplica lo que rinden
+Confiada, Cariñosa y Unida (y Hostil, si el vínculo es negativo). La actitud cambia sus frases y su cara, y multiplica lo que rinden
 los cuidados (`efectividad`): cuanto más bajo el vínculo, peor te trata y menos caso hace.
 
 **Charla** (`charla` en el JSON del personaje): al tocarla se abre una conversación que cuenta una vez al día.
 La respuesta buena depende de su actitud y, con la lujuria alta, de si está Alterada o Crítica (`ajuste`).
 El resultado aplica `vinculo.charla` y la primera respuesta buena deja una nota en el diario.
+
+**Molestarla** (`vinculo.molestia`): tras la charla, cada actitud aguanta `paciencia` toques al día.
+Con Hostil, Arisca o Distante, los toques de más bajan el vínculo; con más confianza, solo al pasar del doble.
+Si está Alterada o Crítica, además suben la lujuria. Solo molestarla puede dejar el vínculo en negativo
+(actitud Hostil): en `aviso` amenaza con llamar y en `denuncia` termina la partida con el final *Denuncia*.
 
 Cuando la lujuria llega a 100, el vínculo decide el final:
 
