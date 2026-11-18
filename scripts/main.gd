@@ -29,7 +29,6 @@ var level_pill: PanelContainer
 var lust_bar: ProgressBar
 var lbl_lust: Label
 var name_lbl: Label
-var talk_pill: PanelContainer
 var lbl_moon: Label
 var moon_pill: PanelContainer
 var lbl_line: Label
@@ -200,10 +199,6 @@ func _build_ui() -> void:
 	gap.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	gap.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ov.add_child(gap)
-	talk_pill = _pill(Color(0.3, 0.1, 0.24, 0.92), Color("f07ac0"))
-	talk_pill.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	talk_pill.add_child(_label("Tócala para hablar", 20))
-	ov.add_child(talk_pill)
 	var lust_pill := _pill(Color(0.1, 0.08, 0.2, 0.9), BORDER)
 	ov.add_child(lust_pill)
 	var lust_row := HBoxContainer.new()
@@ -375,7 +370,6 @@ func _refresh() -> void:
 		game.day, game.actions_left, int(game.balance["acciones_por_dia"]), game.money]
 	lbl_level.text = info["nombre"]
 	name_lbl.text = "%s · %s" % [game.character["nombre"], game.attitude()["nombre"]]
-	talk_pill.visible = game.can_talk() and not game.ever_talked
 	var psb := level_pill.get_theme_stylebox("panel") as StyleBoxFlat
 	psb.bg_color = lv_color
 	psb.border_color = lv_color.lightened(0.35)
@@ -416,8 +410,7 @@ func _refresh() -> void:
 				b.text = "%s (%d)" % [label, n] if n > 0 else label
 				b.disabled = game.over
 			_:
-				var act: Dictionary = game.activity(id)
-				b.text = "%s (%d)" % [label, int(act["costo"])] if int(act["costo"]) > 1 else label
+				b.text = label
 				b.disabled = not game.can_do(id)
 				b.tooltip_text = game.why_not(id)
 

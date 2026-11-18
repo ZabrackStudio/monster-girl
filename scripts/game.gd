@@ -52,14 +52,13 @@ var bond := 0.0
 var talked_today := false           # la charla que cuenta es una al día
 var pokes_today := 0                # toques de hoy después de la charla
 var warned := false                 # ya amenazó con denunciarte
-var ever_talked := false            # el aviso de «tócala» solo sale hasta la primera charla
 
 
 ## Estado que se guarda en la partida (todo lo demás sale de los JSON de datos).
 const SAVE_FIELDS := ["stats", "day", "actions_left", "money", "total_money", "inventory",
 	"passives", "minigames", "known_affinity", "events_seen", "times_today", "pending_event",
 	"tolerance", "curse_mark", "marked", "today", "discovered", "outfit", "outfits", "bond",
-	"current_line", "talked_today", "pokes_today", "warned", "ever_talked"]
+	"current_line", "talked_today", "pokes_today", "warned"]
 const INT_FIELDS := ["day", "actions_left", "money", "total_money"]
 const SAVE_VERSION := 1
 const SAVE_PATH := "user://partida.json"
@@ -235,7 +234,6 @@ func talk(reply: String) -> String:
 	if not can_talk():
 		return ""
 	talked_today = true
-	ever_talked = true
 	var key := talk_key()
 	var quality: String = character["charla"]["ajuste"][key][reply]
 	var fx: Dictionary = balance["vinculo"]["charla"][quality]

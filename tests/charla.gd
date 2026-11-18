@@ -20,7 +20,7 @@ func _run() -> void:
 	root.add_child(main)
 	for i in 30: await process_frame
 	var g = main.game
-	print("CHARLA actitud inicial: ", g.attitude()["nombre"], " vínculo ", g.bond, " aviso ", main.talk_pill.visible)
+	print("CHARLA actitud inicial: ", g.attitude()["nombre"], " vínculo ", g.bond)
 	var sprite = main.portrait.sprite
 	# Los toques llegan en píxeles de ventana; el juego se dibuja escalado dentro de ella.
 	var center: Vector2 = root.get_screen_transform() * root.get_final_transform() * sprite.get_global_rect().get_center()
@@ -37,7 +37,7 @@ func _run() -> void:
 	var before: float = g.bond
 	main._talk_reply(best)
 	for i in 20: await process_frame
-	print("CHARLA buena: vínculo ", before, " -> ", g.bond, " aviso ", main.talk_pill.visible)
+	print("CHARLA buena: vínculo ", before, " -> ", g.bond)
 	_shot("c2_respuesta")
 	main._close_modal()
 	await create_timer(0.4).timeout
