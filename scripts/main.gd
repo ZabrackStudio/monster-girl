@@ -6,6 +6,7 @@ const Game := preload("res://scripts/game.gd")
 const Portrait := preload("res://scripts/portrait.gd")
 const Music := preload("res://scripts/music.gd")
 const Fade := preload("res://scripts/transicion.gd")
+const EndingScene := preload("res://scripts/final_escena.gd")
 const Shopkeeper := preload("res://scripts/shopkeeper.gd")
 const MINIGAME_SCRIPTS := {
 	"burbujas": preload("res://scripts/minigame_bubbles.gd"),
@@ -49,6 +50,7 @@ var shop_said: Label
 var shop_keeper
 var shop_bought := []
 var transitions := true   # las pruebas automáticas las desactivan
+var ending_scene: Control
 var sleeping := false
 var last_poke := -1000
 var closing: Control
@@ -932,9 +934,11 @@ func _show_game_over(ending: Dictionary) -> void:
 	var tw := create_tween()
 	tw.tween_property(fade, "color:a", 1.0, 1.8)
 	await tw.finished
-	var v := _open_modal(ending["titulo"], 1.0)
-	v.add_child(_wrap(ending["texto"], 21))
-	v.add_child(HSeparator.new())
+	ending_scene = EndingScene.new(ending)
+	add_child(ending_scene)
+	fade.queue_free()
+	await ending_scene.finished
+	var v := _open_modal(ending["titulo"], 0.45)
 	v.add_child(_label("Días sobrevividos: %d" % ending["dias"], 24))
 	v.add_child(_label("Actitud final: %s" % ending["actitud"], 20))
 	var rec := _label("Récord con %s: %d días%s" % [game.character["nombre"], record["mejor_dias"],
@@ -946,7 +950,6 @@ func _show_game_over(ending: Dictionary) -> void:
 	v.add_child(finals)
 	v.add_child(_button("Nueva partida", func(): Fade.go(get_tree())))
 	v.add_child(_button("Menú principal", _to_menu))
-	fade.queue_free()
 
 
 func _save_record(ending: Dictionary) -> Dictionary:

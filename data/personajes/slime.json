@@ -97,26 +97,33 @@
 	"finales": {
 		"carnal": {
 			"titulo": "Final malo: Disuelto",
+			"imagen": "res://ui/finales/carnal.png",
+			"imagen_tras_corte": true,
+			"texto_arriba": true,
 			"musica": "final_malo",
 			"texto": "Te dices que solo es un abrazo.\n\nReme se cierra a tu alrededor, fría al principio, después no. Busca tus ojos y ya no los encuentra: no te mira, solo te desea.\n\nAlgo empieza a arder en la piel. Intentas apartarte, pero su cuerpo no tiene bordes de donde empujar.\n\n«Espera», dices. Ella ya no oye nada.\n\nFundido a negro.\n\n—\n\nAl amanecer, Reme recupera la forma sola en el sofá. Brilla más que nunca y no entiende por qué la casa está tan callada. Junto a la puerta siguen tus pantuflas."
 		},
 		"marea": {
 			"titulo": "Final bueno: Marea interior",
+			"imagen": "res://ui/finales/marea.png",
 			"musica": "final_bueno",
 			"texto": "Esa noche, Reme no se hace una bolita.\n\nLa ves en el marco de la puerta, sin contornos, con un brillo que no le conocías. Da un paso hacia ti. Se detiene.\n\n«Si me quedo, te hago daño», dice. Ya no imita tu voz; la suya tiembla. «Y tú eres lo único que no quiero romper.»\n\nRetrocede. La luz del pasillo se apaga.\n\n—\n\nEn la mañana, la casa huele a lluvia. En el refrigerador hay una nota con una letra que se escurre: «Me voy a donde no pueda alcanzarte. No me busques. Te quise más de lo que te deseé.»"
 		},
 		"poseida": {
 			"titulo": "Final malo: Poseída",
+			"imagen": "res://ui/finales/poseida.png",
 			"musica": "final_malo",
 			"texto": "Esa noche no hay bolita en el sofá.\n\nLa oyes antes de verla: un goteo lento que cruza el pasillo. En el marco de la puerta, Reme ya no tiene contornos. Brilla con un rosa que no es suyo.\n\nDices su nombre. Sonríe con tu voz, no con la suya.\n\nLa puerta del cuarto no tiene cerrojo. Tampoco habría servido: un slime pasa por debajo.\n\nFundido a negro.\n\n—\n\nAl amanecer, Reme recupera la forma sola, en tu cama. No recuerda la noche. Solo sabe que la casa está demasiado callada y que tus pantuflas siguen junto a la puerta."
 		},
 		"lucha": {
 			"titulo": "Final malo: Lo intentó",
+			"imagen": "res://ui/finales/lucha.png",
 			"musica": "final_malo",
 			"texto": "Esa noche, Reme te despierta desde el otro lado de la puerta.\n\n«Corre», dice. Es su voz, todavía. «Toma las llaves y corre. Yo… yo me quedo aquí. Aguanto.»\n\nOyes cómo se pega al marco, cómo se aferra a la madera para no entrar. Aguanta un minuto. Aguanta dos. Alcanzas a encontrar un zapato.\n\nLa madera cede despacio.\n\n«Perdón», dice. Y ya no vuelve a decir nada con su voz.\n\nFundido a negro.\n\n—\n\nAl amanecer, Reme recupera la forma sola, en el pasillo. Junto a la puerta hay una pantufla. La otra sigue en tu mano."
 		},
 		"denuncia": {
 			"titulo": "Final malo: Denuncia",
+			"imagen": "res://ui/finales/denuncia.png",
 			"musica": "final_malo",
 			"texto": "A las seis y cuarto de la mañana llaman a la puerta. Es un decir: la puerta ya está abierta.\n\nBotas en el pasillo. Dos soldados y, detrás, la intendente con una carpeta bajo el brazo.\n\n«Denuncia presentada por la propia asignada», lee. «Molestias reiteradas pese a sus avisos. Trae fechas y horas.» Pasa la hoja. «Aprendió a usar el teléfono imitándote a ti.»\n\nReme está en la cocina, compacta y opaca, dentro de su frasco. Cierra la tapa desde adentro cuando pasas esposado. No te mira.\n\n—\n\nEXPEDIENTE H.A.R.E.M. · PROYECTO WAIFU\nCuidador: retirado de la beta y retenido a disposición del mando.\nAsignada: trasladada. Apta para convivir con otro cuidador.\n\nAl margen, a mano: «La maldición no tuvo nada que ver. Fuiste tú.»"
 		}

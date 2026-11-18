@@ -101,6 +101,8 @@ Sinergias y trampas que se activan al hacer una actividad:
 Momentos: `trabajar`, `comer`, `pasear`, `limpiar`, `jugar`, `noche`.
 Una opción con `"final": "carnal"` termina la partida con ese final.
 
+Cada final indica su ilustración en `imagen` (`ui/finales/`, se generan con `tools/preparar_finales.gd`). `imagen_tras_corte` la muestra después del «—» y `texto_arriba` sube el cuadro de texto.
+
 ## Versión web (GitHub Pages)
 
 Se juega en <https://zabrackstudio.github.io/monster-girl/>, también desde iPhone con Safari

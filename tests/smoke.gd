@@ -35,6 +35,11 @@ func _run() -> void:
 			await process_frame
 			main._choose(g.pending_event["opciones"].size() - 1)
 	print("SMOKE fin: día %d, over=%s, gasto total %d" % [g.day, g.over, g.total_money])
-	await create_timer(2.5).timeout   # deja correr el fundido y la pantalla final
+	await create_timer(2.5).timeout   # deja correr el fundido hasta la escena final
+	for i in 200:
+		if main.modal != null: break
+		main.ending_scene.advance()
+		await process_frame
+	await create_timer(0.3).timeout
 	print("SMOKE pantalla final: ", main.modal != null and main.modal.is_inside_tree())
 	quit()
