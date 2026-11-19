@@ -115,3 +115,24 @@ Para publicar cambios, vuelve a exportar a `docs/` y sube:
 
 GitHub tarda un minuto en publicarlo. La exportación usa la variante sin hilos
 (`thread_support=false`) porque GitHub Pages no permite las cabeceras que requieren los hilos.
+
+## Proyecto, plazo y evaluación (`data/proyecto.json`)
+
+Cada asignada es un expediente con su plazo (`dias`). Al terminar el último día, H.A.R.E.M. evalúa la convivencia
+con un puntaje de 0 a 100 (`evaluacion.pesos`): control de la lujuria, vínculo, bienestar y crisis sufridas.
+La nota (`calificaciones`) decide si se aprueba (`aprobar`) y abre el siguiente expediente; su `fondos` se suma
+al dinero inicial de la siguiente asignada. El avance se guarda en `user://proyecto.json`.
+Llegar a lujuria 100 antes del plazo termina la asignación con uno de los finales de siempre y no aprueba.
+
+Cada expediente puede traer un `informe`: lo que cuenta la intendente antes de empezar.
+
+## Asignadas
+
+- **Reme** (`slime`): expediente 01. Al azar no pasa del día 15; jugando básico suele sacar C; bien jugada, A.
+- **Mandy** (`ratona`): expediente 02. Más hambre (`dia.hambre_diaria`) y una maldición más rápida. Jugando básico
+  casi siempre reprueba. Sprites en `personajes/ratona/trajes/` (se generan con `tools/preparar_mandy.gd`).
+  Todavía no tiene ilustración de su cuarto ni de sus finales: usa un degradado y fondo negro.
+
+Los eventos con `personaje` solo salen con esa asignada. Los objetos con `especie` solo se venden para ella,
+y `objetos` en el personaje cambia la descripción de un objeto común.
+

@@ -9,6 +9,7 @@ const MAX_DAYS := 1000
 
 var finals := {}
 var bonds := []
+var parts := {}
 
 
 func _init() -> void:
@@ -16,6 +17,7 @@ func _init() -> void:
 		var days := []
 		finals.clear()
 		bonds.clear()
+		parts.clear()
 		for i in GAMES:
 			days.append(_run(strategy, i))
 		days.sort()
@@ -26,6 +28,12 @@ func _init() -> void:
 			strategy, float(total) / GAMES, days[GAMES / 2], days[GAMES / 10],
 			days[GAMES * 9 / 10], days[-1], finals])
 		bonds.sort()
+		if parts.get("n", 0) > 0:
+			var line := "          evaluación media:"
+			for k in parts:
+				if k != "n":
+					line += " %s %.0f" % [k, parts[k] / parts["n"]]
+			print(line)
 		print("          vínculo final: mediana %d  p90 %d  máx %d" % [bonds[bonds.size() / 2], bonds[bonds.size() * 9 / 10], bonds[-1]])
 	quit()
 
@@ -33,9 +41,19 @@ func _init() -> void:
 func _run(strategy: String, seed_value: int) -> int:
 	var g = Game.new()
 	g.quiet = true
-	g.setup("res://data/personajes/slime.json", seed_value)
+	var cid := OS.get_environment("SIM_CHAR") if OS.get_environment("SIM_CHAR") != "" else "slime"
+	g.setup("res://data/personajes/%s.json" % cid, seed_value)
 	g.event_triggered.connect(func(ev): _resolve(g, ev, strategy))
-	g.game_over.connect(func(e): finals[e["tipo"]] = finals.get(e["tipo"], 0) + 1; bonds.append(g.bond))
+	g.game_over.connect(func(e):
+		var k: String = e["tipo"] + (":" + e["nota"] if e.has("nota") else "")
+		finals[k] = finals.get(k, 0) + 1
+		bonds.append(g.bond)
+		if e.has("puntaje"):
+			var ev: Dictionary = g.evaluation()
+			parts["n"] = parts.get("n", 0) + 1
+			parts["puntaje"] = parts.get("puntaje", 0.0) + float(e["puntaje"])
+			for part in ev["partes"]:
+				parts[part] = parts.get(part, 0.0) + float(ev["partes"][part]))
 	g.start()
 	if ":" in strategy:
 		g.outfit = strategy.split(":")[1]
@@ -109,17 +127,18 @@ func _act(g, strategy: String) -> bool:
 			g.use_item("manzanilla")
 		if s["higiene"] < 40 and g.inventory.get("jabon", 0) > 0:
 			g.use_item("jabon")
-		if s["hambre"] > 50 and g.inventory.get("gelatina", 0) > 0:
-			g.use_item("gelatina")
+		for food in ["gelatina", "queso"]:
+			if s["hambre"] > 50 and g.inventory.get(food, 0) > 0:
+				g.use_item(food)
 	if expert and _routine(g):
 		return true
-	if s["hambre"] > 55 and g.can_do("comer"):
+	if s["hambre"] > 55 and g.can_do("comer") and not (expert and _trap(g, "comer")):
 		g.do_activity("comer"); return true
-	if s["higiene"] < 40 and g.can_do("limpiar"):
+	if s["higiene"] < 40 and g.can_do("limpiar") and not (expert and _trap(g, "limpiar")):
 		g.do_activity("limpiar"); return true
 	if g.money < (60 if expert else 25) and g.can_do("trabajar"):
 		g.do_activity("trabajar"); return true
-	if g.times_today.get("pasear", 0) == 0 and g.can_do("pasear"):
+	if g.times_today.get("pasear", 0) == 0 and g.can_do("pasear") and not (expert and _trap(g, "pasear")):
 		g.do_activity("pasear"); return true
 	if g.can_play() and g.times_today.get("jugar", 0) < 2:
 		var mg: String = g.minigames[0]
@@ -136,7 +155,7 @@ func _act(g, strategy: String) -> bool:
 
 
 func _shop(g) -> void:
-	for id in ["almohada", "pecera", "lampara", "frasco"]:
+	for id in ["almohada", "pecera", "lampara", "frasco", "linterna", "tocadiscos"]:
 		if g.items.has(id) and g.can_buy(id) and g.money >= int(g.items[id]["precio"]) + 30:
 			g.buy(id)
 	if g.inventory.get("manzanilla", 0) < 2 and g.money >= 50:
@@ -145,16 +164,25 @@ func _shop(g) -> void:
 		g.buy("jabon")
 
 
-## Rutina del vínculo (comer, pasear, jugar, limpiar) evitando las trampas.
+## ¿Hacer esto ahora dispararía una trampa de su especie?
+func _trap(g, id: String) -> bool:
+	for r in g._match_reactions(id):
+		if float(r["efectos"].get("lujuria", 0)) > 0:
+			return true
+	return false
+
+
+## Rutina del vínculo de su especie (la reacción que da vínculo) evitando las trampas.
 func _routine(g) -> bool:
-	var seq := ["comer", "pasear", "jugar", "limpiar"]
+	var seq := []
+	for r in g.character.get("reacciones", []):
+		if r.has("vinculo") and r.has("cadena"):
+			seq = r["cadena"]
 	var done: Array = g.today
 	if done.size() >= seq.size() or done != seq.slice(0, done.size()):
 		return false
 	var nxt: String = seq[done.size()]
-	if nxt == "comer" and g.stats["hambre"] <= 25:
-		return false
-	if nxt == "pasear" and g.stats["higiene"] <= 35:
+	if _trap(g, nxt):
 		return false
 	if nxt == "jugar":
 		if not g.can_play():

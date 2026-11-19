@@ -27,10 +27,10 @@
 		"Nada, ¿eh? Ojalá no tengas que volver corriendo."
 	],
 	"comentarios": {
-		"gelatina": "La gelatina, mejor fría. A los slimes les gusta notar algo más frío que ellos.",
+		"gelatina": "La gelatina, mejor fría. Quita el hambre y no pesa.",
 		"caramelos": "Caramelos. Un antojo no salva a nadie, pero tampoco mata.",
-		"agua": "Agua mineral. Para ella es casi un baño; no la desperdicies.",
-		"jabon": "Jabón neutro. Una slime sucia se pone nerviosa. Una nerviosa, peor.",
+		"agua": "Agua mineral. Nunca sobra.",
+		"jabon": "Jabón neutro. Sucia se pone nerviosa. Nerviosa, peor.",
 		"manzanilla": "Manzanilla. Funciona, pero cada vez menos. Que no se acostumbre.",
 		"almohada": "La almohada de gel. Quien duerme abrazado no sale a cazar de noche.",
 		"pecera": "La pecera. Mirar peces calma más de lo que parece.",
@@ -39,11 +39,23 @@
 		"mj_memoria": "Juego de memoria. Una cabeza ocupada no piensa en otras cosas.",
 		"traje_casual": "Sudadera y shorts. En la calle pasará desapercibida. En casa, vigílala.",
 		"traje_vestido_blanco": "El vestido blanco. Afuera la van a mirar todos. Mejor para estar en casa.",
-		"traje_vestido_lila": "¿El de fiesta? En la calle se va a poner contenta. Y acelerada. Quedas advertido."
+		"traje_vestido_lila": "¿El de fiesta? En la calle se va a poner contenta. Y acelerada. Quedas advertido.",
+		"mj_burbujas": "Burbujas. Parece tontería. Distrae como pocas cosas.",
+		"queso": "Queso curado. Para una ratona, vale más que el dinero.",
+		"linterna": "Una lámpara de carburo. Los mineros no duermen a oscuras.",
+		"tocadiscos": "El tocadiscos. Con música no se oye pensar. A veces eso es bueno.",
+		"traje_casual60": "¿La falda de lunares? Va a querer salir a bailar todos los días. Tú decides si eso es bueno."
 	},
 	"cierre": [
 		"Vuelve entero. Y ella también.",
 		"En la noche, mantén la puerta cerrada.",
 		"Si un día no vienes, ya sabré por qué."
-	]
+	],
+	"comentarios_personaje": {
+		"slime": {
+			"gelatina": "La gelatina, mejor fría. A los slimes les gusta notar algo más frío que ellos.",
+			"agua": "Agua mineral. Para ella es casi un baño; no la desperdicies.",
+			"jabon": "Jabón neutro. Una slime sucia se pone nerviosa. Una nerviosa, peor."
+		}
+	}
 }

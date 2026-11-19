@@ -3,9 +3,8 @@
 		["Proyecto Waifu: Simulador de Cuidado", "Prototipo en desarrollo"],
 		["Idea", "Neftali Baleriano"],
 		["Programación", "Zabrack Studio"],
-		["Asistencia de programación", "Claude (Anthropic)"],
-		["Imágenes", "ChatGPT (OpenAI)"],
-		["Música", "Material provisional generado con IA para el prototipo"],
+				["Imágenes", "ChatGPT (OpenAI)"],
+		["Música", "ZBK Music"],
 		["Motor", "Godot Engine"]
 	]
 }

@@ -32,6 +32,16 @@ func setup(id: String, color: Color) -> void:
 	var bg_path := "res://personajes/%s/fondo.png" % id
 	if ResourceLoader.exists(bg_path):
 		bg.texture = load(bg_path)
+	else:
+		# Sin ilustración de su cuarto: un degradado con su color mientras tanto.
+		var grad := Gradient.new()
+		grad.set_color(0, color.darkened(0.55))
+		grad.set_color(1, color.darkened(0.88))
+		var tex := GradientTexture2D.new()
+		tex.gradient = grad
+		tex.fill_from = Vector2(0.5, 0.0)
+		tex.fill_to = Vector2(0.5, 1.0)
+		bg.texture = tex
 	add_child(bg)
 	sprite = TextureRect.new()
 	sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

@@ -1,0 +1,674 @@
+{
+	"id": "ratona",
+	"nombre": "Mandy",
+	"especie": "Ratona minera",
+	"etiqueta_especie": "Cosas de ratona",
+	"personalidad": "Trabajadora y desconfiada. Guarda todo lo que brilla, come a todas horas y no soporta quedarse quieta.",
+	"color": "b08f86",
+	"stats_iniciales": {
+		"salud": 75,
+		"felicidad": 45,
+		"tristeza": 25,
+		"hambre": 45,
+		"higiene": 45,
+		"lujuria": 15
+	},
+	"dia": {
+		"hambre_diaria": 19
+	},
+	"minijuego_inicial": "memoria",
+	"afinidades": {
+		"comer": 1.2,
+		"limpiar": 0.8,
+		"pasear": 1.1
+	},
+	"minijuegos": {
+		"memoria": 1.2,
+		"burbujas": 0.8
+	},
+	"efectos_extra": {
+		"trabajar": {
+			"tristeza": 3,
+			"lujuria": 2
+		}
+	},
+	"lujuria": {
+		"base": 9.0,
+		"por_tristeza": 0.1,
+		"por_hambre": 0.18,
+		"por_suciedad": 0.08,
+		"por_felicidad": 0.08,
+		"por_salud": 0.05,
+		"por_dia": 0.14,
+		"max_por_dia": 999.0,
+		"ruido": 3.0
+	},
+	"objetos": {
+		"queso": "Su comida favorita."
+	},
+	"dialogos": {
+		"inicio": [
+			"Mandy. Ratona, minera y no muerdo si no hace falta. ¿Aquí se come tres veces al día o eso era mentira del folleto?"
+		],
+		"trabajar": [
+			"¿Te vas al turno? Llévate algo de comer. Yo siempre llevaba.",
+			"Si no vuelves antes de que oscurezca, salgo a buscarte. Costumbre de mina.",
+			"Trae lo que ganes. Lo guardo yo, que sé esconder bien."
+		],
+		"comer": [
+			"Esto sí es una ración. En la mina nos daban la mitad.",
+			"No me mires así. Como rápido por si alguien me lo quita.",
+			"Guardo la corteza para después. No preguntes."
+		],
+		"pasear": [
+			"Afuera todo está tan arriba. Me mareo con tanto cielo.",
+			"Huele a lluvia. En la galería, eso eran problemas.",
+			"¿Viste ese callejón? Ahí cabe una buena madriguera."
+		],
+		"limpiar": [
+			"El polvo de carbón no sale nunca. Ya te lo digo.",
+			"Me baño, pero el casco no se moja.",
+			"Listo. Ya parezco gente de superficie."
+		],
+		"jugar": [
+			"¡Otra! Esta vez no me ganas.",
+			"Tengo buena memoria. En la mina, olvidar un túnel es mala idea.",
+			"Bueno, sí. Me divertí. No se lo cuentes a nadie."
+		],
+		"dormir": [
+			"Duermo con la lámpara cerca. Por si acaso.",
+			"Si oyes que algo rasca la pared, soy yo. Es la costumbre."
+		],
+		"nivel_0": [
+			"Hoy estoy tranquila. Como mina en domingo.",
+			"Todo en orden."
+		],
+		"nivel_1": [
+			"Tengo las orejas inquietas. No sé por qué.",
+			"¿Te quedas un rato cerca? Sin motivo."
+		],
+		"nivel_2": [
+			"Hace calor aquí adentro, ¿o soy yo?",
+			"Perdón. Me quedé mirándote. Otra vez."
+		],
+		"nivel_3": [
+			"No te acerques. Lo digo en serio.",
+			"Distráeme con algo. Con lo que sea. Rápido."
+		],
+		"vestir": [
+			"¿Y esto? Parezco de las fotos que tenía el capataz en la caseta.",
+			"No sé caminar con falda. Ya aprenderé.",
+			"Si me ves bailar, no viste nada."
+		]
+	},
+	"finales": {
+		"carnal": {
+			"titulo": "Final malo: Sin aire",
+			"musica": "final_malo",
+			"texto": "Te dices que solo es un abrazo.\n\nMandy se aferra a ti con una fuerza que no le conocías. Los ojos rojos le brillan en la oscuridad y el corazón le late tan rápido que lo sientes en tu propio pecho.\n\n«No te suelto», dice. Ya no lo dice en broma.\n\nIntentas recuperar el aire. Ella no afloja.\n\nFundido a negro.\n\n—\n\nAl amanecer, Mandy despierta sola, hecha un ovillo junto a la cama. Cuenta las monedas de su escondite una vez, dos veces. Siempre le salen las mismas. Lo que falta no lo puede contar."
+		},
+		"marea": {
+			"titulo": "Final bueno: Veta profunda",
+			"musica": "final_bueno",
+			"texto": "Esa noche, Mandy no se acurruca junto a la puerta de tu cuarto.\n\nLa encuentras en la cocina, con el casco puesto y la mochila al hombro. La lámpara le ilumina la cara desde abajo. Tiene los ojos mojados.\n\n«Si me quedo, te hago daño», dice. «Y tú eres lo único que no quiero perder. Ni siquiera las monedas.»\n\nSe acomoda la mochila. Apaga la luz de la cocina.\n\n—\n\nEn la mañana, el escondite detrás del refrigerador está vacío, salvo por una lámpara de minero encendida. Al lado hay una nota escrita con carbón: «Me voy hacia abajo, donde no me puedas seguir. Te dejo mi luz para que no te pierdas sin mí.»"
+		},
+		"poseida": {
+			"titulo": "Final malo: Poseída",
+			"musica": "final_malo",
+			"texto": "Esa noche, la lámpara del casco se enciende sola en el pasillo.\n\nLa oyes antes de verla: algo rasca la pared, despacio, de una punta a la otra. En la puerta, Mandy te mira con unos ojos que ya no parpadean.\n\nDices su nombre. Sonríe con todos los dientes.\n\nPara una ratona no hay puertas cerradas. Solo paredes que todavía no roe.\n\nFundido a negro.\n\n—\n\nAl amanecer, Mandy despierta en tu cama, sola. No recuerda la noche. La lámpara del casco sigue encendida sobre la almohada, y ya no le queda aceite."
+		},
+		"lucha": {
+			"titulo": "Final malo: Lo intentó",
+			"musica": "final_malo",
+			"texto": "Esa noche, Mandy te despierta golpeando la puerta del sótano. Desde adentro.\n\n«Me encerré», dice. Le tiembla la voz. «Toma las llaves y vete lejos. Yo cavo hacia el otro lado. Si cavo, no pienso.»\n\nOyes la piqueta contra la piedra. Un golpe, otro. Luego, silencio. Luego, las uñas contra la madera.\n\n«Perdón», dice desde el otro lado. «No llegué a ninguna parte.»\n\nFundido a negro.\n\n—\n\nAl amanecer, la puerta del sótano está abierta. Adentro hay un túnel de medio metro y una piqueta gastada hasta el mango."
+		},
+		"denuncia": {
+			"titulo": "Final malo: Denuncia",
+			"musica": "final_malo",
+			"texto": "A las seis y cuarto de la mañana llaman a la puerta. Es un decir: la puerta ya está abierta.\n\nBotas en el pasillo. Dos soldados y, detrás, la intendente con una carpeta bajo el brazo.\n\n«Denuncia presentada por la propia asignada», lee. «Molestias reiteradas pese a sus avisos.» Levanta una libreta manchada de carbón. «Lo anotó todo, como en sus partes de turno. Con hora y minuto.»\n\nDesde su cuarto se oye la piqueta contra la pared. No se detiene cuando pasas esposado.\n\n—\n\nEXPEDIENTE H.A.R.E.M. · PROYECTO WAIFU\nCuidador: retirado de la beta y retenido a disposición del mando.\nAsignada: trasladada. Apta para convivir con otro cuidador.\n\nAl margen, a mano: «En la mina aguantó derrumbes. A ti no te aguantó.»"
+		}
+	},
+	"evaluacion": {
+		"A": "El día treinta, la intendente encuentra la despensa llena y la casa en orden. Mandy le muestra su libreta de turnos: treinta días sin un solo derrumbe.\n\n«Tendré que contratarte a ti también», le dice la intendente. Mandy se lo toma en serio.",
+		"B": "El día treinta, Mandy espera en la puerta con el casco bajo el brazo, como en una inspección de mina.\n\n«Nada que reportar», dice. La intendente revisa igual. «Bien. Firmo.»",
+		"C": "El día treinta, la intendente llega con dos soldados. Mandy los cuenta, cuenta las salidas y se queda cerca de la ventana.\n\n«Pasas», dice la intendente. «Con lo justo.»",
+		"D": "El día treinta, la intendente llega con dos soldados y un camión de traslado. Mandy se encierra en su cuarto y no sale.\n\n«Sobreviviste», dice la intendente. «Eso no es lo mismo que aprobar.»"
+	},
+	"reacciones": [
+		{
+			"id": "jornada_completa",
+			"accion": "jugar",
+			"cadena": [
+				"trabajar",
+				"comer",
+				"jugar"
+			],
+			"efectos": {
+				"lujuria": -10,
+				"tristeza": -6,
+				"felicidad": 6
+			},
+			"vinculo": 4,
+			"texto": "Mandy se estira a tu lado, como después de un buen turno. «Así sí.»",
+			"nota": "Trabajar, comer y jugar, en ese orden."
+		},
+		{
+			"id": "cena_de_turno",
+			"accion": "comer",
+			"cadena": [
+				"trabajar",
+				"comer"
+			],
+			"efectos": {
+				"lujuria": -5,
+				"felicidad": 4
+			},
+			"texto": "Comer cuando vuelves del trabajo le sabe a fin de turno.",
+			"nota": "Comer cuando vuelves del trabajo la calma."
+		},
+		{
+			"id": "exploradora",
+			"accion": "pasear",
+			"condiciones": {
+				"hambre_max": 45
+			},
+			"efectos": {
+				"lujuria": -4,
+				"felicidad": 4
+			},
+			"texto": "Con la panza llena se pone a explorar callejones y se le olvida todo.",
+			"nota": "Pasear sin hambre la distrae."
+		},
+		{
+			"id": "bano_tras_paseo",
+			"accion": "limpiar",
+			"cadena": [
+				"pasear",
+				"limpiar"
+			],
+			"efectos": {
+				"lujuria": -3,
+				"felicidad": 3
+			},
+			"texto": "Después del paseo, el baño le quita el polvo de la calle y la deja tranquila.",
+			"nota": "Bañarla al volver del paseo la relaja."
+		},
+		{
+			"id": "paseo_con_hambre",
+			"accion": "pasear",
+			"condiciones": {
+				"hambre_min": 60
+			},
+			"efectos": {
+				"lujuria": 6
+			},
+			"texto": "Con hambre, todo lo que huele a comida la pone nerviosa.",
+			"nota": "Sacarla a pasear con hambre la altera."
+		},
+		{
+			"id": "bano_de_mas",
+			"accion": "limpiar",
+			"condiciones": {
+				"higiene_min": 60
+			},
+			"efectos": {
+				"lujuria": 6,
+				"tristeza": 3
+			},
+			"texto": "No soporta que la bañen sin necesidad: se eriza y no se calma.",
+			"nota": "Bañarla cuando ya está limpia la altera."
+		},
+		{
+			"id": "juego_con_hambre",
+			"accion": "jugar",
+			"condiciones": {
+				"hambre_min": 60
+			},
+			"efectos": {
+				"lujuria": 5
+			},
+			"texto": "Con hambre no se concentra, pierde y se frustra.",
+			"nota": "Jugar con hambre la frustra."
+		}
+	],
+	"traje_inicial": "minera",
+	"trajes": {
+		"minera": "Ropa de minera",
+		"casual60": "Blusa y falda de lunares"
+	},
+	"trajes_efectos": {
+		"minera": {},
+		"casual60": {
+			"pasear": {
+				"lujuria": 6,
+				"felicidad": 5
+			},
+			"jugar": {
+				"lujuria": -4,
+				"felicidad": 3
+			},
+			"limpiar": {
+				"lujuria": -2
+			}
+		}
+	},
+	"charla": {
+		"opciones": {
+			"escuchar": "Escuchar sus historias de la mina.",
+			"animar": "Decirle algo bonito.",
+			"bromear": "Hacerla reír.",
+			"distancia": "Darle su espacio."
+		},
+		"ajuste": {
+			"hostil": {
+				"distancia": "buena",
+				"escuchar": "regular",
+				"animar": "mala",
+				"bromear": "mala"
+			},
+			"arisca": {
+				"bromear": "buena",
+				"distancia": "regular",
+				"escuchar": "regular",
+				"animar": "mala"
+			},
+			"distante": {
+				"animar": "buena",
+				"escuchar": "regular",
+				"bromear": "regular",
+				"distancia": "mala"
+			},
+			"confiada": {
+				"escuchar": "buena",
+				"bromear": "regular",
+				"animar": "regular",
+				"distancia": "mala"
+			},
+			"carinosa": {
+				"bromear": "buena",
+				"animar": "regular",
+				"escuchar": "regular",
+				"distancia": "mala"
+			},
+			"unida": {
+				"animar": "buena",
+				"escuchar": "regular",
+				"bromear": "regular",
+				"distancia": "mala"
+			},
+			"alterada": {
+				"escuchar": "buena",
+				"distancia": "regular",
+				"bromear": "regular",
+				"animar": "mala"
+			},
+			"critica": {
+				"distancia": "buena",
+				"escuchar": "regular",
+				"animar": "mala",
+				"bromear": "mala"
+			}
+		},
+		"notas": {
+			"hostil": "Hostil: déjala en paz.",
+			"arisca": "Arisca: hazla reír.",
+			"distante": "Distante: dile algo bonito.",
+			"confiada": "Confiada: escucha sus historias.",
+			"carinosa": "Cariñosa: hazla reír.",
+			"unida": "Unida: dile algo bonito.",
+			"alterada": "Alterada: escúchala.",
+			"critica": "Crítica: aléjate."
+		},
+		"toque": {
+			"arisca": {
+				"calma": [
+					"¿Qué? Estoy ocupada.",
+					"No me toques el casco.",
+					"Si es por la comida, ya me la comí."
+				],
+				"alterada": [
+					"No me mires tanto. Me pongo peor.",
+					"Algo me pica por dentro y no es polvo."
+				],
+				"critica": [
+					"Lejos. Ya.",
+					"No respondo por lo que haga. Vete."
+				]
+			},
+			"distante": {
+				"calma": [
+					"Estoy bien. Contando cosas.",
+					"¿Necesitas algo? Yo no.",
+					"Aquí sigo. La pared y yo nos entendemos."
+				],
+				"alterada": [
+					"Estoy rara. Como antes de un derrumbe.",
+					"No sé qué me pasa. No preguntes."
+				],
+				"critica": [
+					"No te conozco tanto como para pedirte ayuda.",
+					"Algo tira de mí hacia ti. No me gusta."
+				]
+			},
+			"confiada": {
+				"calma": [
+					"¿Sabías que en la mina contábamos los pasos para no perdernos? Yo todavía los cuento.",
+					"Hoy encontré un tornillo precioso. Te lo enseño si prometes no tocarlo.",
+					"Oye. Hola. Nada, solo hola."
+				],
+				"alterada": [
+					"Tengo calor. Mucho. ¿Abres la ventana?",
+					"Háblame de algo aburrido. Rápido."
+				],
+				"critica": [
+					"Si me ves rara, enciérrame. Lo digo en serio.",
+					"Me late todo. No te acerques tanto."
+				]
+			},
+			"carinosa": {
+				"calma": [
+					"Te guardé la mejor parte del queso. No se lo digas a nadie.",
+					"Cuando llegas, se me pasan los nervios.",
+					"Eres la única persona que dejo mirar mi escondite. Mirar, no tocar."
+				],
+				"alterada": [
+					"Quédate cerca, pero no tanto. ¿Se entiende?",
+					"No es nada. Es la maldición. No eres tú. Bueno, un poco."
+				],
+				"critica": [
+					"Esta noche te quiero lejos. Justamente porque te quiero.",
+					"Cierra con llave. Por favor."
+				]
+			},
+			"unida": {
+				"calma": [
+					"No hace falta que digas nada. Ya te conozco el paso.",
+					"Si me dieran a elegir entre tú y la mina, me quedo en la superficie.",
+					"Sé que eres tú antes de verte. Por cómo suenan tus pasos."
+				],
+				"alterada": [
+					"Te miro mucho, lo sé. Ayúdame a mirar otra cosa.",
+					"Sigo siendo yo. Recuérdamelo."
+				],
+				"critica": [
+					"Si no me puedo controlar, me voy. Prométeme que no vas a seguirme.",
+					"No dejes que me acerque. Aunque te lo pida."
+				]
+			},
+			"hostil": {
+				"calma": [
+					"¿Qué quieres ahora?",
+					"No me toques.",
+					"Tengo una libreta. Y un número de teléfono."
+				],
+				"alterada": [
+					"Aléjate. Tú no ayudas.",
+					"Ni lo intentes."
+				],
+				"critica": [
+					"¡LEJOS!",
+					"No te debo nada. Fuera."
+				]
+			}
+		},
+		"respuestas": {
+			"hostil": {
+				"buena": [
+					"Bueno. Por fin entiendes algo."
+				],
+				"regular": [
+					"Mm."
+				],
+				"mala": [
+					"¿En serio? Eso también lo anoto."
+				]
+			},
+			"arisca": {
+				"buena": [
+					"Ja. Esa estuvo buena. No te acostumbres.",
+					"Bueno, me reí. Una vez."
+				],
+				"regular": [
+					"Ajá.",
+					"Sí, sí."
+				],
+				"mala": [
+					"No necesito que me endulces el oído."
+				]
+			},
+			"distante": {
+				"buena": [
+					"Nadie me había dicho eso fuera de la mina. Ni adentro.",
+					"¿De verdad? Bueno… gracias."
+				],
+				"regular": [
+					"Ah. Bueno.",
+					"Lo anoto."
+				],
+				"mala": [
+					"Claro. Como todos."
+				]
+			},
+			"confiada": {
+				"buena": [
+					"Y entonces el capataz se cayó al carro de carbón. ¿Te lo conté? Te lo cuento otra vez.",
+					"Nadie me escuchaba tanto desde que cerraron la mina."
+				],
+				"regular": [
+					"Ja. Sí.",
+					"Bueno, sí, puede ser."
+				],
+				"mala": [
+					"¿Te aburro? Puedes decírmelo."
+				]
+			},
+			"carinosa": {
+				"buena": [
+					"¡Para! Me duele la panza de reírme.",
+					"Eres lo más tonto que encontré fuera de la mina. Y lo digo con cariño."
+				],
+				"regular": [
+					"Qué lindo. Raro, pero lindo.",
+					"Mm. Me gusta que estés aquí."
+				],
+				"mala": [
+					"¿Ahora quieres espacio? Bueno."
+				]
+			},
+			"unida": {
+				"buena": [
+					"Ya lo sé. Pero me gusta oírlo.",
+					"Si me lo dices así, me lo creo."
+				],
+				"regular": [
+					"Ja. Tonto.",
+					"Te escucho. Siempre."
+				],
+				"mala": [
+					"No hace falta que te alejes. Ya no."
+				]
+			},
+			"alterada": {
+				"buena": [
+					"Sigue hablando. Tu voz me ayuda a no pensar.",
+					"Bien. Eso. Cuéntame más."
+				],
+				"regular": [
+					"Ajá…",
+					"Puede ser."
+				],
+				"mala": [
+					"No me digas cosas bonitas ahora. Lo empeoras."
+				]
+			},
+			"critica": {
+				"buena": [
+					"Gracias. Aléjate un poco más. Así.",
+					"Bien. No vuelvas hasta mañana."
+				],
+				"regular": [
+					"No sé si eso ayuda.",
+					"Mm…"
+				],
+				"mala": [
+					"¡No! Ahora no. Nada de eso."
+				]
+			}
+		},
+		"molesta": {
+			"hostil": [
+				"Anotado. Hora y minuto.",
+				"Sigue. Me falta poco para llenar la página.",
+				"¿Sabes quién contesta en ese número? Pronto lo sabrás."
+			],
+			"arisca": [
+				"Te dije que no.",
+				"Quita la mano o la muerdo.",
+				"¿Qué parte de «déjame» no entiendes?"
+			],
+			"distante": [
+				"Ya basta, por favor.",
+				"No me gusta eso.",
+				"¿Puedes dejar de hacerlo?"
+			],
+			"confiada": [
+				"¡Oye! Me despeinas las orejas.",
+				"Ya, pesado.",
+				"Una vez da risa. Veinte, no."
+			],
+			"carinosa": [
+				"Me haces cosquillas… pero ya, ¿eh?",
+				"Si sigues, te escondo las llaves.",
+				"Sé que me quieres. Ahora quiero estar quieta."
+			],
+			"unida": [
+				"Estoy aquí. No hace falta comprobarlo.",
+				"Sí, sí. Ya sé que eres tú.",
+				"Te lo digo con cariño: basta."
+			],
+			"alterada": [
+				"No me toques ahora. Lo empeoras.",
+				"¡Basta! Cada vez que me tocas, sube.",
+				"Por favor. Me cuesta mucho aguantar."
+			],
+			"critica": [
+				"¡SUÉLTAME! ¡No sabes lo que estás despertando!",
+				"Una vez más y no respondo.",
+				"Aléjate. Aléjate ya."
+			]
+		},
+		"aviso": "Tengo el número de H.A.R.E.M. anotado en la libreta. Una vez más y llamo."
+	},
+	"dialogos_actitud": {
+		"arisca": {
+			"trabajar": [
+				"Vete. Yo sé cuidarme sola.",
+				"Trae dinero. Es lo único útil que traes."
+			],
+			"comer": [
+				"Déjalo ahí. Como cuando no mires.",
+				"No creas que con comida me compras."
+			],
+			"pasear": [
+				"Camino detrás. No me hables.",
+				"Salgo por el aire, no por ti."
+			],
+			"limpiar": [
+				"Puedo sola.",
+				"Rápido, que se enfría el agua."
+			],
+			"jugar": [
+				"Juego. No significa que me caigas bien.",
+				"Gané. Obvio."
+			]
+		},
+		"distante": {
+			"trabajar": [
+				"Bueno. Te espero.",
+				"Cuídate en el turno."
+			],
+			"comer": [
+				"Gracias. Está bien.",
+				"Comí cosas peores."
+			],
+			"pasear": [
+				"Hay mucho cielo hoy.",
+				"Prefiero las calles angostas."
+			],
+			"limpiar": [
+				"Ya está.",
+				"El polvo vuelve. Siempre vuelve."
+			],
+			"jugar": [
+				"Estuvo bien.",
+				"Otra, si quieres."
+			]
+		},
+		"carinosa": {
+			"trabajar": [
+				"¡Vuelve rápido! Te guardo la cena.",
+				"Te puse un pan en el bolsillo. No preguntes cuándo."
+			],
+			"comer": [
+				"¡Esto está riquísimo! ¿Me das la mitad de lo tuyo?",
+				"Comer contigo es mejor que comer sola. Y eso que comer sola me encanta."
+			],
+			"pasear": [
+				"¡Mira! Una tapa dorada. Hoy es un buen día.",
+				"Vamos por el callejón. Confía en mí."
+			],
+			"limpiar": [
+				"Huele a jabón. Ya no parezco minera.",
+				"Listo. Ahora brillo, ¿ves?"
+			],
+			"jugar": [
+				"¡Te gané! Bueno, empate. Bueno, ganaste. Revancha.",
+				"Contigo, hasta perder es divertido."
+			]
+		},
+		"unida": {
+			"trabajar": [
+				"Vete sin preocuparte. Aquí todo sigue en su lugar.",
+				"Ya sé que vuelves. Igual te espero."
+			],
+			"comer": [
+				"Te guardé la mejor parte. Siempre.",
+				"Con la panza llena y contigo al lado, no me falta nada."
+			],
+			"pasear": [
+				"Contigo, hasta el cielo abierto me gusta.",
+				"Si me pierdo, sé que me encuentras."
+			],
+			"limpiar": [
+				"Gracias por cuidarme tanto.",
+				"Ya ni me acuerdo del polvo de la mina."
+			],
+			"jugar": [
+				"Así quiero los días. Todos.",
+				"Juguemos hasta que se haga de noche."
+			]
+		},
+		"hostil": {
+			"trabajar": [
+				"Vete. Ojalá tardes.",
+				"Mejor sin ti."
+			],
+			"comer": [
+				"No tengo hambre. Para ti.",
+				"Déjalo y vete."
+			],
+			"pasear": [
+				"No me hables en la calle.",
+				"Camino sola."
+			],
+			"limpiar": [
+				"No me toques.",
+				"Sola."
+			],
+			"jugar": [
+				"No quiero.",
+				"Ya. ¿Terminamos?"
+			]
+		}
+	}
+}

@@ -4,6 +4,7 @@ extends Control
 const Game := preload("res://scripts/game.gd")
 const Music := preload("res://scripts/music.gd")
 const Fade := preload("res://scripts/transicion.gd")
+const Progress := preload("res://scripts/progreso.gd")
 const RECORDS_PATH := "user://records.json"
 const SRC_W := 941.0   # ancho de la imagen original del menú
 const PIECES := [["logo", 0], ["nueva", 695], ["continuar", 925], ["opciones", 1146], ["creditos", 1371]]
@@ -75,7 +76,7 @@ func _on_nueva() -> void:
 
 func _start_new() -> void:
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(Game.SAVE_PATH))
-	Fade.go(get_tree(), "res://scenes/intro.tscn")
+	Fade.go(get_tree(), "res://scenes/expedientes.tscn")
 
 
 func _on_continuar() -> void:
@@ -100,15 +101,15 @@ func _on_opciones() -> void:
 	var l := _wrap(rec)
 	l.modulate = Color(1, 1, 1, 0.75)
 	v.add_child(l)
-	v.add_child(_button("Borrar partida y récords", _confirm_wipe))
+	v.add_child(_button("Borrar partida, récords y avance", _confirm_wipe))
 	v.add_child(_button("Volver", _close_modal))
 
 
 func _confirm_wipe() -> void:
 	var v := _open_modal("¿Borrar todo?")
-	v.add_child(_wrap("Se borrarán la partida guardada y los récords. No se puede deshacer."))
+	v.add_child(_wrap("Se borrarán la partida guardada, los récords y el avance en el proyecto. No se puede deshacer."))
 	v.add_child(_button("Sí, borrar", func():
-		for path in [Game.SAVE_PATH, RECORDS_PATH]:
+		for path in [Game.SAVE_PATH, RECORDS_PATH, Progress.PATH]:
 			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 		Fade.go(get_tree())))
 	v.add_child(_button("Cancelar", _on_opciones))
@@ -134,8 +135,10 @@ func _records_text() -> String:
 	var out := []
 	for cid in data:
 		var r: Dictionary = data[cid]
-		out.append("%s: mejor marca %d días · %d partidas · finales vistos: %d" % [
-			cid.capitalize(), int(r.get("mejor_dias", 0)), int(r.get("partidas", 0)), r.get("finales", []).size()])
+		var grade: String = Progress.load_progress()["notas"].get(cid, "")
+		out.append("%s: mejor marca %d días · %d partidas · finales vistos: %d%s" % [
+			Progress.character_name(cid), int(r.get("mejor_dias", 0)), int(r.get("partidas", 0)),
+			r.get("finales", []).size(), " · mejor nota: " + grade if grade != "" else ""])
 	return "\n".join(out)
 
 

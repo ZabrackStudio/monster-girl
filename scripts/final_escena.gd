@@ -37,7 +37,8 @@ func _ready() -> void:
 	black.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(black)
 	art = TextureRect.new()
-	art.texture = load(ending["imagen"])
+	if ResourceLoader.exists(ending.get("imagen", "")):
+		art.texture = load(ending["imagen"])
 	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	art.set_anchors_preset(Control.PRESET_FULL_RECT)

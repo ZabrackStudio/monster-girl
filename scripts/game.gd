@@ -52,14 +52,18 @@ var bond := 0.0
 var talked_today := false           # la charla que cuenta es una al día
 var pokes_today := 0                # toques de hoy después de la charla
 var warned := false                 # ya amenazó con denunciarte
+# Plazo de la asignación y evaluación final de H.A.R.E.M.
+var term := 0                       # días de convivencia (0 = sin plazo)
+var crises := 0                     # crisis que dejaron marca
+var project: Dictionary = {}        # data/proyecto.json
 
 
 ## Estado que se guarda en la partida (todo lo demás sale de los JSON de datos).
 const SAVE_FIELDS := ["stats", "day", "actions_left", "money", "total_money", "inventory",
 	"passives", "minigames", "known_affinity", "events_seen", "times_today", "pending_event",
 	"tolerance", "curse_mark", "marked", "today", "discovered", "outfit", "outfits", "bond",
-	"current_line", "talked_today", "pokes_today", "warned"]
-const INT_FIELDS := ["day", "actions_left", "money", "total_money"]
+	"current_line", "talked_today", "pokes_today", "warned", "term", "crises"]
+const INT_FIELDS := ["day", "actions_left", "money", "total_money", "term", "crises"]
 const SAVE_VERSION := 1
 const SAVE_PATH := "user://partida.json"
 
@@ -82,6 +86,8 @@ func from_dict(d: Dictionary) -> bool:
 	for s in STATS:
 		stats[s] = float(stats.get(s, character["stats_iniciales"].get(s, 50)))
 	rng.state = int(d.get("rng", "0"))
+	if not d.has("term"):
+		term = int(assignment().get("dias", 0))   # partidas de antes del plazo
 	_log("[b]— Día %d —[/b]" % day)
 	changed.emit()
 	return true
@@ -102,7 +108,10 @@ func setup(character_path: String, seed_value: int = -1) -> void:
 		rng.randomize()
 	character = load_json(character_path)
 	balance = load_json("res://data/balance.json")
-	events = load_json("res://data/eventos.json")
+	project = load_json("res://data/proyecto.json")
+	for ev in load_json("res://data/eventos.json"):
+		if ev.get("personaje", character["id"]) == character["id"]:
+			events.append(ev)
 	for it in load_json("res://data/items.json"):
 		if it.has("especie") and it["especie"] != character["id"]:
 			continue
@@ -110,10 +119,12 @@ func setup(character_path: String, seed_value: int = -1) -> void:
 		item_order.append(it["id"])
 
 
-func start() -> void:
+## Empieza la asignación. `extra_money` son los fondos que gana una buena nota anterior.
+func start(extra_money := 0) -> void:
 	for s in STATS:
 		stats[s] = float(character["stats_iniciales"].get(s, 50))
-	money = int(balance["dinero_inicial"])
+	money = int(balance["dinero_inicial"]) + extra_money
+	term = int(assignment().get("dias", 0))
 	actions_left = int(balance["acciones_por_dia"])
 	minigames = [character["minijuego_inicial"]]
 	outfit = character.get("traje_inicial", "")
@@ -354,6 +365,11 @@ func buy(id: String) -> bool:
 	return true
 
 
+## Descripción del objeto; cada asignada puede tener la suya.
+func item_text(id: String) -> String:
+	return character.get("objetos", {}).get(id, items[id]["descripcion"])
+
+
 func can_buy(id: String) -> bool:
 	var it: Dictionary = items[id]
 	match it["tipo"]:
@@ -406,7 +422,8 @@ func use_item(id: String) -> void:
 func sleep() -> void:
 	if over or not pending_event.is_empty():
 		return
-	var d: Dictionary = balance["dia"]
+	var d: Dictionary = balance["dia"].duplicate()
+	d.merge(character.get("dia", {}), true)
 	_say("dormir")
 	_add("hambre", float(d["hambre_diaria"]))
 	_add("higiene", -(float(d["higiene_diaria"]) + passive_sum("higiene_diaria")))
@@ -441,6 +458,9 @@ func sleep() -> void:
 	if full_moon:
 		_log("[color=#ef7d86]Luna llena.[/color]")
 	if _check_consumed():
+		return
+	if term > 0 and day > term:
+		_evaluate()
 		return
 	if not quiet:
 		current_line = touch_line()
@@ -644,6 +664,7 @@ func _check_consumed() -> bool:
 		marked = true
 		curse_mark = minf(curse_mark + float(balance["maldicion"]["marca"]), float(balance["maldicion"]["marca_max"]))
 		_log("[color=#ef7d86]La maldición deja una marca.[/color]")
+		crises += 1
 		_bond(float(balance["vinculo"]["crisis"]))
 	elif marked and stats["lujuria"] < float(niveles[2]["min"]):
 		marked = false
@@ -654,15 +675,75 @@ func _check_consumed() -> bool:
 	return over
 
 
-func _end(kind: String) -> void:
+func _end(kind: String, ending: Dictionary = {}) -> void:
 	over = true
-	var ending: Dictionary = character["finales"][kind].duplicate()
+	if ending.is_empty():
+		ending = character["finales"][kind].duplicate()
 	ending["tipo"] = kind
 	ending["dias"] = day
 	ending["vinculo"] = bond
 	ending["actitud"] = attitude()["nombre"]
 	changed.emit()
 	game_over.emit(ending)
+
+
+## Datos de esta asignación en el proyecto (plazo, nota para aprobar…).
+func assignment() -> Dictionary:
+	for a in project.get("expedientes", []):
+		if a["personaje"] == character["id"]:
+			return a
+	return {}
+
+
+## Puntaje de la evaluación (0-100) y su desglose.
+func evaluation() -> Dictionary:
+	var w: Dictionary = project["evaluacion"]
+	var parts := {
+		"control": 100.0 - stats["lujuria"],
+		"vinculo": clampf(bond, 0.0, 100.0),
+		"bienestar": (stats["salud"] + stats["felicidad"] + (100.0 - stats["tristeza"])
+			+ (100.0 - stats["hambre"]) + stats["higiene"]) / 5.0,
+		"estabilidad": maxf(0.0, 100.0 - crises * float(w["por_crisis"])),
+	}
+	var total := 0.0
+	for k in parts:
+		total += parts[k] * float(w["pesos"][k])
+	return {"puntaje": roundi(total), "partes": parts, "nota": grade_for(roundi(total))}
+
+
+## Calificación que corresponde a un puntaje.
+func grade_for(score: int) -> Dictionary:
+	for g in project["calificaciones"]:
+		if score >= int(g["min"]):
+			return g
+	return project["calificaciones"][-1]
+
+
+## ¿Esta nota alcanza para pasar a la siguiente asignada?
+func passes(grade: String) -> bool:
+	var order: Array = project["calificaciones"].map(func(g): return g["nota"])
+	return order.find(grade) <= order.find(assignment().get("aprobar", order[-2]))
+
+
+## Se cumplió el plazo: H.A.R.E.M. evalúa la convivencia.
+func _evaluate() -> void:
+	var ev := evaluation()
+	var g: Dictionary = ev["nota"]
+	var ok := passes(g["nota"])
+	var texts: Dictionary = character.get("evaluacion", {})
+	var report := "EXPEDIENTE H.A.R.E.M. · PROYECTO WAIFU\nAsignada: %s\nConvivencia: %d de %d días\nCalificación: %s · %s\n%s" % [
+		character["nombre"], term, term, g["nota"], g["nombre"],
+		"Resultado: aprobada." if ok else "Resultado: reprobada. Repite la asignación."]
+	var ending := {
+		"titulo": "Evaluación final",
+		"musica": "final_bueno" if ok else "final_malo",
+		"imagen": project.get("imagen_evaluacion", ""),
+		"texto": texts.get(g["nota"], "") + "\n\n—\n\n" + report,
+		"nota": g["nota"],
+		"puntaje": ev["puntaje"],
+		"aprobada": ok,
+	}
+	_end("evaluacion", ending)
 
 
 ## Vínculo necesario para el final bueno.

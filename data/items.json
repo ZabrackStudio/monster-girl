@@ -5,13 +5,29 @@
 		"categoria": "Alimentación",
 		"tipo": "consumible",
 		"precio": 14,
-		"descripcion": "Su comida favorita.",
+		"descripcion": "Dulce, fresca y tiembla.",
 		"efectos": {
 			"hambre": -25,
 			"felicidad": 10
 		},
 		"favorito": [
 			"slime"
+		]
+	},
+	{
+		"id": "queso",
+		"nombre": "Queso curado",
+		"categoria": "Alimentación",
+		"tipo": "consumible",
+		"precio": 12,
+		"especie": "ratona",
+		"descripcion": "Fuerte y duro.",
+		"efectos": {
+			"hambre": -28,
+			"felicidad": 10
+		},
+		"favorito": [
+			"ratona"
 		]
 	},
 	{
@@ -33,7 +49,7 @@
 		"categoria": "Cuidado personal",
 		"tipo": "consumible",
 		"precio": 10,
-		"descripcion": "Para una slime, es casi un baño.",
+		"descripcion": "Hidrata y refresca.",
 		"efectos": {
 			"salud": 6,
 			"higiene": 12,
@@ -90,9 +106,21 @@
 		"categoria": "Entretenimiento",
 		"tipo": "pasivo",
 		"precio": 70,
-		"descripcion": "Dice que es como verse en un espejo.",
+		"descripcion": "Mirarla calma.",
 		"pasivo": {
 			"tristeza_diaria": -3
+		}
+	},
+	{
+		"id": "tocadiscos",
+		"nombre": "Tocadiscos",
+		"categoria": "Entretenimiento",
+		"tipo": "pasivo",
+		"precio": 90,
+		"especie": "ratona",
+		"descripcion": "Rock and roll para no pensar.",
+		"pasivo": {
+			"lujuria_diaria": -2
 		}
 	},
 	{
@@ -109,6 +137,19 @@
 		}
 	},
 	{
+		"id": "linterna",
+		"nombre": "Lámpara de carburo",
+		"categoria": "Artículos especiales",
+		"tipo": "pasivo",
+		"precio": 110,
+		"especie": "ratona",
+		"descripcion": "Una luz como la de la mina.",
+		"pasivo": {
+			"tristeza_diaria": -2,
+			"lujuria_diaria": -1
+		}
+	},
+	{
 		"id": "mj_memoria",
 		"nombre": "Juego: Memoria",
 		"categoria": "Entretenimiento",
@@ -116,6 +157,15 @@
 		"precio": 50,
 		"descripcion": "Un juego de parejas.",
 		"minijuego": "memoria"
+	},
+	{
+		"id": "mj_burbujas",
+		"nombre": "Juego: Burbujas",
+		"categoria": "Entretenimiento",
+		"tipo": "minijuego",
+		"precio": 50,
+		"descripcion": "Burbujas para reventar.",
+		"minijuego": "burbujas"
 	},
 	{
 		"id": "traje_casual",
@@ -146,5 +196,15 @@
 		"especie": "slime",
 		"traje": "vestido_lila",
 		"descripcion": "Para salir de fiesta. O para jugar en casa."
+	},
+	{
+		"id": "traje_casual60",
+		"nombre": "Blusa y falda de lunares",
+		"categoria": "Vestuario",
+		"tipo": "traje",
+		"precio": 110,
+		"especie": "ratona",
+		"traje": "casual60",
+		"descripcion": "Para salir a bailar. En casa no se queda quieta."
 	}
 ]

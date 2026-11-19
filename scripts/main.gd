@@ -7,12 +7,13 @@ const Portrait := preload("res://scripts/portrait.gd")
 const Music := preload("res://scripts/music.gd")
 const Fade := preload("res://scripts/transicion.gd")
 const EndingScene := preload("res://scripts/final_escena.gd")
+const Progress := preload("res://scripts/progreso.gd")
 const Shopkeeper := preload("res://scripts/shopkeeper.gd")
 const MINIGAME_SCRIPTS := {
 	"burbujas": preload("res://scripts/minigame_bubbles.gd"),
 	"memoria": preload("res://scripts/minigame_memory.gd"),
 }
-const CHARACTER := "res://data/personajes/slime.json"
+const DEFAULT_CHARACTER := "slime"
 const RECORDS_PATH := "user://records.json"
 const BAR_STATS := ["salud", "felicidad", "tristeza", "hambre", "vinculo", "higiene"]
 const STAT_COLORS := {"salud": "5fd38a", "felicidad": "f07ac0", "tristeza": "8a78f0",
@@ -60,7 +61,16 @@ var held: Control         # ventana anterior, a la vista mientras se mide la nue
 
 func _ready() -> void:
 	game = Game.new()
-	game.setup(CHARACTER)
+	# Al continuar manda la partida guardada; si no, la asignada que se eligió en el menú.
+	var saved = null
+	if Engine.get_meta("continuar", false) and FileAccess.file_exists(Game.SAVE_PATH):
+		saved = Game.load_json(Game.SAVE_PATH)
+		if saved is Dictionary and saved.has("personaje"):
+			Engine.set_meta("personaje", saved["personaje"])
+	var cid: String = Engine.get_meta("personaje", DEFAULT_CHARACTER)
+	if not FileAccess.file_exists("res://data/personajes/%s.json" % cid):
+		cid = DEFAULT_CHARACTER
+	game.setup("res://data/personajes/%s.json" % cid)
 	# La música vive en un autoload para no cortarse entre pantallas;
 	# si no existe (pruebas con -s), se crea aquí.
 	music = get_node_or_null("/root/Musica")
@@ -77,10 +87,9 @@ func _ready() -> void:
 	var loaded := false
 	if Engine.get_meta("continuar", false):
 		Engine.set_meta("continuar", false)
-		var d = Game.load_json(Game.SAVE_PATH) if FileAccess.file_exists(Game.SAVE_PATH) else null
-		loaded = d is Dictionary and game.from_dict(d)
+		loaded = saved is Dictionary and game.from_dict(saved)
 	if not loaded:
-		game.start()
+		game.start(Progress.funds_for(game.character["id"]))
 	_refresh()
 	if loaded and not game.pending_event.is_empty():
 		_show_event(game.pending_event)
@@ -369,8 +378,9 @@ func _bar(color: Color, height := 16) -> ProgressBar:
 func _refresh() -> void:
 	var info: Dictionary = game.level_info()
 	var lv_color := Color(info["color"])
-	lbl_top.text = "Día %d   ·   Acciones: %d/%d   ·   %d $" % [
-		game.day, game.actions_left, int(game.balance["acciones_por_dia"]), game.money]
+	var day_text := "Día %d/%d" % [mini(game.day, game.term), game.term] if game.term > 0 else "Día %d" % game.day
+	lbl_top.text = "%s   ·   Acciones: %d/%d   ·   %d $" % [
+		day_text, game.actions_left, int(game.balance["acciones_por_dia"]), game.money]
 	lbl_level.text = info["nombre"]
 	name_lbl.text = "%s · %s" % [game.character["nombre"], game.attitude()["nombre"]]
 	var psb := level_pill.get_theme_stylebox("panel") as StyleBoxFlat
@@ -738,7 +748,7 @@ func _fill_shop() -> void:
 		if it["tipo"] == "consumible" and game.inventory.get(id, 0) > 0:
 			owned = "  (tienes %d)" % game.inventory[id]
 		info.add_child(_label(it["nombre"] + owned, 22))
-		var d := _wrap(it["descripcion"], 17)
+		var d := _wrap(game.item_text(id), 17)
 		d.modulate = TEXT_DIM
 		info.add_child(d)
 		row.add_child(info)
@@ -766,10 +776,12 @@ func _leave_shop() -> void:
 	var seen := []
 	for i in range(shop_bought.size() - 1, -1, -1):
 		var id: String = shop_bought[i]
-		if id in seen or not shop["comentarios"].has(id):
+		var comments: Dictionary = shop["comentarios"].duplicate()
+		comments.merge(shop.get("comentarios_personaje", {}).get(game.character["id"], {}), true)
+		if id in seen or not comments.has(id):
 			continue
 		seen.append(id)
-		lines.append(shop["comentarios"][id])
+		lines.append(comments[id])
 		if lines.size() == 2:
 			break
 	if lines.is_empty():
@@ -828,7 +840,7 @@ func _show_inventory() -> void:
 		var info := VBoxContainer.new()
 		info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		info.add_child(_label("%s ×%d" % [it["nombre"], game.inventory[id]], 22))
-		var d := _wrap(it["descripcion"], 17)
+		var d := _wrap(game.item_text(id), 17)
 		d.modulate = TEXT_DIM
 		info.add_child(d)
 		row.add_child(info)
@@ -943,7 +955,7 @@ func _event_tag(kind: String) -> String:
 	match kind:
 		"positivo": return "Algo bueno"
 		"negativo": return "Un contratiempo"
-		"especie": return "Cosas de slime"
+		"especie": return game.character.get("etiqueta_especie", "Cosas de " + game.character["especie"].to_lower())
 		"critico": return "¡Situación crítica!"
 	return "Mientras tanto…"
 
@@ -966,16 +978,48 @@ func _show_game_over(ending: Dictionary) -> void:
 	fade.queue_free()
 	await ending_scene.finished
 	var v := _open_modal(ending["titulo"], 0.45)
-	v.add_child(_label("Días sobrevividos: %d" % ending["dias"], 24))
+	if ending.has("nota"):
+		_evaluation_results(v, ending)
+		return
+	v.add_child(_label("Días sobrevividos: %d de %d" % [mini(ending["dias"], game.term), game.term] if game.term > 0 else "Días sobrevividos: %d" % ending["dias"], 24))
 	v.add_child(_label("Actitud final: %s" % ending["actitud"], 20))
 	var rec := _label("Récord con %s: %d días%s" % [game.character["nombre"], record["mejor_dias"],
 		"  ¡Nuevo récord!" if record["nuevo"] else ""], 20)
 	rec.modulate = TEXT_DIM
 	v.add_child(rec)
-	var finals := _label("Finales descubiertos: %d/%d" % [record["finales"].size(), game.character["finales"].size()], 20)
+	var finals := _label("Finales descubiertos: %d/%d" % [record["finales"].size(), game.character["finales"].size() + 1], 20)
 	finals.modulate = TEXT_DIM
 	v.add_child(finals)
-	v.add_child(_button("Nueva partida", func(): Fade.go(get_tree())))
+	v.add_child(_button("Repetir la asignación", func(): Fade.go(get_tree())))
+	v.add_child(_button("Menú principal", _to_menu))
+
+
+## Resultados de la evaluación del día final: nota, actitud y, si aprobó, la siguiente asignada.
+func _evaluation_results(v: VBoxContainer, ending: Dictionary) -> void:
+	Progress.record_grade(game.character["id"], ending["nota"])
+	var grade := _label("Calificación: %s · %s" % [ending["nota"], game.grade_for(ending["puntaje"])["nombre"]], 26)
+	grade.add_theme_color_override("font_color", Color("9fe0a8") if ending["aprobada"] else Color("ef7d86"))
+	v.add_child(grade)
+	v.add_child(_label("Actitud final: %s" % ending["actitud"], 20))
+	var funds: int = int(game.grade_for(ending["puntaje"]).get("fondos", 0))
+	var nxt := Progress.next_index(game.character["id"])
+	if ending["aprobada"] and nxt >= 0:
+		var next_id: String = Progress.project()["expedientes"][nxt]["personaje"]
+		var line := "Siguiente asignada: %s" % Progress.character_name(next_id)
+		if funds > 0:
+			line += "\nFondos extra para la próxima asignación: %d $" % funds
+		var l := _wrap(line, 20)
+		l.modulate = TEXT_DIM
+		v.add_child(l)
+		v.add_child(_button("Siguiente expediente", func():
+			Engine.set_meta("personaje", next_id)
+			Engine.set_meta("intro_personaje", next_id)
+			Fade.go(get_tree(), "res://scenes/intro.tscn")))
+	elif ending["aprobada"]:
+		var l := _wrap("No hay más asignadas por ahora. El proyecto sigue en desarrollo.", 20)
+		l.modulate = TEXT_DIM
+		v.add_child(l)
+	v.add_child(_button("Repetir la asignación", func(): Fade.go(get_tree())))
 	v.add_child(_button("Menú principal", _to_menu))
 
 

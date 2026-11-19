@@ -1,0 +1,58 @@
+{
+	"expedientes": [
+		{
+			"personaje": "slime",
+			"dias": 30,
+			"aprobar": "C"
+		},
+		{
+			"personaje": "ratona",
+			"dias": 30,
+			"aprobar": "C",
+			"informe": [
+				"Volviste. Aprobaste con la slime, así que el mando te sube de nivel. Y de dificultad.",
+				"Tu nueva asignada es una ratona minera. Se llama Mandy. La sacamos de una galería abandonada después de un asedio de tres semanas.",
+				"Trabajadora, desconfiada y con hambre a todas horas. Guarda todo lo que brilla. No le toques el escondite.",
+				"La maldición le pega más fuerte que a la slime. No te confíes por lo que aprendiste con ella: cada especie es distinta.",
+				"Lo de siempre: treinta días. El último, paso yo.",
+				"Y no le hagas bromas sobre gatos. El último que lo intentó sigue en la enfermería."
+			]
+		}
+	],
+	"calificaciones": [
+		{
+			"nota": "A",
+			"nombre": "Sobresaliente",
+			"min": 90,
+			"fondos": 60
+		},
+		{
+			"nota": "B",
+			"nombre": "Buena",
+			"min": 80,
+			"fondos": 30
+		},
+		{
+			"nota": "C",
+			"nombre": "Suficiente",
+			"min": 65,
+			"fondos": 0
+		},
+		{
+			"nota": "D",
+			"nombre": "Insuficiente",
+			"min": 0,
+			"fondos": 0
+		}
+	],
+	"evaluacion": {
+		"pesos": {
+			"control": 0.4,
+			"vinculo": 0.35,
+			"bienestar": 0.15,
+			"estabilidad": 0.1
+		},
+		"por_crisis": 25
+	},
+	"imagen_evaluacion": "res://ui/tienda_fondo.png"
+}

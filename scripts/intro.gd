@@ -1,4 +1,5 @@
-## Introducción: la intendente de H.A.R.E.M. explica el Proyecto Waifu.
+## Introducción: la intendente de H.A.R.E.M. explica el Proyecto Waifu
+## o, en cada asignación nueva, presenta a la siguiente asignada.
 ## Toca para avanzar; el primer toque completa la frase si aún se está escribiendo.
 extends Control
 
@@ -18,6 +19,12 @@ var tween: Tween
 func _ready() -> void:
 	var data: Dictionary = Game.load_json("res://data/intro.json")
 	lines = data["lineas"]
+	# Cada asignada nueva llega con su informe; la primera usa la introducción completa.
+	var cid: String = Engine.get_meta("intro_personaje", "")
+	Engine.set_meta("intro_personaje", "")
+	for a in Game.load_json("res://data/proyecto.json")["expedientes"]:
+		if a["personaje"] == cid and a.has("informe"):
+			lines = a["informe"]
 	var music = get_node_or_null("/root/Musica")
 	if music:
 		music.play("tienda")

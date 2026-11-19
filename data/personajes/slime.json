@@ -3,6 +3,18 @@
 	"nombre": "Reme",
 	"especie": "Slime",
 	"personalidad": "Curiosa y pegajosa. Imita todo lo que ve, absorbe lo que toca y sufre cuando se queda sola.",
+	"etiqueta_especie": "Cosas de slime",
+	"objetos": {
+		"gelatina": "Su comida favorita.",
+		"agua": "Para una slime, es casi un baño.",
+		"lampara": "Dice que es como verse en un espejo."
+	},
+	"evaluacion": {
+		"A": "El día treinta, la intendente llega sin soldados. Revisa la casa, la despensa y a Reme. Reme le ofrece una gelatina. La intendente, para sorpresa de todos, la acepta.\n\n«Nunca vi una asignada tan estable», dice. Firma sin leer dos veces.",
+		"B": "El día treinta, la intendente revisa la casa con su carpeta. Reme la sigue de cuarto en cuarto, imitando cómo camina.\n\n«Buen trabajo, recluta. No perfecto. Bueno.»",
+		"C": "El día treinta, la intendente llega con dos soldados, por si acaso. Reme se esconde detrás de ti.\n\nLa intendente anota algo, lo tacha y lo vuelve a anotar. «Pasas. Por poco.»",
+		"D": "El día treinta, la intendente llega con dos soldados y un camión de traslado. Reme no sale de su cuarto.\n\n«Sobreviviste», dice la intendente. «Eso no es lo mismo que aprobar.»"
+	},
 	"color": "6fd3c1",
 	"stats_iniciales": {
 		"salud": 80,
