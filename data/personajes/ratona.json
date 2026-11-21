@@ -33,7 +33,7 @@
 		}
 	},
 	"lujuria": {
-		"base": 9.0,
+		"base": 10.0,
 		"por_tristeza": 0.1,
 		"por_hambre": 0.18,
 		"por_suciedad": 0.08,
@@ -670,5 +670,20 @@
 				"Ya. ¿Terminamos?"
 			]
 		}
-	}
+	},
+	"saturacion": {
+		"felicidad": [
+			"Está tan pasada de vueltas que no puede quedarse quieta.",
+			"Se ríe, corre, rasca la pared. Demasiada energía junta."
+		],
+		"hambre": [
+			"Comió hasta no poder más y ahora no sabe qué hacer con tanta energía.",
+			"Esconde lo que ya no le cabe. Está inquieta de tan llena."
+		],
+		"higiene": [
+			"Tanto jabón la tiene erizada y de malas.",
+			"Huele a limpio y se siente extraña. Le falta su polvo de mina."
+		]
+	},
+	"icono_lujuria": "res://personajes/ratona/icono.png"
 }

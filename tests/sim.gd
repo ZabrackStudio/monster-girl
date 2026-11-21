@@ -121,6 +121,16 @@ func _act(g, strategy: String) -> bool:
 		return false
 
 	var expert := strategy == "experta"
+	# «atenta»: juega como la básica pero aprende de los avisos (no repite al tope ni cae en trampas)
+	# y tiene a mano lo que piden los eventos. No conoce la rutina ni la charla buena.
+	var attentive := strategy == "atenta"
+	if attentive:
+		for id in ["manzanilla", "caramelos", "agua", "queso"]:
+			if g.items.has(id) and g.inventory.get(id, 0) < 1 and g.money >= 40:
+				g.buy(id)
+		if s["lujuria"] > 50 and g.inventory.get("manzanilla", 0) > 0:
+			g.use_item("manzanilla")
+	var careful := expert or attentive
 	if expert:
 		_shop(g)
 		if s["lujuria"] > 45 and g.inventory.get("manzanilla", 0) > 0:
@@ -132,15 +142,15 @@ func _act(g, strategy: String) -> bool:
 				g.use_item(food)
 	if expert and _routine(g):
 		return true
-	if s["hambre"] > 55 and g.can_do("comer") and not (expert and _trap(g, "comer")):
+	if s["hambre"] > 55 and g.can_do("comer") and not (careful and _trap(g, "comer")):
 		g.do_activity("comer"); return true
-	if s["higiene"] < 40 and g.can_do("limpiar") and not (expert and _trap(g, "limpiar")):
+	if s["higiene"] < 40 and g.can_do("limpiar") and not (careful and _trap(g, "limpiar")):
 		g.do_activity("limpiar"); return true
 	if g.money < (60 if expert else 25) and g.can_do("trabajar"):
 		g.do_activity("trabajar"); return true
-	if g.times_today.get("pasear", 0) == 0 and g.can_do("pasear") and not (expert and _trap(g, "pasear")):
+	if g.times_today.get("pasear", 0) == 0 and g.can_do("pasear") and not (careful and _trap(g, "pasear")):
 		g.do_activity("pasear"); return true
-	if g.can_play() and g.times_today.get("jugar", 0) < 2:
+	if g.can_play() and g.times_today.get("jugar", 0) < 2 and not (careful and _trap(g, "jugar")):
 		var mg: String = g.minigames[0]
 		if expert:
 			var best := -1.0
@@ -155,17 +165,28 @@ func _act(g, strategy: String) -> bool:
 
 
 func _shop(g) -> void:
-	for id in ["almohada", "pecera", "lampara", "frasco", "linterna", "tocadiscos"]:
+	for id in ["almohada", "nido", "pecera", "lampara", "alcancia", "frasco", "linterna", "tocadiscos"]:
 		if g.items.has(id) and g.can_buy(id) and g.money >= int(g.items[id]["precio"]) + 30:
 			g.buy(id)
 	if g.inventory.get("manzanilla", 0) < 2 and g.money >= 50:
 		g.buy("manzanilla")
 	if g.inventory.get("jabon", 0) < 1 and g.money >= 40:
 		g.buy("jabon")
+	# Reservas para las respuestas de los eventos que piden un objeto.
+	for id in ["caramelos", "agua", "queso", "cepillo"]:
+		if g.items.has(id) and g.inventory.get(id, 0) < 1 and g.money >= 45:
+			g.buy(id)
 
 
-## ¿Hacer esto ahora dispararía una trampa de su especie?
+## ¿Hacer esto ahora dispararía una trampa de su especie o la saturaría?
 func _trap(g, id: String) -> bool:
+	var st: Dictionary = g.stats
+	if (id == "pasear" or id == "jugar") and st["felicidad"] > 88:
+		return true
+	if id == "limpiar" and st["higiene"] > 70:
+		return true
+	if id == "comer" and st["hambre"] < 25:
+		return true
 	for r in g._match_reactions(id):
 		if float(r["efectos"].get("lujuria", 0)) > 0:
 			return true

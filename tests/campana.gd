@@ -61,7 +61,25 @@ func _run() -> void:
 	_check(m.money == 100, "Mandy empieza con los fondos extra (%d $)" % m.money)
 	_check(m.events.all(func(e): return e.get("personaje", "ratona") == "ratona"), "Mandy solo ve sus eventos")
 	_check(m.items.has("queso") and not m.items.has("frasco"), "La tienda de Mandy tiene sus objetos")
-	_check(m.item_text("gelatina") == "Dulce, fresca y tiembla." and m.item_text("queso") == "Su comida favorita.", "Descripciones propias")
+	_check(m.item_text("queso") == "Su comida favorita." and not m.items.has("gelatina") and m.items.has("nido"), "Tienda y descripciones propias de Mandy")
+	# Saturación: con la felicidad al tope, jugar otra vez le sube la lujuria.
+	m.stats["hambre"] = 30.0
+	var drops := []
+	for i in 2:
+		m.stats["felicidad"] = 100.0
+		m.stats["lujuria"] = 30.0
+		m.tolerance.clear()
+		m.play_minigame("memoria", 1.0)
+		drops.append(30.0 - m.stats["lujuria"])
+	_check(drops[1] < drops[0] - 3.0, "Repetir el juego con la felicidad al tope se vuelve en contra (baja %.1f y luego %.1f)" % drops)
+	# Respuesta que pide un objeto.
+	var ev: Dictionary = m.events.filter(func(e): return e["id"] == "trampa")[0]
+	_check(not m.option_available(ev["opciones"][0]), "Sin queso no se puede elegir la respuesta buena")
+	m.inventory["queso"] = 1
+	_check(m.option_available(ev["opciones"][0]), "Con queso sí")
+	m.pending_event = ev
+	m.resolve_event(0)
+	_check(not m.inventory.has("queso"), "La respuesta gasta el queso")
 	for key in ["trabajar", "comer", "pasear", "limpiar", "jugar", "dormir", "inicio", "vestir"]:
 		if m.character["dialogos"].get(key, []).is_empty():
 			_check(false, "Mandy tiene diálogo de " + key)

@@ -14,6 +14,8 @@ const STAT_NAMES := {
 }
 ## Estadísticas donde subir es bueno; en el resto, bajar es bueno.
 const GOOD_UP := ["salud", "felicidad", "higiene"]
+## Estadísticas que se saturan: pasarse del tope repitiendo una acción trae consecuencias.
+const SATURABLE := ["felicidad", "hambre", "higiene"]
 
 var character: Dictionary
 var balance: Dictionary
@@ -56,6 +58,7 @@ var warned := false                 # ya amenazó con denunciarte
 var term := 0                       # días de convivencia (0 = sin plazo)
 var crises := 0                     # crisis que dejaron marca
 var project: Dictionary = {}        # data/proyecto.json
+var overflow: Dictionary = {}       # lo que la última acción quiso dar de más
 
 
 ## Estado que se guarda en la partida (todo lo demás sale de los JSON de datos).
@@ -305,6 +308,7 @@ func do_activity(id: String) -> void:
 	money += earned
 	total_money += earned
 	var reactions := _match_reactions(id)
+	overflow.clear()
 	var mult := _mult_for(id) * float(character["afinidades"].get(id, 1.0))
 	apply(act["efectos"], mult, _tolerance_use(id))
 	apply(character["efectos_extra"].get(id, {}))
@@ -313,6 +317,7 @@ func do_activity(id: String) -> void:
 	today.append(id)
 	_apply_reactions(reactions)
 	_outfit_effects(id)
+	_saturate(id)
 	_after_action(id, float(act.get("prob_evento", 0)))
 
 
@@ -333,6 +338,7 @@ func play_minigame(id: String, score: float) -> void:
 	for k in mg["efectos_bonus"]:
 		eff[k] = eff.get(k, 0.0) + float(mg["efectos_bonus"][k]) * score
 	var reactions := _match_reactions("jugar")
+	overflow.clear()
 	var mult := _mult_for("jugar") * minigame_affinity(id)
 	apply(eff, mult, _tolerance_use("mj_" + id))
 	apply(act["efectos"])
@@ -344,6 +350,7 @@ func play_minigame(id: String, score: float) -> void:
 	today.append("jugar")
 	_apply_reactions(reactions)
 	_outfit_effects("jugar")
+	_saturate("jugar")
 	_after_action("jugar", float(act.get("prob_evento", 0)))
 
 
@@ -411,10 +418,12 @@ func use_item(id: String) -> void:
 		inventory.erase(id)
 	var it: Dictionary = items[id]
 	var mult := 1.3 if character["id"] in it.get("favorito", []) else 1.0
+	overflow.clear()
 	# Usar el mismo objeto varias veces el mismo día rinde cada vez menos.
 	apply(it["efectos"], mult * _mult_for("objeto_" + id), _tolerance_use("objeto_" + id))
 	_count("objeto_" + id)
 	_log("Usas: %s." % it["nombre"])
+	_saturate("objeto_" + id)
 	_check_consumed()
 	changed.emit()
 
@@ -446,8 +455,10 @@ func sleep() -> void:
 	_add("lujuria", lust)
 	_night_bond()
 	var decay := float(balance["maldicion"]["tolerancia_decay"])
+	var combo_decay := float(balance["maldicion"].get("tolerancia_decay_combos", decay))
 	for k in tolerance:
-		tolerance[k] *= decay
+		# Los combos se recuperan más lento: repetir siempre el mismo rinde cada vez menos.
+		tolerance[k] *= combo_decay if k.begins_with("reaccion_") else decay
 	day += 1
 	actions_left = int(balance["acciones_por_dia"])
 	times_today.clear()
@@ -529,7 +540,14 @@ func _apply_reactions(list: Array) -> void:
 # ---------------------------------------------------------------- eventos
 
 func option_available(opt: Dictionary) -> bool:
+	if opt.has("requiere") and not has_item(opt["requiere"]):
+		return false
 	return money + int(opt.get("efectos", {}).get("dinero", 0)) >= 0
+
+
+## ¿Tiene este objeto, en el inventario o ya instalado en casa?
+func has_item(id: String) -> bool:
+	return inventory.get(id, 0) > 0 or passives.has(id)
 
 
 func resolve_event(index: int) -> void:
@@ -541,7 +559,15 @@ func resolve_event(index: int) -> void:
 	if opt.has("final"):
 		_end(opt["final"])
 		return
-	apply(opt.get("efectos", {}), effectiveness())
+	var req: String = opt.get("requiere", "")
+	if inventory.get(req, 0) > 0:
+		inventory[req] -= 1
+		if inventory[req] <= 0:
+			inventory.erase(req)
+	var eff: Dictionary = opt.get("efectos", {})
+	apply(eff, effectiveness())
+	if eff.has("vinculo"):
+		_bond(float(eff["vinculo"]))
 	if opt.get("resultado", "") != "":
 		_log(opt["resultado"])
 	_check_consumed()
@@ -609,7 +635,32 @@ func apply(effects: Dictionary, mult: float = 1.0, lust_mult: float = 1.0) -> Di
 		var before: float = stats[k]
 		stats[k] = clampf(before + v, _floor(k), 100)
 		real[k] = stats[k] - before
+		# Solo cuenta si ya estaba al tope: es repetir lo mismo cuando ya no hace falta.
+		var full: float = before if k in GOOD_UP else 100.0 - before
+		if beneficial and k in SATURABLE and full >= float(balance["saturacion"]["desde"]):
+			overflow[k] = overflow.get(k, 0.0) + absf(v) - absf(real[k])
 	return real
+
+
+## Pasarse del tope (comer sin hambre, más diversión de la que cabe, bañarla limpia)
+## se vuelve en contra: lo que sobra se convierte en efectos negativos.
+func _saturate(source: String) -> void:
+	var cfg: Dictionary = balance["saturacion"]
+	var excess := overflow.duplicate()
+	overflow.clear()
+	if times_today.get(source, 0) < 2:
+		return   # la primera vez en el día no cuenta: hace falta insistir
+	for stat in excess:
+		if excess[stat] < float(cfg["minimo"]):
+			continue
+		var eff := {}
+		for k in cfg[stat]:
+			eff[k] = excess[stat] * float(cfg[stat][k])
+		apply(eff)
+		overflow.clear()
+		var lines: Array = character.get("saturacion", {}).get(stat, [])
+		if not lines.is_empty():
+			_log("[color=#f2a65a]%s[/color]" % _pick(lines))
 
 
 func _add(stat: String, v: float) -> void:

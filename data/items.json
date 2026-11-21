@@ -5,14 +5,15 @@
 		"categoria": "Alimentación",
 		"tipo": "consumible",
 		"precio": 14,
-		"descripcion": "Dulce, fresca y tiembla.",
+		"descripcion": "Su comida favorita.",
 		"efectos": {
 			"hambre": -25,
 			"felicidad": 10
 		},
 		"favorito": [
 			"slime"
-		]
+		],
+		"especie": "slime"
 	},
 	{
 		"id": "queso",
@@ -29,6 +30,19 @@
 		"favorito": [
 			"ratona"
 		]
+	},
+	{
+		"id": "pan",
+		"nombre": "Pan con semillas",
+		"categoria": "Alimentación",
+		"tipo": "consumible",
+		"precio": 7,
+		"especie": "ratona",
+		"descripcion": "Rinde mucho.",
+		"efectos": {
+			"hambre": -18,
+			"felicidad": 3
+		}
 	},
 	{
 		"id": "caramelos",
@@ -49,12 +63,13 @@
 		"categoria": "Cuidado personal",
 		"tipo": "consumible",
 		"precio": 10,
-		"descripcion": "Hidrata y refresca.",
+		"descripcion": "Para una slime, es casi un baño.",
 		"efectos": {
 			"salud": 6,
 			"higiene": 12,
 			"lujuria": -3
-		}
+		},
+		"especie": "slime"
 	},
 	{
 		"id": "jabon",
@@ -65,6 +80,20 @@
 		"descripcion": "Limpia en un momento.",
 		"efectos": {
 			"higiene": 35
+		}
+	},
+	{
+		"id": "cepillo",
+		"nombre": "Cepillo de cerdas",
+		"categoria": "Cuidado personal",
+		"tipo": "consumible",
+		"precio": 11,
+		"especie": "ratona",
+		"descripcion": "Para el pelo de las orejas y la cola.",
+		"efectos": {
+			"higiene": 20,
+			"felicidad": 5,
+			"lujuria": -2
 		}
 	},
 	{
@@ -87,6 +116,19 @@
 		"descripcion": "Duerme abrazada a ella.",
 		"pasivo": {
 			"vinculo_noche": 1
+		},
+		"especie": "slime"
+	},
+	{
+		"id": "nido",
+		"nombre": "Nido de lana",
+		"categoria": "Cuidado personal",
+		"tipo": "pasivo",
+		"precio": 60,
+		"especie": "ratona",
+		"descripcion": "Duerme hecha un ovillo adentro.",
+		"pasivo": {
+			"vinculo_noche": 1
 		}
 	},
 	{
@@ -98,7 +140,8 @@
 		"descripcion": "Se queda horas mirando los peces.",
 		"pasivo": {
 			"lujuria_diaria": -2
-		}
+		},
+		"especie": "slime"
 	},
 	{
 		"id": "lampara",
@@ -106,10 +149,11 @@
 		"categoria": "Entretenimiento",
 		"tipo": "pasivo",
 		"precio": 70,
-		"descripcion": "Mirarla calma.",
+		"descripcion": "Dice que es como verse en un espejo.",
 		"pasivo": {
 			"tristeza_diaria": -3
-		}
+		},
+		"especie": "slime"
 	},
 	{
 		"id": "tocadiscos",
@@ -121,6 +165,18 @@
 		"descripcion": "Rock and roll para no pensar.",
 		"pasivo": {
 			"lujuria_diaria": -2
+		}
+	},
+	{
+		"id": "alcancia",
+		"nombre": "Alcancía de hojalata",
+		"categoria": "Entretenimiento",
+		"tipo": "pasivo",
+		"precio": 70,
+		"especie": "ratona",
+		"descripcion": "Cuenta lo que guarda todas las noches.",
+		"pasivo": {
+			"tristeza_diaria": -3
 		}
 	},
 	{

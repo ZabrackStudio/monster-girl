@@ -217,7 +217,7 @@ func _build_ui() -> void:
 	lust_row.add_theme_constant_override("separation", 10)
 	lust_pill.add_child(lust_row)
 	var drop := TextureRect.new()
-	drop.texture = load("res://ui/gota.png")
+	drop.texture = load(game.character.get("icono_lujuria", "res://ui/gota.png"))
 	drop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	drop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	drop.custom_minimum_size = Vector2(44, 40)

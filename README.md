@@ -128,11 +128,21 @@ Cada expediente puede traer un `informe`: lo que cuenta la intendente antes de e
 
 ## Asignadas
 
-- **Reme** (`slime`): expediente 01. Al azar no pasa del día 15; jugando básico suele sacar C; bien jugada, A.
-- **Mandy** (`ratona`): expediente 02. Más hambre (`dia.hambre_diaria`) y una maldición más rápida. Jugando básico
-  casi siempre reprueba. Sprites en `personajes/ratona/trajes/` (se generan con `tools/preparar_mandy.gd`).
-  Todavía no tiene ilustración de su cuarto ni de sus finales: usa un degradado y fondo negro.
+Simulación de 200 partidas por estrategia (azar · básica que repite lo mismo · experta que conoce rutina y charla):
+
+- **Reme** (`slime`): expediente 01. Azar: cae hacia el día 8. Básica: cae hacia el día 19. Experta: B, a veces A.
+- **Mandy** (`ratona`): expediente 02. Más hambre (`dia.hambre_diaria`) y una maldición más rápida. Azar: cae hacia
+  el día 7. Básica: cae hacia el día 20. Experta: B, a veces A. Sprites en `personajes/ratona/` (se generan con
+  `tools/preparar_mandy.gd`). Todavía no tiene ilustración de su cuarto ni de sus finales: usa un degradado y fondo negro.
 
 Los eventos con `personaje` solo salen con esa asignada. Los objetos con `especie` solo se venden para ella,
-y `objetos` en el personaje cambia la descripción de un objeto común.
+y `objetos` en el personaje cambia la descripción de un objeto común. `icono_lujuria` cambia el ícono de la barra.
 
+## Saturación y combos repetidos
+
+- `saturacion` (balance.json): si una acción se repite el mismo día con felicidad, hambre o higiene ya al tope
+  (`desde`), lo que sobra se vuelve en contra (más lujuria, tristeza o menos salud). Cada asignada tiene sus frases en `saturacion`.
+- `maldicion.tolerancia_decay_combos`: los combos se recuperan más lento que el resto de los remedios, así que
+  repetir siempre el mismo rinde cada vez menos.
+- Una opción de evento con `requiere` solo se puede elegir si tienes ese objeto (si es consumible, lo gasta).
+  Las opciones pueden mover el vínculo con `"vinculo"` en sus efectos.

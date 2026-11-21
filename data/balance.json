@@ -135,7 +135,8 @@
 		"luna_base": 15,
 		"luna_por_dia": 0.15,
 		"marca": 8,
-		"marca_max": 60
+		"marca_max": 60,
+		"tolerancia_decay_combos": 0.85
 	},
 	"vinculo": {
 		"final": 76,
@@ -213,6 +214,21 @@
 			"lujuria_critica": 3,
 			"aviso": -15,
 			"denuncia": -25
+		}
+	},
+	"saturacion": {
+		"desde": 90,
+		"minimo": 5,
+		"felicidad": {
+			"lujuria": 0.35
+		},
+		"hambre": {
+			"lujuria": 0.3,
+			"salud": -0.15
+		},
+		"higiene": {
+			"tristeza": 0.3,
+			"felicidad": -0.25
 		}
 	}
 }

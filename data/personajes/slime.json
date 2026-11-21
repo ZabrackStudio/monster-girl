@@ -3,6 +3,20 @@
 	"nombre": "Reme",
 	"especie": "Slime",
 	"personalidad": "Curiosa y pegajosa. Imita todo lo que ve, absorbe lo que toca y sufre cuando se queda sola.",
+	"saturacion": {
+		"felicidad": [
+			"Tanta diversión la tiene acelerada. Ya no se calma.",
+			"Se ríe demasiado fuerte y tiembla entera. Le cuesta bajar las revoluciones."
+		],
+		"hambre": [
+			"Comió de más y se hincha. Lo que sobra se le sube a la cabeza.",
+			"Ya no le cabe nada, pero no deja de absorber."
+		],
+		"higiene": [
+			"De tanto lavarla, ya está harta del agua.",
+			"Brilla de limpia, pero tanto baño la dejó de malas."
+		]
+	},
 	"etiqueta_especie": "Cosas de slime",
 	"objetos": {
 		"gelatina": "Su comida favorita.",
@@ -41,7 +55,7 @@
 		}
 	},
 	"lujuria": {
-		"base": 8.0,
+		"base": 7.5,
 		"por_tristeza": 0.08,
 		"por_hambre": 0.12,
 		"por_suciedad": 0.16,

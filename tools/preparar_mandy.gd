@@ -5,7 +5,8 @@ extends SceneTree
 const SRC := "../Material/"
 const DEST := "res://personajes/ratona/trajes/"
 const MOODS := ["neutral", "feliz", "triste", "cansada", "inquieta", "alterada", "critica"]
-const CASUAL_H := 640   # recorte del traje casual para que la cabeza mida como en el de minera
+const CASUAL_H := 640
+const ICON_RECT := Rect2i(272, 49, 52, 52)   # lámpara del casco en 01_neutral.png   # recorte del traje casual para que la cabeza mida como en el de minera
 
 
 func _init() -> void:
@@ -28,6 +29,17 @@ func _init() -> void:
 		casual.append(img.get_region(Rect2i(0, 0, img.get_width(), mini(CASUAL_H, img.get_height()))))
 	zip.close()
 	_save_all(casual, "casual60")
+	# Ícono de la barra de lujuria: la lámpara del casco.
+	var icon: Image = miner[0].get_region(ICON_RECT)
+	icon.resize(96, 96, Image.INTERPOLATE_LANCZOS)
+	icon.convert(Image.FORMAT_RGBA8)
+	for y in 96:
+		for x in 96:   # recorte redondo, con borde suave
+			var d := Vector2(x - 47.5, y - 47.5).length()
+			var c := icon.get_pixel(x, y)
+			c.a *= clampf(46.0 - d, 0.0, 1.0)
+			icon.set_pixel(x, y, c)
+	icon.save_png(ProjectSettings.globalize_path("res://personajes/ratona/icono.png"))
 	quit()
 
 
