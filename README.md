@@ -158,4 +158,3 @@ desbloquear objetos, diario y expedientes, y cambiar de asignada. Dura hasta cer
 La clave no está escrita en el código, solo su huella SHA-256 (`KEY_HASH`). Para cambiarla:
 `printf '%s' nuevaclave | sha256sum` y pega el resultado. La prueba `tests/dev.gd` recibe la clave por la variable `DEV_KEY`.
 En la web todo el juego vive en el navegador: esto lo esconde, pero no es una protección real.
-

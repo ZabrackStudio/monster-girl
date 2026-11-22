@@ -27,7 +27,7 @@ func _ready() -> void:
 			lines = a["informe"]
 	var music = get_node_or_null("/root/Musica")
 	if music:
-		music.play("tienda")
+		music.play("intro")
 	var black := ColorRect.new()
 	black.color = Color.BLACK
 	black.set_anchors_preset(Control.PRESET_FULL_RECT)

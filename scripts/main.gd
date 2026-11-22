@@ -84,7 +84,7 @@ func _ready() -> void:
 	add_child(dev)
 	_build_ui()
 	refresh_dev()
-	music.play("lobby")
+	music.play(lobby_track())
 	game.changed.connect(_refresh)
 	game.changed.connect(_autosave)
 	game.log_message.connect(func(t): log_box.append_text(t + "\n"))
@@ -102,6 +102,15 @@ func _ready() -> void:
 
 
 ## Muestra u oculta el botón del modo desarrollo.
+## Cada chica tiene su propia música de casa; si falta, suena la de Reme.
+func lobby_track() -> String:
+	var own: String = "lobby_" + game.character["id"]
+	for ext in ["mp3", "ogg", "wav"]:
+		if ResourceLoader.exists("res://audio/%s.%s" % [own, ext]):
+			return own
+	return "lobby_slime"
+
+
 func refresh_dev() -> void:
 	btn_dev.visible = DevMode.active()
 
@@ -474,7 +483,7 @@ func _open_modal(title: String, dim := 0.65) -> VBoxContainer:
 		held = closing
 	modal = null
 	if not game.over:
-		music.play("lobby")
+		music.play(lobby_track())
 	modal = ColorRect.new()
 	modal.color = Color(0, 0, 0, dim)
 	modal.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -539,7 +548,7 @@ func _close_modal() -> void:
 		closing_frame = Engine.get_process_frames()
 		_fade_out(old)
 	if not game.over:
-		music.play("lobby")
+		music.play(lobby_track())
 
 
 ## Tocar a la chica: la charla del día o, si ya hablasteis, solo una frase.
@@ -984,7 +993,7 @@ func _event_tag(kind: String) -> String:
 func _show_game_over(ending: Dictionary) -> void:
 	await get_tree().process_frame
 	_close_modal()
-	music.play(ending.get("musica", "final_malo"))
+	music.play(ending.get("musica", "final_poseida"))
 	var record := _save_record(ending)
 	var fade := ColorRect.new()
 	fade.color = Color(0, 0, 0, 0)

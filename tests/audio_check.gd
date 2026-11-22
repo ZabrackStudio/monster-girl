@@ -3,7 +3,7 @@ extends SceneTree
 const Music := preload("res://scripts/music.gd")
 func _init() -> void:
 	var m = Music.new()
-	for t in ["lobby", "tienda", "final_bueno", "final_malo"]:
+	for t in ["menu", "intro", "lobby_slime", "lobby_ratona", "tienda", "final_poseida", "final_carnal", "final_denuncia", "final_lucha", "final_marea"]:
 		var s = m._stream(t)
 		print("%-12s %s  %.1f s  bucle=%s" % [t, s.get_class() if s else "NO CARGA", s.get_length() if s else 0.0, s.loop if s else "-"])
 	m.free()

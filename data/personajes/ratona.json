@@ -106,31 +106,31 @@
 			"titulo": "Final malo: Sin aire",
 			"imagen": "res://ui/finales/ratona_carnal.png",
 			"imagen_tras_corte": true,
-			"musica": "final_malo",
+			"musica": "final_carnal",
 			"texto": "Te dices que solo es un abrazo.\n\nMandy se aferra a ti con una fuerza que no le conocías. Los ojos rojos le brillan en la oscuridad y el corazón le late tan rápido que lo sientes en tu propio pecho.\n\n«No te suelto», dice. Ya no lo dice en broma.\n\nIntentas recuperar el aire. Ella no afloja.\n\nFundido a negro.\n\n—\n\nAl amanecer, Mandy despierta sola, hecha un ovillo junto a la cama. Cuenta las monedas de su escondite una vez, dos veces. Siempre le salen las mismas. Lo que falta no lo puede contar."
 		},
 		"marea": {
 			"titulo": "Final bueno: Veta profunda",
 			"imagen": "res://ui/finales/ratona_marea.png",
-			"musica": "final_bueno",
+			"musica": "final_marea",
 			"texto": "Esa noche, Mandy no se acurruca junto a la puerta de tu cuarto.\n\nLa encuentras en la cocina, con el casco puesto y la mochila al hombro. La lámpara le ilumina la cara desde abajo. Tiene los ojos mojados.\n\n«Si me quedo, te hago daño», dice. «Y tú eres lo único que no quiero perder. Ni siquiera las monedas.»\n\nSe acomoda la mochila. Apaga la luz de la cocina.\n\n—\n\nEn la mañana, el escondite detrás del refrigerador está vacío, salvo por una lámpara de minero encendida. Al lado hay una nota escrita con carbón: «Me voy hacia abajo, donde no me puedas seguir. Te dejo mi luz para que no te pierdas sin mí.»"
 		},
 		"poseida": {
 			"titulo": "Final malo: Poseída",
 			"imagen": "res://ui/finales/ratona_poseida.png",
-			"musica": "final_malo",
+			"musica": "final_poseida",
 			"texto": "Esa noche, la lámpara del casco se enciende sola en el pasillo.\n\nLa oyes antes de verla: algo rasca la pared, despacio, de una punta a la otra. En la puerta, Mandy te mira con unos ojos que ya no parpadean.\n\nDices su nombre. Sonríe con todos los dientes.\n\nPara una ratona no hay puertas cerradas. Solo paredes que todavía no roe.\n\nFundido a negro.\n\n—\n\nAl amanecer, Mandy despierta en tu cama, sola. No recuerda la noche. La lámpara del casco sigue encendida sobre la almohada, y ya no le queda aceite."
 		},
 		"lucha": {
 			"titulo": "Final malo: Lo intentó",
 			"imagen": "res://ui/finales/ratona_lucha.png",
-			"musica": "final_malo",
+			"musica": "final_lucha",
 			"texto": "Esa noche, Mandy te despierta golpeando la puerta del sótano. Desde adentro.\n\n«Me encerré», dice. Le tiembla la voz. «Toma las llaves y vete lejos. Yo cavo hacia el otro lado. Si cavo, no pienso.»\n\nOyes la piqueta contra la piedra. Un golpe, otro. Luego, silencio. Luego, las uñas contra la madera.\n\n«Perdón», dice desde el otro lado. «No llegué a ninguna parte.»\n\nFundido a negro.\n\n—\n\nAl amanecer, la puerta del sótano está abierta. Adentro hay un túnel de medio metro y una piqueta gastada hasta el mango."
 		},
 		"denuncia": {
 			"titulo": "Final malo: Denuncia",
 			"imagen": "res://ui/finales/ratona_denuncia.png",
-			"musica": "final_malo",
+			"musica": "final_denuncia",
 			"texto": "A las seis y cuarto de la mañana llaman a la puerta. Es un decir: la puerta ya está abierta.\n\nBotas en el pasillo. Dos soldados y, detrás, la intendente con una carpeta bajo el brazo.\n\n«Denuncia presentada por la propia asignada», lee. «Molestias reiteradas pese a sus avisos.» Levanta una libreta manchada de carbón. «Lo anotó todo, como en sus partes de turno. Con hora y minuto.»\n\nDesde su cuarto se oye la piqueta contra la pared. No se detiene cuando pasas esposado.\n\n—\n\nEXPEDIENTE H.A.R.E.M. · PROYECTO WAIFU\nCuidador: retirado de la beta y retenido a disposición del mando.\nAsignada: trasladada. Apta para convivir con otro cuidador.\n\nAl margen, a mano: «En la mina aguantó derrumbes. A ti no te aguantó.»"
 		}
 	},

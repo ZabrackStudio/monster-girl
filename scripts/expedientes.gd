@@ -12,7 +12,7 @@ func _ready() -> void:
 	if music == null:
 		music = Music.new()
 		add_child(music)
-	music.play("lobby")
+	music.play("menu")
 	var black := ColorRect.new()
 	black.color = Color("0d0b18")
 	black.set_anchors_preset(Control.PRESET_FULL_RECT)

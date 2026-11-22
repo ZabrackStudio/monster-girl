@@ -787,7 +787,7 @@ func _evaluate() -> void:
 		"Resultado: aprobada." if ok else "Resultado: reprobada. Repite la asignación."]
 	var ending := {
 		"titulo": "Evaluación final",
-		"musica": "final_bueno" if ok else "final_malo",
+		"musica": "final_marea" if ok else "final_lucha",
 		"imagen": project.get("imagen_evaluacion", ""),
 		"texto": texts.get(g["nota"], "") + "\n\n—\n\n" + report,
 		"nota": g["nota"],
