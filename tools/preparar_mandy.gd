@@ -5,9 +5,8 @@ extends SceneTree
 const SRC := "../Material/"
 const DEST := "res://personajes/ratona/trajes/"
 const MOODS := ["neutral", "feliz", "triste", "cansada", "inquieta", "alterada", "critica"]
-const CASUAL_H := 640
+const CASUAL_H := 640   # recorte del traje casual para que la cabeza mida como en el de minera
 const ROOM_RECT := Rect2i(0, 180, 1024, 700)   # franja del cuarto que se ve detrás de ella
-const ICON_RECT := Rect2i(272, 49, 52, 52)   # lámpara del casco en 01_neutral.png   # recorte del traje casual para que la cabeza mida como en el de minera
 
 
 func _init() -> void:
@@ -35,17 +34,20 @@ func _init() -> void:
 	room = room.get_region(ROOM_RECT)
 	room.resize(952, roundi(952.0 * ROOM_RECT.size.y / ROOM_RECT.size.x), Image.INTERPOLATE_LANCZOS)
 	room.save_png(ProjectSettings.globalize_path("res://personajes/ratona/fondo.png"))
-	# Ícono de la barra de lujuria: la lámpara del casco.
-	var icon: Image = miner[0].get_region(ICON_RECT)
-	icon.resize(96, 96, Image.INTERPOLATE_LANCZOS)
+	# Ícono de la barra de lujuria: su cara de ratona, recortada y en un cuadro de 128 px.
+	var icon := Image.load_from_file(base.path_join("Mandy/Mandy icono.png"))
 	icon.convert(Image.FORMAT_RGBA8)
-	for y in 96:
-		for x in 96:   # recorte redondo, con borde suave
-			var d := Vector2(x - 47.5, y - 47.5).length()
-			var c := icon.get_pixel(x, y)
-			c.a *= clampf(46.0 - d, 0.0, 1.0)
-			icon.set_pixel(x, y, c)
-	icon.save_png(ProjectSettings.globalize_path("res://personajes/ratona/icono.png"))
+	var r := Rect2i()
+	for y in icon.get_height():
+		for x in icon.get_width():
+			if icon.get_pixel(x, y).a > 0.5:
+				r = Rect2i(x, y, 1, 1) if r.size == Vector2i.ZERO else r.expand(Vector2i(x, y))
+	icon = icon.get_region(r.grow(2))
+	var side := maxi(icon.get_width(), icon.get_height())
+	var square := Image.create(side, side, false, Image.FORMAT_RGBA8)
+	square.blit_rect(icon, Rect2i(Vector2i.ZERO, icon.get_size()), Vector2i((side - icon.get_width()) / 2, (side - icon.get_height()) / 2))
+	square.resize(128, 128, Image.INTERPOLATE_LANCZOS)
+	square.save_png(ProjectSettings.globalize_path("res://personajes/ratona/icono.png"))
 	quit()
 
 
