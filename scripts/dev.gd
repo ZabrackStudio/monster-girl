@@ -18,6 +18,7 @@ const Game := preload("res://scripts/game.gd")
 
 var main
 var typed := ""
+var entry := ""
 var taps: Array[int] = []
 
 
@@ -61,22 +62,41 @@ func tap() -> void:
 			_ask_key()
 
 
+## Pide la clave con un teclado dibujado en pantalla: en la web del celular el teclado
+## del sistema no le llega a Godot, y uno físico ya se escucha en _input.
 func _ask_key() -> void:
 	var v: VBoxContainer = main._open_modal("Clave")
-	var edit := LineEdit.new()
-	edit.secret = true
-	edit.custom_minimum_size = Vector2(0, 64)
-	edit.add_theme_font_size_override("font_size", 24)
-	v.add_child(edit)
-	var try := func():
-		if matches(edit.text):
-			_activate()
-		else:
-			main._close_modal()
-	edit.text_submitted.connect(func(_t): try.call())
-	v.add_child(main._button("Entrar", try))
+	entry = ""
+	var shown: Label = main._label("", 30)
+	shown.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	shown.custom_minimum_size = Vector2(0, 56)
+	v.add_child(shown)
+	var show := func(): shown.text = "•".repeat(entry.length()) if entry != "" else "—"
+	show.call()
+	var grid := GridContainer.new()
+	grid.columns = 6
+	grid.add_theme_constant_override("h_separation", 6)
+	grid.add_theme_constant_override("v_separation", 6)
+	for ch in "abcdefghijklmnopqrstuvwxyz0123456789":
+		var b: Button = main._button(ch.to_upper(), func():
+			entry = (entry + ch).right(MAX_KEY)
+			show.call())
+		b.custom_minimum_size = Vector2(0, 56)
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		b.add_theme_font_size_override("font_size", 22)
+		grid.add_child(b)
+	v.add_child(grid)
+	v.add_child(_row([
+		["Borrar", func():
+			entry = entry.left(-1)
+			show.call()],
+		["Entrar", func():
+			if matches(entry):
+				_activate()
+			else:
+				main._close_modal()],
+	]))
 	v.add_child(main._button("Cancelar", main._close_modal))
-	edit.grab_focus.call_deferred()
 
 
 func _activate() -> void:

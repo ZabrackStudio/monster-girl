@@ -25,6 +25,18 @@ func _type(text: String) -> void:
 		await process_frame
 
 
+## Toca el botón del modal abierto que tenga ese texto.
+func _press(label: String) -> void:
+	for b in main_ref.modal.find_children("*", "Button", true, false):
+		if b.text == label:
+			b.pressed.emit()
+			return
+	print("DEV no encontré la tecla ", label)
+
+
+var main_ref
+
+
 func _run() -> void:
 	var key := OS.get_environment("DEV_KEY")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida.json"))
@@ -32,6 +44,7 @@ func _run() -> void:
 	var main = load("res://scenes/main.tscn").instantiate()
 	main.transitions = false
 	root.add_child(main)
+	main_ref = main
 	for i in 5: await process_frame
 	_check(not main.btn_dev.visible, "El botón DEV empieza oculto")
 	await _type("hola" + "x" + key.substr(0, key.length() - 1))
@@ -59,6 +72,16 @@ func _run() -> void:
 		main.dev.tap()
 	await process_frame
 	_check(main.modal != null and not DevMode.active(), "Siete toques piden la clave")
+	for i in 3: await process_frame
+	root.get_texture().get_image().save_png(ProjectSettings.globalize_path("res://tests/capturas/dev_teclado.png"))
+	_press("X")
+	_press("Borrar")
+	for ch in key:
+		_press(ch.to_upper())
+	_press("Entrar")
+	for i in 3: await process_frame
+	_check(DevMode.active(), "El teclado en pantalla acepta la clave")
+	main._close_modal()
 	main.dev._ending("evaluacion")
 	for i in 5: await process_frame
 	_check(g.over, "Lanzar la evaluación termina la partida")
