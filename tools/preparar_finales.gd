@@ -5,12 +5,18 @@ extends SceneTree
 const SRC := "../Material/"
 const DEST := "res://ui/finales/"
 const SIZE := Vector2i(720, 1280)
+## Nombre en ui/finales/ -> imagen en ../Material/.
 const IMAGES := {
-	"poseida": "Reme final poseida.png",
-	"lucha": "Reme lo intento.png",
-	"carnal": "Reme disuelto.png",
-	"denuncia": "Reme denuncia.png",
-	"marea": "Reme marea interior.png",
+	"poseida": "Reme/Reme final poseida.png",
+	"lucha": "Reme/Reme lo intento.png",
+	"carnal": "Reme/Reme disuelto.png",
+	"denuncia": "Reme/Reme denuncia.png",
+	"marea": "Reme/Reme marea interior.png",
+	"ratona_poseida": "Mandy/Mandy poseida.png",
+	"ratona_lucha": "Mandy/Mandy lo intento.png",
+	"ratona_carnal": "Mandy/Mandy sin aire.png",
+	"ratona_denuncia": "Mandy/Mandy Denuncia.png",
+	"ratona_marea": "Mandy/Mandy veta profunda.png",
 }
 
 

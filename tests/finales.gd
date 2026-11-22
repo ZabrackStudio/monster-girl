@@ -22,7 +22,10 @@ func _shot(name: String) -> void:
 
 
 func _run() -> void:
-	for kind in ["poseida", "lucha", "carnal", "denuncia", "marea"]:
+	for run in ["slime/poseida", "slime/lucha", "slime/carnal", "slime/denuncia", "slime/marea",
+			"ratona/poseida", "ratona/lucha", "ratona/carnal", "ratona/denuncia", "ratona/marea"]:
+		Engine.set_meta("personaje", run.get_slice("/", 0))
+		var kind: String = run.get_slice("/", 1)
 		DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida.json"))
 		var main = load("res://scenes/main.tscn").instantiate()
 		root.add_child(main)
@@ -30,11 +33,12 @@ func _run() -> void:
 		main.game._end(kind)
 		await create_timer(2.2).timeout
 		var scene = main.ending_scene
-		_check(scene != null, kind + ": abre la escena")
-		_check(ResourceLoader.exists(main.game.character["finales"][kind]["imagen"]), kind + ": imagen importada")
+		_check(scene != null, run + ": abre la escena")
+		_check(ResourceLoader.exists(main.game.character["finales"][kind]["imagen"]), run + ": imagen importada")
+		_check(scene.art.texture != null, run + ": la escena muestra la ilustración")
 		var after_cut: bool = scene.ending.get("imagen_tras_corte", false)
 		await create_timer(1.2).timeout
-		_shot(kind + "_1")
+		_shot(run.replace("/", "_") + "_1")
 		var fits := true
 		var steps := 0
 		var seen_art: bool = scene.art.modulate.a > 0.5
@@ -51,15 +55,16 @@ func _run() -> void:
 				print("FINALES medida ", kind, " paso ", steps, " caja ", r, " escena ", scene.size, " texto: ", scene.text.text.left(30))
 			if steps == 2:
 				await create_timer(1.1).timeout
-				_shot(kind + "_2")
-		_check(fits, kind + ": el texto cabe en pantalla")
-		_check(main.modal != null, kind + ": llega a los resultados (%d toques)" % steps)
+				_shot(run.replace("/", "_") + "_2")
+		_check(fits, run + ": el texto cabe en pantalla")
+		_check(main.modal != null, run + ": llega a los resultados (%d toques)" % steps)
 		if after_cut:
-			_check(seen_art, kind + ": la imagen aparece tras el corte")
+			_check(seen_art, run + ": la imagen aparece tras el corte")
 		await create_timer(1.0).timeout
-		_shot(kind + "_3")
+		_shot(run.replace("/", "_") + "_3")
 		main.queue_free()
 		await process_frame
 		await process_frame
+	Engine.set_meta("personaje", "slime")
 	print("FINALES resultado: ", "todo ok" if fails == 0 else "%d fallas" % fails)
 	quit()

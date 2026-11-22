@@ -6,6 +6,7 @@ const SRC := "../Material/"
 const DEST := "res://personajes/ratona/trajes/"
 const MOODS := ["neutral", "feliz", "triste", "cansada", "inquieta", "alterada", "critica"]
 const CASUAL_H := 640
+const ROOM_RECT := Rect2i(0, 180, 1024, 700)   # franja del cuarto que se ve detrás de ella
 const ICON_RECT := Rect2i(272, 49, 52, 52)   # lámpara del casco en 01_neutral.png   # recorte del traje casual para que la cabeza mida como en el de minera
 
 
@@ -14,11 +15,11 @@ func _init() -> void:
 	# Minera: sprites sueltos.
 	var miner := []
 	for i in MOODS.size():
-		miner.append(Image.load_from_file(base.path_join("ratona_minera/%02d_%s.png" % [i + 1, MOODS[i]])))
+		miner.append(Image.load_from_file(base.path_join("Mandy/%02d_%s.png" % [i + 1, MOODS[i]])))
 	_save_all(miner, "minera")
 	# Casual años 60: viene dentro de un zip.
 	var zip := ZIPReader.new()
-	if zip.open(base.path_join("ratona_casual_60s_7_expresiones_godot.zip")) != OK:
+	if zip.open(base.path_join("Mandy/ratona_casual_60s_7_expresiones_godot.zip")) != OK:
 		push_error("No se pudo abrir el zip del traje casual")
 		quit()
 		return
@@ -29,6 +30,11 @@ func _init() -> void:
 		casual.append(img.get_region(Rect2i(0, 0, img.get_width(), mini(CASUAL_H, img.get_height()))))
 	zip.close()
 	_save_all(casual, "casual60")
+	# Su cuarto: la ilustración es vertical; se toma la franja con el mapa, la lámpara y los frascos.
+	var room := Image.load_from_file(base.path_join("Mandy/Dormitorio Mandy.png"))
+	room = room.get_region(ROOM_RECT)
+	room.resize(952, roundi(952.0 * ROOM_RECT.size.y / ROOM_RECT.size.x), Image.INTERPOLATE_LANCZOS)
+	room.save_png(ProjectSettings.globalize_path("res://personajes/ratona/fondo.png"))
 	# Ícono de la barra de lujuria: la lámpara del casco.
 	var icon: Image = miner[0].get_region(ICON_RECT)
 	icon.resize(96, 96, Image.INTERPOLATE_LANCZOS)

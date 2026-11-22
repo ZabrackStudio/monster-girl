@@ -132,8 +132,9 @@ Simulación de 200 partidas por estrategia (azar · básica que repite lo mismo 
 
 - **Reme** (`slime`): expediente 01. Azar: cae hacia el día 8. Básica: cae hacia el día 19. Experta: B, a veces A.
 - **Mandy** (`ratona`): expediente 02. Más hambre (`dia.hambre_diaria`) y una maldición más rápida. Azar: cae hacia
-  el día 7. Básica: cae hacia el día 20. Experta: B, a veces A. Sprites en `personajes/ratona/` (se generan con
-  `tools/preparar_mandy.gd`). Todavía no tiene ilustración de su cuarto ni de sus finales: usa un degradado y fondo negro.
+  el día 7. Básica: cae hacia el día 20. Experta: B, a veces A. Sprites, cuarto e ícono en `personajes/ratona/` (se generan con
+  `tools/preparar_mandy.gd`); sus finales, con `tools/preparar_finales.gd`. El material fuente está en
+  `../Material/Mandy/` y el de Reme en `../Material/Reme/`.
 
 Los eventos con `personaje` solo salen con esa asignada. Los objetos con `especie` solo se venden para ella,
 y `objetos` en el personaje cambia la descripción de un objeto común. `icono_lujuria` cambia el ícono de la barra.

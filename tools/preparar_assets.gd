@@ -58,7 +58,7 @@ func _init() -> void:
 		print("ui/%s.png %s" % [name, img.get_size()])
 
 	# Retrato: de la cabeza a debajo de la falda, sin márgenes vacíos.
-	var chica := Image.load_from_file(base + SRC + "Chica espíritu de limo esmeralda.png")
+	var chica := Image.load_from_file(base + SRC + "Reme/Chica espíritu de limo esmeralda.png")
 	chica.convert(Image.FORMAT_RGBA8)
 	var r := chica.get_region(Rect2i(0, 0, chica.get_width(), 880))
 	r = r.get_region(r.get_used_rect())
@@ -66,7 +66,7 @@ func _init() -> void:
 	print("retrato ", r.get_size())
 
 	# Fondo: el dormitorio recortado a la proporción del panel del retrato.
-	var cuarto := Image.load_from_file(base + SRC + "Dormitorio acogedor de fantasía slime.png")
+	var cuarto := Image.load_from_file(base + SRC + "Reme/Dormitorio Reme.png")
 	var h := cuarto.get_height()
 	var w := int(h * 1.35)
 	var f := cuarto.get_region(Rect2i(140, 0, w, h))
@@ -76,7 +76,7 @@ func _init() -> void:
 
 	# Hojas de expresiones: 7 columnas, una por estado, recortadas a la cintura.
 	for sheet in SHEETS:
-		var src := Image.load_from_file(base + SRC + sheet + ".png")
+		var src := Image.load_from_file(base + SRC + "Reme/" + sheet + ".png")
 		var had_alpha := src.detect_alpha() != Image.ALPHA_NONE
 		src.convert(Image.FORMAT_RGBA8)
 		if not had_alpha:
