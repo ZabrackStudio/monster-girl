@@ -6,7 +6,7 @@ Prototipo jugable en Godot 4.7 con un personaje: **Reme**, una slime.
 
 Abre la carpeta en Godot y pulsa F5, o desde la terminal:
 
-    flatpak run org.godotengine.Godot --path .
+	flatpak run org.godotengine.Godot --path .
 
 ## Estructura
 
@@ -36,7 +36,7 @@ ni instrucciones; el jugador aprende observando a la chica y con las notas de su
 
 Cambia los JSON y ejecuta el simulador (200 partidas por estrategia):
 
-    flatpak run org.godotengine.Godot --headless --path . -s res://tests/sim.gd
+	flatpak run org.godotengine.Godot --headless --path . -s res://tests/sim.gd
 
 Para simular solo algunas estrategias: `flatpak run --env=SIM_STRATS=basica,experta org.godotengine.Godot ...`
 
@@ -110,8 +110,8 @@ Se juega en <https://zabrackstudio.github.io/monster-girl/>, también desde iPho
 
 Para publicar cambios, vuelve a exportar a `docs/` y sube:
 
-    flatpak run org.godotengine.Godot --headless --path . --export-release "Web" docs/index.html
-    git add -A && git commit -m "Actualiza build web" && git push
+	flatpak run org.godotengine.Godot --headless --path . --export-release "Web" docs/index.html
+	git add -A && git commit -m "Actualiza build web" && git push
 
 GitHub tarda un minuto en publicarlo. La exportación usa la variante sin hilos
 (`thread_support=false`) porque GitHub Pages no permite las cabeceras que requieren los hilos.
@@ -147,3 +147,15 @@ y `objetos` en el personaje cambia la descripción de un objeto común. `icono_l
   repetir siempre el mismo rinde cada vez menos.
 - Una opción de evento con `requiere` solo se puede elegir si tienes ese objeto (si es consumible, lo gasta).
   Las opciones pueden mover el vínculo con `"vinculo"` en sus efectos.
+
+## Modo desarrollo (`scripts/dev.gd`)
+
+Durante la partida, escribe la palabra clave con el teclado (o toca 7 veces seguidas la barra de arriba y escríbela).
+Aparece un botón «DEV» con: valores exactos, lujuria prevista para la noche, nota si la evaluaran hoy,
+deslizadores para cada estadística, vínculo y día, saltar noches, lanzar cualquier evento o final,
+desbloquear objetos, diario y expedientes, y cambiar de asignada. Dura hasta cerrar el juego.
+
+La clave no está escrita en el código, solo su huella SHA-256 (`KEY_HASH`). Para cambiarla:
+`printf '%s' nuevaclave | sha256sum` y pega el resultado. La prueba `tests/dev.gd` recibe la clave por la variable `DEV_KEY`.
+En la web todo el juego vive en el navegador: esto lo esconde, pero no es una protección real.
+

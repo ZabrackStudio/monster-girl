@@ -8,6 +8,7 @@ const Music := preload("res://scripts/music.gd")
 const Fade := preload("res://scripts/transicion.gd")
 const EndingScene := preload("res://scripts/final_escena.gd")
 const Progress := preload("res://scripts/progreso.gd")
+const DevMode := preload("res://scripts/dev.gd")
 const Shopkeeper := preload("res://scripts/shopkeeper.gd")
 const MINIGAME_SCRIPTS := {
 	"burbujas": preload("res://scripts/minigame_bubbles.gd"),
@@ -57,6 +58,8 @@ var last_poke := -1000
 var closing: Control
 var closing_frame := -1
 var held: Control         # ventana anterior, a la vista mientras se mide la nueva
+var dev                   # modo desarrollo (scripts/dev.gd)
+var btn_dev: Button
 
 
 func _ready() -> void:
@@ -77,7 +80,10 @@ func _ready() -> void:
 	if music == null:
 		music = Music.new()
 		add_child(music)
+	dev = DevMode.new(self)
+	add_child(dev)
 	_build_ui()
+	refresh_dev()
 	music.play("lobby")
 	game.changed.connect(_refresh)
 	game.changed.connect(_autosave)
@@ -93,6 +99,11 @@ func _ready() -> void:
 	_refresh()
 	if loaded and not game.pending_event.is_empty():
 		_show_event(game.pending_event)
+
+
+## Muestra u oculta el botón del modo desarrollo.
+func refresh_dev() -> void:
+	btn_dev.visible = DevMode.active()
 
 
 ## Guarda tras cada cambio; al terminar la partida, la borra.
@@ -150,6 +161,16 @@ func _build_ui() -> void:
 	lbl_top = _label("", 24)
 	lbl_top.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	top.add_child(lbl_top)
+	top.mouse_filter = Control.MOUSE_FILTER_STOP
+	top.gui_input.connect(func(e):
+		if e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
+			dev.tap())
+	btn_dev = Button.new()
+	btn_dev.text = "DEV"
+	btn_dev.add_theme_font_size_override("font_size", 18)
+	btn_dev.add_theme_color_override("font_color", Color("f2c14e"))
+	btn_dev.pressed.connect(func(): dev.open())
+	top_row.add_child(btn_dev)
 	btn_sound = Button.new()
 	btn_sound.add_theme_font_size_override("font_size", 20)
 	btn_sound.custom_minimum_size = Vector2(120, 0)
