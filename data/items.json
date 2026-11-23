@@ -86,6 +86,37 @@
 		}
 	},
 	{
+		"id": "te_rosas",
+		"nombre": "Té de rosas",
+		"categoria": "Alimentación",
+		"tipo": "consumible",
+		"precio": 14,
+		"especie": "dragona",
+		"descripcion": "En vajilla fina, como corresponde.",
+		"efectos": {
+			"hambre": -6,
+			"felicidad": 8,
+			"lujuria": -4
+		},
+		"favorito": [
+			"dragona"
+		]
+	},
+	{
+		"id": "perfume_ambar",
+		"nombre": "Perfume de ámbar",
+		"categoria": "Cuidado personal",
+		"tipo": "consumible",
+		"precio": 15,
+		"especie": "dragona",
+		"descripcion": "Elegante y caro, como ella.",
+		"efectos": {
+			"felicidad": 10,
+			"higiene": 5,
+			"lujuria": 12
+		}
+	},
+	{
 		"id": "agua",
 		"nombre": "Agua mineral",
 		"categoria": "Cuidado personal",
@@ -152,6 +183,20 @@
 		}
 	},
 	{
+		"id": "aceite_alas",
+		"nombre": "Aceite para alas",
+		"categoria": "Cuidado personal",
+		"tipo": "consumible",
+		"precio": 12,
+		"especie": "dragona",
+		"descripcion": "Deja las plumas y las escamas impecables.",
+		"efectos": {
+			"higiene": 20,
+			"felicidad": 5,
+			"lujuria": -2
+		}
+	},
+	{
 		"id": "manzanilla",
 		"nombre": "Té de manzanilla",
 		"categoria": "Artículos especiales",
@@ -194,6 +239,18 @@
 		"precio": 60,
 		"especie": "ratona",
 		"descripcion": "Duerme hecha un ovillo adentro.",
+		"pasivo": {
+			"vinculo_noche": 1
+		}
+	},
+	{
+		"id": "cinta",
+		"nombre": "Cinta con tu nombre",
+		"categoria": "Cuidado personal",
+		"tipo": "pasivo",
+		"precio": 60,
+		"especie": "dragona",
+		"descripcion": "La lleva atada a la cola. Que se note.",
 		"pasivo": {
 			"vinculo_noche": 1
 		}
@@ -270,6 +327,18 @@
 		"pasivo": {
 			"tristeza_diaria": -2,
 			"lujuria_diaria": -1
+		}
+	},
+	{
+		"id": "espejo",
+		"nombre": "Espejo de cuerpo entero",
+		"categoria": "Artículos especiales",
+		"tipo": "pasivo",
+		"precio": 55,
+		"especie": "dragona",
+		"descripcion": "Se admira horas frente a él.",
+		"pasivo": {
+			"lujuria_diaria": -2
 		}
 	},
 	{

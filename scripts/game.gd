@@ -313,6 +313,10 @@ func do_activity(id: String) -> void:
 	var mult := _mult_for(id) * float(character["afinidades"].get(id, 1.0))
 	apply(act["efectos"], mult, _tolerance_use(id))
 	apply(character["efectos_extra"].get(id, {}))
+	# Celos (Vipi): cuanto más te quiere, más le duele que te vayas.
+	var jealous: Dictionary = character.get("celos", {})
+	if jealous.get("accion", "") == id and bond > 0:
+		_add("tristeza", bond * float(jealous["tristeza_por_vinculo"]))
 	_count(id)
 	_say(id)
 	today.append(id)
@@ -576,7 +580,10 @@ func resolve_event(index: int) -> void:
 		inventory[req] -= 1
 		if inventory[req] <= 0:
 			inventory.erase(req)
-	var eff: Dictionary = opt.get("efectos", {})
+	var eff: Dictionary = opt.get("efectos", {}).duplicate()
+	# Algunas especies viven los eventos con más intensidad: lo que altera, altera más.
+	if float(eff.get("lujuria", 0)) > 0:
+		eff["lujuria"] = float(eff["lujuria"]) * float(character.get("eventos", {}).get("lujuria_mult", 1.0))
 	match opt.get("escondite", ""):
 		"devolver": _return_stash()
 		"perder": stash.clear()
@@ -629,6 +636,7 @@ func _return_stash() -> void:
 
 
 func _try_event(moment: String, prob: float) -> void:
+	prob *= float(character.get("eventos", {}).get("prob_mult", 1.0))
 	if over or rng.randf() >= prob:
 		return
 	var pool := []

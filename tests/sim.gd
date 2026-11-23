@@ -167,7 +167,7 @@ func _act(g, strategy: String) -> bool:
 
 
 func _shop(g) -> void:
-	for id in ["almohada", "nido", "pecera", "lampara", "alcancia", "frasco", "linterna", "tocadiscos"]:
+	for id in ["almohada", "nido", "cinta", "pecera", "lampara", "espejo", "alcancia", "frasco", "linterna", "tocadiscos"]:
 		if g.items.has(id) and g.can_buy(id) and g.money >= int(g.items[id]["precio"]) + 30:
 			g.buy(id)
 	if g.inventory.get("manzanilla", 0) < 2 and g.money >= 50:
@@ -175,7 +175,7 @@ func _shop(g) -> void:
 	if g.inventory.get("jabon", 0) < 1 and g.money >= 40:
 		g.buy("jabon")
 	# Reservas para las respuestas de los eventos que piden un objeto.
-	for id in ["caramelos", "agua", "queso", "cepillo"]:
+	for id in ["caramelos", "agua", "queso", "cepillo", "aceite_alas", "te_rosas"]:
 		if g.items.has(id) and g.inventory.get(id, 0) < 1 and g.money >= 45:
 			g.buy(id)
 

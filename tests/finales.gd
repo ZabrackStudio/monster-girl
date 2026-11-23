@@ -23,7 +23,8 @@ func _shot(name: String) -> void:
 
 func _run() -> void:
 	for run in ["slime/poseida", "slime/lucha", "slime/carnal", "slime/denuncia", "slime/marea",
-			"ratona/poseida", "ratona/lucha", "ratona/carnal", "ratona/denuncia", "ratona/marea"]:
+			"ratona/poseida", "ratona/lucha", "ratona/carnal", "ratona/denuncia", "ratona/marea",
+			"dragona/poseida", "dragona/lucha", "dragona/carnal", "dragona/denuncia", "dragona/marea"]:
 		Engine.set_meta("personaje", run.get_slice("/", 0))
 		var kind: String = run.get_slice("/", 1)
 		DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida.json"))
@@ -34,8 +35,11 @@ func _run() -> void:
 		await create_timer(2.2).timeout
 		var scene = main.ending_scene
 		_check(scene != null, run + ": abre la escena")
-		_check(ResourceLoader.exists(main.game.character["finales"][kind]["imagen"]), run + ": imagen importada")
-		_check(scene.art.texture != null, run + ": la escena muestra la ilustración")
+		# Vipi todavía no tiene ilustraciones de sus finales: la escena debe funcionar igual.
+		var img: String = main.game.character["finales"][kind].get("imagen", "")
+		if img != "":
+			_check(ResourceLoader.exists(img), run + ": imagen importada")
+			_check(scene.art.texture != null, run + ": la escena muestra la ilustración")
 		var after_cut: bool = scene.ending.get("imagen_tras_corte", false)
 		await create_timer(1.2).timeout
 		_shot(run.replace("/", "_") + "_1")

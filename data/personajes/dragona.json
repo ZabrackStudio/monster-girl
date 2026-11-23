@@ -1,0 +1,666 @@
+{
+	"id": "dragona",
+	"nombre": "Vipi",
+	"especie": "Dragona",
+	"etiqueta_especie": "Cosas de dragona",
+	"personalidad": "Orgullosa, elegante y de voluntad férrea. Vive para volar, detesta la panza llena y cuando alguien le interesa, se asegura de que todo el mundo lo sepa.",
+	"color": "b0456e",
+	"stats_iniciales": {
+		"salud": 80,
+		"felicidad": 50,
+		"tristeza": 20,
+		"hambre": 35,
+		"higiene": 60,
+		"lujuria": 18
+	},
+	"dia": {
+		"hambre_diaria": 13
+	},
+	"minijuego_inicial": "burbujas",
+	"afinidades": {
+		"comer": 0.8,
+		"limpiar": 1.0,
+		"pasear": 1.35
+	},
+	"minijuegos": {
+		"burbujas": 1.2,
+		"memoria": 0.9
+	},
+	"efectos_extra": {
+		"comer": {
+			"felicidad": -5
+		},
+		"pasear": {
+			"felicidad": 3
+		}
+	},
+	"lujuria": {
+		"base": 10.5,
+		"por_tristeza": 0.12,
+		"por_hambre": 0.08,
+		"por_suciedad": 0.1,
+		"por_felicidad": 0.08,
+		"por_salud": 0.05,
+		"por_dia": 0.16,
+		"max_por_dia": 999.0,
+		"ruido": 3.5
+	},
+	"celos": {
+		"accion": "trabajar",
+		"tristeza_por_vinculo": 0.1
+	},
+	"eventos": {
+		"prob_mult": 1.4,
+		"lujuria_mult": 1.3
+	},
+	"objetos": {
+		"te_rosas": "Su bebida favorita."
+	},
+	"dialogos": {
+		"inicio": [
+			"Vipi Lweed. Dragona, y no de las que se dejan cuidar. Me dijeron que tú eras lo mejor que tenían. Ya veremos."
+		],
+		"trabajar": [
+			"¿Te vas? Vuelve antes de que me aburra.",
+			"Trabaja, si tanto te gusta. Yo te espero desde el techo.",
+			"Que no se te olvide a quién vuelves."
+		],
+		"comer": [
+			"Lo justo. Un dragón con la panza llena no despega.",
+			"¿Otra vez comida? Qué manía tienen ustedes con comer.",
+			"Tres bocados. Ni uno más."
+		],
+		"pasear": [
+			"¡Por fin aire! Mira hacia arriba, que te saludo.",
+			"Desde allá arriba la ciudad parece de juguete.",
+			"Camina a mi lado. Que te vean conmigo."
+		],
+		"limpiar": [
+			"Las escamas se cuidan una por una. Con paciencia.",
+			"Un dragón descuidado es una vergüenza para su especie.",
+			"Así. Ahora brillo como debe ser."
+		],
+		"jugar": [
+			"No me gusta perder. Tenlo presente.",
+			"Gané. Era lo esperado.",
+			"Otra. Y esta vez juega en serio."
+		],
+		"dormir": [
+			"Duermo con las alas abiertas. No me despiertes.",
+			"Si me oyes caminar por el techo, no es nada. Vigilo."
+		],
+		"nivel_0": [
+			"Hoy el cielo está limpio. Y yo también.",
+			"Todo en orden. Como debe ser."
+		],
+		"nivel_1": [
+			"Hace calor. ¿Lo notas tú también?",
+			"Me pica la cola. Qué impropio."
+		],
+		"nivel_2": [
+			"No me mires así. O sí. No lo sé.",
+			"Se me escapa humo cuando respiro. Ignóralo."
+		],
+		"nivel_3": [
+			"Aléjate. Un dragón no responde de sí mismo así.",
+			"No me provoques. Hoy no."
+		],
+		"vestir": [
+			"Por supuesto que me queda bien.",
+			"Mírame bien. Es una orden."
+		]
+	},
+	"finales": {
+		"carnal": {
+			"titulo": "Final malo: Atesorado",
+			"musica": "final_carnal",
+			"texto": "Te dices que solo es un abrazo.\n\nVipi cierra las alas a tu alrededor y la casa desaparece. Solo quedan su calor y el olor a té de rosas.\n\n«Mío», dice contra tu cuello. No lo pregunta.\n\nIntentas apartarte. Sus garras no te lastiman, pero tampoco te sueltan.\n\nFundido a negro.\n\n—\n\nAl amanecer, Vipi duerme enroscada en la cama, con la cola cerrada sobre algo que no deja ver a nadie. Cuando la intendente pregunta por ti, sonríe: «Está a salvo. Los dragones cuidamos muy bien nuestro tesoro.»"
+		},
+		"marea": {
+			"titulo": "Final bueno: Vuelo nocturno",
+			"musica": "final_marea",
+			"texto": "Esa noche, Vipi no está en el techo.\n\nLa encuentras en el balcón, con las alas abiertas y la taza favorita en la mano. Es la primera vez que la ves temblar.\n\n«Si me quedo, te encierro», dice. «Y tú no eres algo que se guarda. Lo aprendí contigo.»\n\nDeja la taza en la baranda. Antes de que puedas decir nada, ya está en el aire.\n\n—\n\nEn la mañana, junto a la taza hay una escama roja, todavía tibia, atada con una cinta. La nota dice, con letra perfecta: «Para que todos sepan que alguna vez fuiste mío. Y que te dejé ir.»"
+		},
+		"poseida": {
+			"titulo": "Final malo: Poseída",
+			"musica": "final_poseida",
+			"texto": "Esa noche, la casa se llena de humo tibio.\n\nLa oyes caminar sobre el techo, de una punta a la otra, cada vez más rápido. Después, silencio. Después, unas garras en tu ventana.\n\nVipi te mira desde afuera, con las alas abiertas y unos ojos que ya no son suyos. Sonríe como sonríe un dragón frente a su tesoro.\n\nEl vidrio no aguanta.\n\nFundido a negro.\n\n—\n\nAl amanecer, Vipi despierta en tu cama, sola. No recuerda la noche. En la ventana rota quedan marcas de garras y una pluma de ala, todavía caliente."
+		},
+		"lucha": {
+			"titulo": "Final malo: Lo intentó",
+			"musica": "final_lucha",
+			"texto": "Esa noche, Vipi te despierta golpeando la ventana. Desde afuera.\n\n«Me voy lejos», dice, con la voz rota. «Cierra con llave. Si vuelo hasta cansarme, no pienso en ti.»\n\nLa ves despegar. Un círculo, dos, cada vez más grandes. Luego, cada vez más pequeños.\n\nAl tercero, aterriza en el balcón. Las alas le tiemblan.\n\n«Perdón», dice desde el otro lado del vidrio. «No llegué a ninguna parte.»\n\nFundido a negro.\n\n—\n\nAl amanecer, el balcón está lleno de plumas y la baranda, doblada. La taza favorita de Vipi está rota en el suelo."
+		},
+		"denuncia": {
+			"titulo": "Final malo: Denuncia",
+			"musica": "final_denuncia",
+			"texto": "A las seis y cuarto de la mañana llaman a la puerta. Es un decir: la puerta ya está abierta.\n\nBotas en el pasillo. Dos soldados y, detrás, la intendente con una carpeta bajo el brazo.\n\n«Denuncia presentada por la propia asignada», lee. «Faltas de respeto reiteradas pese a sus avisos.» Levanta una carta en papel perfumado, con sello de lacre. «Lo redactó ella. Tres páginas. Con copia al mando.»\n\nVipi toma té en la sala. No levanta la vista cuando pasas esposado.\n\n—\n\nEXPEDIENTE H.A.R.E.M. · PROYECTO WAIFU\nCuidador: retirado de la beta y retenido a disposición del mando.\nAsignada: trasladada. Exige un cuidador «a su altura».\n\nAl margen, a mano: «Un dragón no perdona. Y menos por escrito.»"
+		}
+	},
+	"evaluacion": {
+		"A": "El día treinta, Vipi recibe a la intendente con té servido en su mejor vajilla. Te sienta a su lado y no te suelta el brazo en toda la visita.\n\n«Treinta días sin un solo incidente», dice la intendente. «Y la dragona te presume como a una medalla.» Vipi sonríe. No lo niega.",
+		"B": "El día treinta, Vipi espera en el balcón con las alas plegadas, como una reina en su torre.\n\n«Aceptable», dice cuando la intendente firma. Lo dice de ti y del informe. Viniendo de ella, es un elogio.",
+		"C": "El día treinta, la intendente llega con dos soldados. Vipi los mira desde el techo, con humo tibio saliendo de la nariz.\n\n«Pasas», dice la intendente. «Con lo justo. Y que no se entere de que lo dije.»",
+		"D": "El día treinta, la intendente llega con dos soldados y una red de acero. Vipi no baja del techo en toda la tarde.\n\n«Sobreviviste», dice la intendente. «Eso no es lo mismo que aprobar.»"
+	},
+	"reacciones": [
+		{
+			"id": "paseo_del_brazo",
+			"accion": "pasear",
+			"cadena": [
+				"limpiar",
+				"jugar",
+				"pasear"
+			],
+			"efectos": {
+				"lujuria": -10,
+				"tristeza": -6,
+				"felicidad": 6
+			},
+			"vinculo": 4,
+			"texto": "Sale arreglada y de buen humor, y te toma del brazo para que toda la calle lo vea. Vuelve satisfecha.",
+			"nota": "Arreglarla, jugar con ella y salir juntos, en ese orden."
+		},
+		{
+			"id": "vuelo_ligero",
+			"accion": "pasear",
+			"condiciones": {
+				"hambre_min": 30,
+				"hambre_max": 65
+			},
+			"efectos": {
+				"lujuria": -5,
+				"felicidad": 4
+			},
+			"texto": "Con la panza liviana vuela alto y vuelve serena.",
+			"nota": "Sacarla a volar sin la panza llena la calma."
+		},
+		{
+			"id": "acicalado",
+			"accion": "limpiar",
+			"cadena": [
+				"pasear",
+				"limpiar"
+			],
+			"efectos": {
+				"lujuria": -4,
+				"felicidad": 3
+			},
+			"texto": "Después del vuelo se arregla las alas pluma por pluma, y eso la tranquiliza.",
+			"nota": "Arreglarla al volver del vuelo la relaja."
+		},
+		{
+			"id": "panza_llena",
+			"accion": "pasear",
+			"cadena": [
+				"comer",
+				"pasear"
+			],
+			"efectos": {
+				"lujuria": 6,
+				"tristeza": 3
+			},
+			"texto": "Recién comida no logra despegar. Vuelve caminando, furiosa.",
+			"nota": "Sacarla a volar justo después de comer la frustra."
+		},
+		{
+			"id": "comer_sin_hambre",
+			"accion": "comer",
+			"condiciones": {
+				"hambre_max": 30
+			},
+			"efectos": {
+				"lujuria": 6,
+				"tristeza": 3
+			},
+			"texto": "Comer sin hambre la deja pesada y de malas.",
+			"nota": "Darle de comer sin hambre la altera."
+		}
+	],
+	"traje_inicial": "inicial",
+	"trajes": {
+		"inicial": "Vestido de dragona"
+	},
+	"trajes_efectos": {
+		"inicial": {}
+	},
+	"charla": {
+		"opciones": {
+			"elogiar": "Elogiar su porte.",
+			"atencion": "Dedicarle toda tu atención.",
+			"desafiar": "Llevarle la contraria.",
+			"distancia": "Darle su espacio."
+		},
+		"ajuste": {
+			"hostil": {
+				"distancia": "buena",
+				"elogiar": "regular",
+				"atencion": "mala",
+				"desafiar": "mala"
+			},
+			"arisca": {
+				"desafiar": "buena",
+				"elogiar": "regular",
+				"distancia": "regular",
+				"atencion": "mala"
+			},
+			"distante": {
+				"elogiar": "buena",
+				"desafiar": "regular",
+				"atencion": "regular",
+				"distancia": "mala"
+			},
+			"confiada": {
+				"atencion": "buena",
+				"elogiar": "regular",
+				"desafiar": "regular",
+				"distancia": "mala"
+			},
+			"carinosa": {
+				"elogiar": "buena",
+				"atencion": "regular",
+				"desafiar": "regular",
+				"distancia": "mala"
+			},
+			"unida": {
+				"atencion": "buena",
+				"elogiar": "regular",
+				"desafiar": "regular",
+				"distancia": "mala"
+			},
+			"alterada": {
+				"desafiar": "buena",
+				"distancia": "regular",
+				"elogiar": "mala",
+				"atencion": "mala"
+			},
+			"critica": {
+				"distancia": "buena",
+				"desafiar": "regular",
+				"elogiar": "mala",
+				"atencion": "mala"
+			}
+		},
+		"notas": {
+			"hostil": "Hostil: déjala en paz.",
+			"arisca": "Arisca: llévale la contraria.",
+			"distante": "Distante: elogia su porte.",
+			"confiada": "Confiada: dedícale toda tu atención.",
+			"carinosa": "Cariñosa: elogia su porte.",
+			"unida": "Unida: dedícale toda tu atención.",
+			"alterada": "Alterada: llévale la contraria.",
+			"critica": "Crítica: aléjate."
+		},
+		"toque": {
+			"arisca": {
+				"calma": [
+					"¿Te di permiso?",
+					"Cuidado con las alas. Son más caras que tu casa.",
+					"Si quieres algo, pídelo con propiedad."
+				],
+				"alterada": [
+					"No me mires tanto. Me enciendes la sangre.",
+					"Hace calor. Tú no ayudas."
+				],
+				"critica": [
+					"Lejos. Ahora.",
+					"Un paso más y no respondo. Vete."
+				]
+			},
+			"distante": {
+				"calma": [
+					"Estoy tomando té. ¿Necesitas algo?",
+					"Aquí sigo. Contemplando.",
+					"El cielo está bonito hoy. Tú, pasable."
+				],
+				"alterada": [
+					"Estoy rara. No es asunto tuyo.",
+					"Me sale humo. Ignóralo."
+				],
+				"critica": [
+					"No te conozco tanto como para pedirte ayuda.",
+					"Algo me arrastra hacia ti. No me gusta."
+				]
+			},
+			"confiada": {
+				"calma": [
+					"¿Sabías que los dragones recordamos cada rostro? El tuyo lo tengo bien guardado.",
+					"Siéntate. Te sirvo té. Es un honor, por si no lo sabías.",
+					"Hola. Nada. Solo quería que me miraras."
+				],
+				"alterada": [
+					"Tengo calor. Mucho. ¿Abres la ventana?",
+					"Háblame de algo aburrido. Rápido."
+				],
+				"critica": [
+					"Si me ves rara, enciérrame. Lo digo en serio.",
+					"Me arde todo. No te acerques tanto."
+				]
+			},
+			"carinosa": {
+				"calma": [
+					"Te guardé la mejor taza. Nadie más la usa.",
+					"Cuando llegas, todo vuelve a su lugar.",
+					"Hoy les conté a las palomas que eres mío. Parecían impresionadas."
+				],
+				"alterada": [
+					"Quédate cerca, pero no tanto. ¿Se entiende?",
+					"No eres tú. Es la maldición. Bueno, un poco eres tú."
+				],
+				"critica": [
+					"Esta noche te quiero lejos. Justamente porque te quiero.",
+					"Cierra con llave. Por favor."
+				]
+			},
+			"unida": {
+				"calma": [
+					"No hace falta que digas nada. Ya sé que eres mío.",
+					"Si me dieran a elegir entre el cielo y tú, lo pensaría. Un poco.",
+					"Reconozco tus pasos desde el techo."
+				],
+				"alterada": [
+					"Te miro demasiado, lo sé. Ayúdame a mirar otra cosa.",
+					"Sigo siendo yo. Recuérdamelo."
+				],
+				"critica": [
+					"Si no me puedo controlar, me voy volando. No me sigas.",
+					"No dejes que me acerque. Aunque te lo ordene."
+				]
+			},
+			"hostil": {
+				"calma": [
+					"¿Qué quieres ahora?",
+					"No me toques.",
+					"Tengo papel, pluma y la dirección del mando."
+				],
+				"alterada": [
+					"Aléjate. Tú no ayudas.",
+					"Ni lo intentes."
+				],
+				"critica": [
+					"¡LEJOS!",
+					"No te debo nada. Fuera."
+				]
+			}
+		},
+		"respuestas": {
+			"hostil": {
+				"buena": [
+					"Por fin. Silencio."
+				],
+				"regular": [
+					"Mm."
+				],
+				"mala": [
+					"¿Ahora sí me miras? Tarde."
+				]
+			},
+			"arisca": {
+				"buena": [
+					"Ja. Tienes agallas. Me gusta eso.",
+					"¿Me estás desafiando? Interesante."
+				],
+				"regular": [
+					"Ajá.",
+					"Lo sé, gracias."
+				],
+				"mala": [
+					"No necesito que me sigas como un perrito."
+				]
+			},
+			"distante": {
+				"buena": [
+					"Por supuesto que lo notaste. Pero gracias.",
+					"Sigue. No me molesta."
+				],
+				"regular": [
+					"Ah. Bueno.",
+					"Tomo nota."
+				],
+				"mala": [
+					"Claro. Vete. Como todos."
+				]
+			},
+			"confiada": {
+				"buena": [
+					"Así. Mírame solo a mí. Es lo correcto.",
+					"Nadie me prestaba tanta atención desde que dejé el nido."
+				],
+				"regular": [
+					"Sí, sí. Lo sé.",
+					"Puede ser."
+				],
+				"mala": [
+					"¿Te aburro? Dilo de una vez."
+				]
+			},
+			"carinosa": {
+				"buena": [
+					"¡Para! Me vas a poner las escamas rojas.",
+					"Dilo más fuerte, que te oiga el vecino."
+				],
+				"regular": [
+					"Qué lindo. Raro, pero lindo.",
+					"Mm. Me gusta que estés aquí."
+				],
+				"mala": [
+					"¿Espacio? ¿De mí? Qué ocurrencia."
+				]
+			},
+			"unida": {
+				"buena": [
+					"Ya lo sé. Pero me gusta que lo demuestres.",
+					"Así. Solo yo."
+				],
+				"regular": [
+					"Ja. Tonto.",
+					"Te escucho. Siempre."
+				],
+				"mala": [
+					"No hace falta que te alejes. Ya no."
+				]
+			},
+			"alterada": {
+				"buena": [
+					"Bien. Discúteme. Así pienso en otra cosa.",
+					"Eso. Sigue llevándome la contraria."
+				],
+				"regular": [
+					"Ajá…",
+					"Puede ser."
+				],
+				"mala": [
+					"No me mires así ahora. Lo empeoras."
+				]
+			},
+			"critica": {
+				"buena": [
+					"Gracias. Aléjate un poco más. Así.",
+					"Bien. No vuelvas hasta mañana."
+				],
+				"regular": [
+					"No sé si eso ayuda.",
+					"Mm…"
+				],
+				"mala": [
+					"¡No! Ahora no. Nada de eso."
+				]
+			}
+		},
+		"molesta": {
+			"hostil": [
+				"Anotado. Con fecha y hora.",
+				"Sigue. Me falta poco para cerrar la carta.",
+				"¿Conoces el sello del mando? Pronto lo verás."
+			],
+			"arisca": [
+				"Te dije que no.",
+				"Quita la mano o te la quemo.",
+				"¿Qué parte de «no» no entiendes?"
+			],
+			"distante": [
+				"Ya basta, por favor.",
+				"No me gusta eso.",
+				"¿Puedes dejar de hacerlo?"
+			],
+			"confiada": [
+				"¡Oye! Me desacomodas las alas.",
+				"Ya, pesado.",
+				"Una vez es encantador. Veinte, no."
+			],
+			"carinosa": [
+				"Me haces cosquillas… pero ya, ¿eh?",
+				"Si sigues, te escondo en mi cuarto.",
+				"Sé que me quieres. Ahora quiero estar quieta."
+			],
+			"unida": [
+				"Estoy aquí. No hace falta comprobarlo.",
+				"Sí, sí. Ya sé que eres tú.",
+				"Te lo digo con cariño: basta."
+			],
+			"alterada": [
+				"No me toques ahora. Lo empeoras.",
+				"¡Basta! Cada vez que me tocas, sube.",
+				"Por favor. Me cuesta mucho aguantar."
+			],
+			"critica": [
+				"¡SUÉLTAME! ¡No sabes lo que estás despertando!",
+				"Una vez más y no respondo.",
+				"Aléjate. Aléjate ya."
+			]
+		},
+		"aviso": "Tengo papel perfumado, lacre y la dirección del mando. Una vez más y escribo."
+	},
+	"dialogos_actitud": {
+		"arisca": {
+			"trabajar": [
+				"Vete. Me arreglo sola.",
+				"Trae dinero. Es lo único útil que traes."
+			],
+			"comer": [
+				"Déjalo ahí. Como cuando quiera.",
+				"No creas que con comida me compras."
+			],
+			"pasear": [
+				"Vuelo sola. Tú camina.",
+				"Salgo por el aire, no por ti."
+			],
+			"limpiar": [
+				"Puedo sola.",
+				"Cuidado con las escamas."
+			],
+			"jugar": [
+				"Juego. No significa que me caigas bien.",
+				"Gané. Obvio."
+			]
+		},
+		"distante": {
+			"trabajar": [
+				"Bueno. Te espero.",
+				"No tardes."
+			],
+			"comer": [
+				"Gracias. Poco.",
+				"Está aceptable."
+			],
+			"pasear": [
+				"Hay buen viento hoy.",
+				"Te veo desde arriba."
+			],
+			"limpiar": [
+				"Ya está.",
+				"Bien. Suficiente."
+			],
+			"jugar": [
+				"Estuvo bien.",
+				"Otra, si quieres."
+			]
+		},
+		"carinosa": {
+			"trabajar": [
+				"¿Otra vez? Vuelve rápido. Te espero en el techo.",
+				"Si alguien te habla en el trabajo, quiero su nombre."
+			],
+			"comer": [
+				"Solo un poco. Bueno, lo que me des tú.",
+				"Comer contigo casi me gusta. Casi."
+			],
+			"pasear": [
+				"¡Mírame! Esta vuelta es para ti.",
+				"Del brazo. Que se note."
+			],
+			"limpiar": [
+				"Déjame brillante. Quiero que me presumas.",
+				"Así. Ahora estoy a tu altura. Bueno, tú a la mía."
+			],
+			"jugar": [
+				"¡Te gané! Bueno, empate. Bueno, ganaste. Revancha.",
+				"Contigo, hasta perder es divertido. Un poco."
+			]
+		},
+		"unida": {
+			"trabajar": [
+				"Ve. Pero cuando vuelvas, eres solo mío.",
+				"Te espero. Siempre te espero."
+			],
+			"comer": [
+				"Te serví la mejor parte. Siempre.",
+				"Contigo al lado, hasta la comida me cae bien."
+			],
+			"pasear": [
+				"Contigo, hasta caminar me gusta.",
+				"Si me pierdo entre las nubes, sé que me encuentras."
+			],
+			"limpiar": [
+				"Gracias por cuidarme tanto.",
+				"Ningún dragón está tan bien cuidado como yo."
+			],
+			"jugar": [
+				"Así quiero los días. Todos.",
+				"Juguemos hasta que se haga de noche."
+			]
+		},
+		"hostil": {
+			"trabajar": [
+				"Vete. Ojalá tardes.",
+				"Mejor sin ti."
+			],
+			"comer": [
+				"No tengo hambre. Para ti.",
+				"Déjalo y vete."
+			],
+			"pasear": [
+				"No me sigas.",
+				"Vuelo sola."
+			],
+			"limpiar": [
+				"No me toques.",
+				"Sola."
+			],
+			"jugar": [
+				"No quiero.",
+				"Ya. ¿Terminamos?"
+			]
+		}
+	},
+	"rutina": [
+		"Vipi ya sabe adónde la llevas y suspira. «¿Otra vez el mismo paseo? Qué poca imaginación.»",
+		"Lo hace con la nariz en alto y la mirada perdida. La rutina ya no la impresiona.",
+		"«Un dragón se aburre fácil», dice, y bosteza echando humo."
+	],
+	"saturacion": {
+		"felicidad": [
+			"Está tan exaltada que no puede quedarse quieta. Echa humo de pura emoción.",
+			"Se ríe demasiado fuerte y le tiemblan las alas. Le cuesta bajar."
+		],
+		"hambre": [
+			"Comió de más y no puede ni despegar. Está de pésimo humor.",
+			"Con la panza llena, mira el cielo como quien mira una puerta cerrada."
+		],
+		"higiene": [
+			"Tanto baño le opaca las escamas. Está irritada.",
+			"Huele a jabón y no a dragona. Se siente extraña."
+		]
+	},
+	"icono_lujuria": "res://personajes/dragona/icono.png"
+}

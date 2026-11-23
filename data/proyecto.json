@@ -17,6 +17,19 @@
 				"Lo de siempre: treinta días. El último, paso yo.",
 				"Y no le hagas bromas sobre gatos. El último que lo intentó sigue en la enfermería."
 			]
+		},
+		{
+			"personaje": "dragona",
+			"dias": 30,
+			"aprobar": "C",
+			"informe": [
+				"Otra vez tú. Aprobaste con la ratona. El mando está impresionado. Yo, un poco menos.",
+				"Tu nueva asignada es una dragona. Se llama Vipi Lweed. Una subespecie pequeña, dicen los informes. Ella no está de acuerdo.",
+				"Orgullosa, elegante y terca como una piedra. Le encanta volar y detesta comer: dice que la panza llena le estorba en el aire.",
+				"Cuando alguien le interesa, no lo esconde. Ni deja que nadie más se acerque. Te lo advierto: los dragones guardan lo que quieren.",
+				"Con ella la maldición no avisa. Las cosas se complican rápido, y vas a tener menos margen que con las otras.",
+				"Treinta días. El último, paso yo. Y si te ofrece té, acéptalo."
+			]
 		}
 	],
 	"calificaciones": [
