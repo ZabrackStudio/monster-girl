@@ -6,7 +6,7 @@ const SRC := "../Material/"
 const DEST := "res://personajes/ratona/trajes/"
 const MOODS := ["neutral", "feliz", "triste", "cansada", "inquieta", "alterada", "critica"]
 const CASUAL_H := 640   # recorte del traje casual para que la cabeza mida como en el de minera
-const ROOM_RECT := Rect2i(0, 180, 1024, 700)   # franja del cuarto que se ve detrás de ella
+const ROOM_RECT := Rect2i(0, 150, 1024, 700)   # franja del cuarto que se ve detrás de ella
 
 
 func _init() -> void:
