@@ -59,6 +59,7 @@
 		"pasear": {
 			"nombre": "Pasear",
 			"costo": 1,
+			"precio": 10,
 			"efectos": {
 				"felicidad": 12,
 				"tristeza": -10,
@@ -136,7 +137,13 @@
 		"luna_por_dia": 0.15,
 		"marca": 8,
 		"marca_max": 60,
-		"tolerancia_decay_combos": 0.85
+		"tolerancia_decay_combos": 0.9,
+		"rutina_aburre": 0.4,
+		"rutina_efectos": {
+			"felicidad": -4,
+			"tristeza": 4,
+			"lujuria": 4
+		}
 	},
 	"vinculo": {
 		"final": 76,

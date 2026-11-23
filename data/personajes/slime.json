@@ -3,6 +3,11 @@
 	"nombre": "Reme",
 	"especie": "Slime",
 	"personalidad": "Curiosa y pegajosa. Imita todo lo que ve, absorbe lo que toca y sufre cuando se queda sola.",
+	"rutina": [
+		"Reme ya sabe qué viene después y se adelanta, aburrida. «Otra vez lo mismo», burbujea.",
+		"Hace todo en piloto automático. La rutina ya no la calma: la apaga.",
+		"Te sigue sin ganas. Su gelatina se ve opaca de tanto repetir el mismo día."
+	],
 	"saturacion": {
 		"felicidad": [
 			"Tanta diversión la tiene acelerada. Ya no se calma.",

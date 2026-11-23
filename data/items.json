@@ -45,6 +45,21 @@
 		}
 	},
 	{
+		"id": "tonico",
+		"nombre": "Tónico del minero",
+		"categoria": "Alimentación",
+		"tipo": "consumible",
+		"precio": 13,
+		"especie": "ratona",
+		"descripcion": "Repone fuerzas después del turno.",
+		"efectos": {
+			"salud": 8,
+			"felicidad": 4,
+			"hambre": -5,
+			"lujuria": 11
+		}
+	},
+	{
 		"id": "caramelos",
 		"nombre": "Caramelos ácidos",
 		"categoria": "Alimentación",
@@ -55,6 +70,19 @@
 			"hambre": -8,
 			"felicidad": 6,
 			"salud": -1
+		}
+	},
+	{
+		"id": "bombones",
+		"nombre": "Bombones de licor",
+		"categoria": "Alimentación",
+		"tipo": "consumible",
+		"precio": 15,
+		"descripcion": "Rellenos de cereza. Un capricho para consentirla.",
+		"efectos": {
+			"hambre": -15,
+			"felicidad": 12,
+			"lujuria": 10
 		}
 	},
 	{
@@ -72,6 +100,20 @@
 		"especie": "slime"
 	},
 	{
+		"id": "sales_burbuja",
+		"nombre": "Sales efervescentes",
+		"categoria": "Cuidado personal",
+		"tipo": "consumible",
+		"precio": 14,
+		"especie": "slime",
+		"descripcion": "Para una slime, un spa completo.",
+		"efectos": {
+			"higiene": 30,
+			"felicidad": 8,
+			"lujuria": 9
+		}
+	},
+	{
 		"id": "jabon",
 		"nombre": "Jabón neutro",
 		"categoria": "Cuidado personal",
@@ -80,6 +122,19 @@
 		"descripcion": "Limpia en un momento.",
 		"efectos": {
 			"higiene": 35
+		}
+	},
+	{
+		"id": "jabon_venus",
+		"nombre": "Jabón rosa Venus",
+		"categoria": "Cuidado personal",
+		"tipo": "consumible",
+		"precio": 16,
+		"descripcion": "Espuma de rosas. Deja la piel radiante.",
+		"efectos": {
+			"higiene": 45,
+			"felicidad": 6,
+			"lujuria": 12
 		}
 	},
 	{
@@ -105,6 +160,18 @@
 		"descripcion": "Calma los nervios.",
 		"efectos": {
 			"lujuria": -10
+		}
+	},
+	{
+		"id": "vela_ylang",
+		"nombre": "Vela de ylang-ylang",
+		"categoria": "Artículos especiales",
+		"tipo": "pasivo",
+		"precio": 45,
+		"descripcion": "Aroma exótico para noches tranquilas.",
+		"pasivo": {
+			"tristeza_diaria": -1,
+			"lujuria_diaria": 3
 		}
 	},
 	{

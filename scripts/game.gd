@@ -524,17 +524,27 @@ func _match_reactions(id: String) -> Array:
 
 
 func _apply_reactions(list: Array) -> void:
+	var curse: Dictionary = balance["maldicion"]
 	for r in list:
 		var good: bool = float(r["efectos"].get("lujuria", 0)) < 0
-		apply(r["efectos"], effectiveness() if good else 1.0,
-			_tolerance_use("reaccion_" + r["id"]) if good else 1.0)
+		var key: String = "reaccion_" + r["id"]
+		var fresh := tolerance_factor(key)
+		var vb: Dictionary = balance["vinculo"]
+		# Repetir el mismo combo todos los días termina aburriéndola: ya no calma ni acerca.
+		if good and fresh < float(curse.get("rutina_aburre", 0.0)):
+			_tolerance_use(key)
+			apply(curse.get("rutina_efectos", {}))
+			var bored: Array = character.get("rutina", ["%s ya se sabe esta rutina de memoria." % character["nombre"]])
+			_log("[color=#c9a0dc]%s[/color]" % _pick(bored))
+			continue
+		apply(r["efectos"], effectiveness() if good else 1.0, _tolerance_use(key) if good else 1.0)
 		var first := not discovered.has(r["id"])
 		discovered[r["id"]] = true
 		var color := "#9fd8ff" if good else "#f2a65a"
 		var note := "  [color=#f2c14e]Nueva nota en el diario.[/color]" if first else ""
 		_log("[color=%s]%s[/color]%s" % [color, r["texto"], note])
-		var vb: Dictionary = balance["vinculo"]
-		_bond(float(r.get("vinculo", vb["reaccion_buena"] if good else vb["reaccion_trampa"])))
+		var gain := float(r.get("vinculo", vb["reaccion_buena"] if good else vb["reaccion_trampa"]))
+		_bond(gain * fresh if good else gain)
 
 
 # ---------------------------------------------------------------- eventos

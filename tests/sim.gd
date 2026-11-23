@@ -40,7 +40,9 @@ func _init() -> void:
 
 func _run(strategy: String, seed_value: int) -> int:
 	var g = Game.new()
-	g.quiet = true
+	g.quiet = OS.get_environment("SIM_DEBUG") == ""
+	if not g.quiet:
+		g.log_message.connect(func(t): print("D%d %s" % [g.day, t]))
 	var cid := OS.get_environment("SIM_CHAR") if OS.get_environment("SIM_CHAR") != "" else "slime"
 	g.setup("res://data/personajes/%s.json" % cid, seed_value)
 	g.event_triggered.connect(func(ev): _resolve(g, ev, strategy))
@@ -140,7 +142,7 @@ func _act(g, strategy: String) -> bool:
 		for food in ["gelatina", "queso"]:
 			if s["hambre"] > 50 and g.inventory.get(food, 0) > 0:
 				g.use_item(food)
-	if expert and _routine(g):
+	if expert and OS.get_environment("SIM_SIN_RUTINA") == "" and _routine(g):
 		return true
 	if s["hambre"] > 55 and g.can_do("comer") and not (careful and _trap(g, "comer")):
 		g.do_activity("comer"); return true
@@ -199,6 +201,9 @@ func _routine(g) -> bool:
 	for r in g.character.get("reacciones", []):
 		if r.has("vinculo") and r.has("cadena"):
 			seq = r["cadena"]
+			# Un jugador hábil cambia de plan cuando la rutina ya la aburre.
+			if g.tolerance_factor("reaccion_" + r["id"]) < float(g.balance["maldicion"].get("rutina_aburre", 0.0)) + 0.05:
+				return false
 	var done: Array = g.today
 	if done.size() >= seq.size() or done != seq.slice(0, done.size()):
 		return false
