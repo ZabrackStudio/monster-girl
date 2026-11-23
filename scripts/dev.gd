@@ -196,6 +196,11 @@ func _status(g) -> String:
 	lines.append("Lujuria esta noche: %+.1f (con azar)" % tonight)
 	var ev: Dictionary = g.evaluation()
 	lines.append("Si la evaluaran hoy: %d puntos, nota %s" % [ev["puntaje"], ev["nota"]["nota"]])
+	if not g.stash.is_empty():
+		var hidden := []
+		for id in g.stash:
+			hidden.append("%s ×%d" % [g.items[id]["nombre"], g.stash[id]])
+		lines.append("Escondido por ella: " + ", ".join(hidden))
 	var tol := []
 	for k in g.tolerance:
 		if g.tolerance[k] > 0.3:

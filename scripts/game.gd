@@ -29,6 +29,7 @@ var actions_left := 0
 var money := 0
 var total_money := 0
 var inventory: Dictionary = {}      # id -> cantidad
+var stash: Dictionary = {}          # lo que ella escondió del inventario (id -> cantidad)
 var passives: Array = []            # ids de objetos pasivos comprados
 var minigames: Array = []           # ids de minijuegos desbloqueados
 var known_affinity: Dictionary = {} # minijuegos ya probados
@@ -65,7 +66,7 @@ var overflow: Dictionary = {}       # lo que la última acción quiso dar de má
 const SAVE_FIELDS := ["stats", "day", "actions_left", "money", "total_money", "inventory",
 	"passives", "minigames", "known_affinity", "events_seen", "times_today", "pending_event",
 	"tolerance", "curse_mark", "marked", "today", "discovered", "outfit", "outfits", "bond",
-	"current_line", "talked_today", "pokes_today", "warned", "term", "crises"]
+	"current_line", "talked_today", "pokes_today", "warned", "term", "crises", "stash"]
 const INT_FIELDS := ["day", "actions_left", "money", "total_money", "term", "crises"]
 const SAVE_VERSION := 1
 const SAVE_PATH := "user://partida.json"
@@ -475,6 +476,7 @@ func sleep() -> void:
 		return
 	if not quiet:
 		current_line = touch_line()
+	_hide_item()
 	_try_event("noche", float(d["prob_evento_noche"]))
 	changed.emit()
 
@@ -575,6 +577,9 @@ func resolve_event(index: int) -> void:
 		if inventory[req] <= 0:
 			inventory.erase(req)
 	var eff: Dictionary = opt.get("efectos", {})
+	match opt.get("escondite", ""):
+		"devolver": _return_stash()
+		"perder": stash.clear()
 	apply(eff, effectiveness())
 	if eff.has("vinculo"):
 		_bond(float(eff["vinculo"]))
@@ -582,6 +587,45 @@ func resolve_event(index: int) -> void:
 		_log(opt["resultado"])
 	_check_consumed()
 	changed.emit()
+
+
+## Pasiva de algunas chicas (Mandy): de noche esconde en silencio algo del inventario.
+## Lo hace más cuando está triste y menos cuando confía en ti.
+func _hide_item() -> void:
+	var cfg: Dictionary = character.get("esconde", {})
+	if cfg.is_empty() or inventory.is_empty():
+		return
+	var p := float(cfg["prob"])
+	if stats["tristeza"] >= float(cfg.get("tristeza_min", 101)):
+		p += float(cfg.get("prob_triste", 0))
+	p *= 1.0 - clampf(bond, 0, 100) / 100.0 * float(cfg.get("freno_vinculo", 0))
+	if rng.randf() >= p:
+		return
+	var ids := inventory.keys()
+	ids.sort()
+	var id: String = ids[rng.randi() % ids.size()]
+	inventory[id] -= 1
+	if inventory[id] <= 0:
+		inventory.erase(id)
+	stash[id] = stash.get(id, 0) + 1
+
+
+func stash_count() -> int:
+	var n := 0
+	for id in stash:
+		n += int(stash[id])
+	return n
+
+
+func _return_stash() -> void:
+	if stash.is_empty():
+		return
+	var names := []
+	for id in stash:
+		inventory[id] = inventory.get(id, 0) + int(stash[id])
+		names.append(items[id]["nombre"] + (" ×%d" % stash[id] if stash[id] > 1 else ""))
+	stash.clear()
+	_log("Recuperas: %s." % ", ".join(names))
 
 
 func _try_event(moment: String, prob: float) -> void:
@@ -616,6 +660,7 @@ func _conditions_ok(cond: Dictionary) -> bool:
 			"dia": cur = day
 			"nivel": cur = level()
 			"dinero": cur = money
+			"escondidos": cur = stash_count()
 			_: cur = stats.get(what, 0.0)
 		if op == "min" and cur < v: return false
 		if op == "max" and cur > v: return false

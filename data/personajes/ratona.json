@@ -677,6 +677,12 @@
 			]
 		}
 	},
+	"esconde": {
+		"prob": 0.3,
+		"prob_triste": 0.25,
+		"tristeza_min": 40,
+		"freno_vinculo": 0.6
+	},
 	"rutina": [
 		"Mandy marca el paso como si fuera otro turno en la mina. «Igual que ayer», resopla.",
 		"Lo hace de memoria, con la cola caída. Ya no la distrae.",
