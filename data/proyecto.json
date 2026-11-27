@@ -30,6 +30,19 @@
 				"Con ella la maldición no avisa. Las cosas se complican rápido, y vas a tener menos margen que con las otras.",
 				"Treinta días. El último, paso yo. Y si te ofrece té, acéptalo."
 			]
+		},
+		{
+			"personaje": "leoparda",
+			"dias": 30,
+			"aprobar": "C",
+			"informe": [
+				"Sobreviviste a la dragona. Pocos pueden decir eso.",
+				"Tu nueva asignada es una leoparda de las nieves. Se llama Leapy. La encontramos viviendo en la azotea de un club de rock, durante una nevada.",
+				"Rebelde, mal hablada y orgullosa. Te va a decir que no le importas. No le creas del todo.",
+				"Le preparamos una vivienda con ventanas grandes y la calefacción al mínimo. Las ventanas fueron idea suya. No le gusta sentirse encerrada.",
+				"Si no te gana la confianza, lo vas a notar. O mejor dicho, no la vas a notar.",
+				"Treinta días. El último, paso yo. Y no le toques los discos."
+			]
 		}
 	],
 	"calificaciones": [

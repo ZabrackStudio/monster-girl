@@ -11,6 +11,8 @@ var mood := "neutral"
 var level := 0
 var outfit := ""
 var has_expression := false
+var absent := false
+var presence := 1.0       # 0 = no está en casa
 var t := 0.0
 
 var bg: TextureRect
@@ -80,9 +82,18 @@ func set_state(new_mood: String, new_level: int, new_outfit: String = "") -> voi
 	fallback.level = level
 
 
+## Sin ella en casa: se desvanece y el cuarto queda vacío.
+func set_absent(value: bool) -> void:
+	if value == absent:
+		return
+	absent = value
+	var t := create_tween()
+	t.tween_property(self, "presence", 0.0 if absent else 1.0, 0.6)
+
+
 ## ¿El toque ha caído sobre ella?
 func hit(pos: Vector2) -> bool:
-	return sprite.visible and sprite.get_rect().has_point(pos)
+	return sprite.visible and not absent and sprite.get_rect().has_point(pos)
 
 
 func poke() -> void:
@@ -135,3 +146,5 @@ func _process(delta: float) -> void:
 	if not has_expression and (mood == "triste" or mood == "cansada"):
 		target = target.lerp(Color("b8c4e0"), 0.25)
 	sprite.modulate = sprite.modulate.lerp(target, clampf(delta * 3.0, 0, 1))
+	sprite.modulate.a = presence
+	fallback.modulate.a = presence

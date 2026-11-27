@@ -1,0 +1,681 @@
+{
+	"id": "leoparda",
+	"nombre": "Leapy",
+	"especie": "Leoparda de las nieves",
+	"etiqueta_especie": "Cosas de leoparda",
+	"personalidad": "Rebelde, punk y orgullosa. Dice que nadie le importa y se ofende si no le prestas atención. Odia que la controlen y se escapa cuando se siente encerrada.",
+	"color": "9a9cb8",
+	"stats_iniciales": {
+		"salud": 80,
+		"felicidad": 40,
+		"tristeza": 30,
+		"hambre": 40,
+		"higiene": 55,
+		"lujuria": 16
+	},
+	"dia": {
+		"hambre_diaria": 16,
+		"higiene_diaria": 8
+	},
+	"minijuego_inicial": "memoria",
+	"afinidades": {
+		"comer": 1.0,
+		"limpiar": 0.75,
+		"pasear": 1.2
+	},
+	"minijuegos": {
+		"memoria": 1.25,
+		"burbujas": 1.0
+	},
+	"efectos_extra": {
+		"limpiar": {
+			"felicidad": -4
+		},
+		"trabajar": {
+			"tristeza": 2
+		}
+	},
+	"lujuria": {
+		"base": 10.0,
+		"por_tristeza": 0.14,
+		"por_hambre": 0.12,
+		"por_suciedad": 0.06,
+		"por_felicidad": 0.08,
+		"por_salud": 0.05,
+		"por_dia": 0.15,
+		"max_por_dia": 999.0,
+		"ruido": 3.5
+	},
+	"fuga": {
+		"vinculo_max": 25,
+		"prob": 0.35,
+		"prob_extra": 0.25,
+		"tristeza_min": 45,
+		"felicidad_max": 30,
+		"regreso_efectos": {
+			"hambre": 12,
+			"higiene": -15,
+			"lujuria": 5,
+			"felicidad": 6,
+			"tristeza": -4
+		},
+		"ausente": [
+			"Cuando vuelves, la ventana de su cuarto está abierta y su chaqueta no está en el perchero.",
+			"La vivienda está en silencio. En la mesa quedó su taza, todavía tibia. Ella no.",
+			"Sus botas no están junto a la puerta. El tocadiscos sigue girando, sin música."
+		],
+		"regreso": [
+			"Pasada la medianoche oyes la ventana. Leapy entra con olor a calle y se va directo a su cuarto, sin saludar.",
+			"Vuelve de madrugada, con el pelaje revuelto y una entrada de concierto arrugada en el bolsillo. «No salí. Y si salí, no es tu problema.»",
+			"La oyes llegar muy tarde, tarareando. Cuando prendes la luz, ya se encerró."
+		]
+	},
+	"objetos": {
+		"carne_seca": "Su comida favorita."
+	},
+	"dialogos": {
+		"inicio": [
+			"Leapy. No me gusta que me cuiden, no me gustan las reglas y tú tampoco me gustas. Todavía. ¿Dónde está el tocadiscos?"
+		],
+		"trabajar": [
+			"Vete. A mí me da igual.",
+			"¿Otra vez trabajo? Qué aburrido eres.",
+			"No tardes. No es que te vaya a extrañar, ¿eh?"
+		],
+		"comer": [
+			"Carne. Lo demás es comida de conejo.",
+			"No me mires mientras como. Es raro.",
+			"Está bien. No te emociones."
+		],
+		"pasear": [
+			"¡Por fin aire! Este lugar me ahoga.",
+			"Camina rápido o te dejo atrás.",
+			"Hace frío. Perfecto."
+		],
+		"limpiar": [
+			"Me sé lavar sola. Soy una gata, ¿recuerdas?",
+			"Agua no. Odio el agua. Bueno, ya, rápido.",
+			"Si me despeinas el pelaje, te muerdo."
+		],
+		"jugar": [
+			"Te voy a destrozar.",
+			"Gané. Llora.",
+			"Otra. Esa no contaba."
+		],
+		"dormir": [
+			"Apaga la luz. Y no me vigiles.",
+			"Si oyes la ventana, son los gatos del vecino. Seguro."
+		],
+		"nivel_0": [
+			"Hoy estoy de buenas. No lo arruines.",
+			"Todo tranquilo. Raro."
+		],
+		"nivel_1": [
+			"Me pica la cola. No preguntes.",
+			"¿Por qué me miras? ¿Eh?"
+		],
+		"nivel_2": [
+			"Hace calor aquí adentro. Abre algo.",
+			"No te acerques tanto. Ni tan lejos. ¡Agh!"
+		],
+		"nivel_3": [
+			"Aléjate, idiota. Lo digo en serio.",
+			"No me provoques. Hoy no puedo."
+		],
+		"vestir": [
+			"¿Qué? Me queda bien. Obvio.",
+			"No me mires tanto."
+		]
+	},
+	"finales": {
+		"carnal": {
+			"titulo": "Final malo: Presa",
+			"musica": "final_carnal",
+			"texto": "Te dices que solo es un abrazo.\n\nLeapy te salta encima sin hacer ruido, como salta sobre una presa en la nieve. Ronronea tan fuerte que lo sientes en los huesos.\n\n«No es que me gustes», dice. Ya no le cree ni ella.\n\nIntentas apartarte. Sus garras no te dejan.\n\nFundido a negro.\n\n—\n\nAl amanecer, Leapy despierta sola en el sofá, con su chaqueta de tachas encima como una manta. Pone un disco a todo volumen para no oír lo callada que está la vivienda."
+		},
+		"marea": {
+			"titulo": "Final bueno: Huellas en la nieve",
+			"musica": "final_marea",
+			"texto": "Esa noche, la ventana de su cuarto está abierta y nieva adentro.\n\nLeapy está sentada en el alféizar, con las botas puestas y la chaqueta al hombro. Por una vez, no se escapa a escondidas: te estaba esperando.\n\n«Si me quedo, te hago daño», dice sin mirarte. «Y no es que me importes. Bueno. Sí. Mucho. ¿Contento?»\n\nSalta hacia la nieve antes de que puedas contestar.\n\n—\n\nEn la mañana, sobre el tocadiscos hay un vinilo de The Leopard Cats con una dedicatoria rayada con la garra: «Para el único idiota que no me dejó sola.» Afuera, las huellas se pierden hacia las montañas."
+		},
+		"poseida": {
+			"titulo": "Final malo: Poseída",
+			"musica": "final_poseida",
+			"texto": "Esa noche, el tocadiscos se detiene solo.\n\nNo oyes sus pasos. Una leoparda de las nieves nunca hace ruido cuando caza. Solo notas el frío de la ventana abierta y, después, dos ojos amarillos en la oscuridad del pasillo.\n\nDices su nombre. Ella no contesta. Ronronea.\n\nFundido a negro.\n\n—\n\nAl amanecer, Leapy despierta en tu cama, sola. No recuerda la noche. En el piso hay marcas de garras que van de su cuarto al tuyo, y ninguna que vuelva."
+		},
+		"lucha": {
+			"titulo": "Final malo: Lo intentó",
+			"musica": "final_lucha",
+			"texto": "Esa noche, Leapy golpea tu puerta y se va corriendo antes de que abras.\n\nLa encuentras afuera, en la nieve, sin chaqueta. Se tiró al frío para apagar lo que le arde por dentro.\n\n«No me mires», dice. Le castañean los dientes. «Vete adentro y cierra. Si me congelo, no pienso en ti.»\n\nAguanta una hora. Después, oyes sus garras en la puerta.\n\n«Perdón», dice desde el otro lado. «No aguanté.»\n\nFundido a negro.\n\n—\n\nAl amanecer, en la nieve queda la forma de su cuerpo, hecha un ovillo, y un rastro de huellas que vuelve hasta la puerta."
+		},
+		"denuncia": {
+			"titulo": "Final malo: Denuncia",
+			"musica": "final_denuncia",
+			"texto": "A las seis y cuarto de la mañana llaman a la puerta. Es un decir: la puerta ya está abierta.\n\nBotas en el pasillo. Dos soldados y, detrás, la intendente con un celular en la mano.\n\n«Denuncia presentada por la propia asignada», dice, y reproduce un audio. Son cuatro minutos de groserías y, al final, una frase clara: «Me cansé de que me toque. Sáquenlo de aquí.»\n\nLeapy sube el volumen del tocadiscos mientras te llevan. No te mira.\n\n—\n\nEXPEDIENTE H.A.R.E.M. · PROYECTO WAIFU\nCuidador: retirado de la beta y retenido a disposición del mando.\nAsignada: reubicada. Pide «alguien que entienda la palabra no».\n\nAl margen, a mano: «Es la primera denuncia que nos llega con banda sonora.»"
+		}
+	},
+	"evaluacion": {
+		"A": "El día treinta, Leapy abre la puerta antes de que la intendente toque. Tiene puesto un disco y la vivienda está, contra todo pronóstico, ordenada.\n\n«Treinta días sin una sola fuga en los registros», dice la intendente. Leapy se encoge de hombros. «No tenía adónde ir. Bueno. No quería ir a ningún lado.»",
+		"B": "El día treinta, Leapy recibe a la intendente con los brazos cruzados y la música alta.\n\n«No me cae mal», dice de ti cuando le preguntan. Viniendo de ella, es casi una declaración.",
+		"C": "El día treinta, la intendente llega con dos soldados. Leapy los mira desde el sofá, con las botas sobre la mesa.\n\n«Pasas», dice la intendente. «Con lo justo. Y revisa esa ventana.»",
+		"D": "El día treinta, la intendente encuentra la ventana abierta y el cuarto vacío. Leapy aparece una hora después, con nieve en el pelo.\n\n«Sobreviviste», dice la intendente. «Eso no es lo mismo que aprobar.»"
+	},
+	"reacciones": [
+		{
+			"id": "noche_libre",
+			"accion": "jugar",
+			"cadena": [
+				"pasear",
+				"comer",
+				"jugar"
+			],
+			"efectos": {
+				"lujuria": -10,
+				"tristeza": -6,
+				"felicidad": 6
+			},
+			"vinculo": 4,
+			"texto": "Salen, comen algo en la calle y terminan jugando hasta tarde. Dice que fue aburrido. Sonríe todo el rato.",
+			"nota": "Salir, comer y jugar, en ese orden."
+		},
+		{
+			"id": "aire_libre",
+			"accion": "pasear",
+			"condiciones": {
+				"tristeza_min": 35
+			},
+			"efectos": {
+				"lujuria": -5,
+				"felicidad": 4
+			},
+			"texto": "Salir cuando está de malas la despeja. Vuelve con el pelaje lleno de escarcha y menos humos.",
+			"nota": "Sacarla cuando está de malas la despeja."
+		},
+		{
+			"id": "revancha",
+			"accion": "jugar",
+			"cadena": [
+				"trabajar",
+				"jugar"
+			],
+			"efectos": {
+				"lujuria": -5,
+				"felicidad": 3
+			},
+			"texto": "Te desafía apenas llegas, como si te hubiera estado esperando. No lo admite.",
+			"nota": "Jugar con ella apenas vuelves del trabajo la calma."
+		},
+		{
+			"id": "bano_forzado",
+			"accion": "limpiar",
+			"condiciones": {
+				"higiene_min": 50
+			},
+			"efectos": {
+				"lujuria": 6,
+				"tristeza": 3
+			},
+			"texto": "Bañarla cuando no hace falta la saca de quicio: se siente controlada.",
+			"nota": "Bañarla cuando ya está limpia la altera."
+		},
+		{
+			"id": "comida_vigilada",
+			"accion": "comer",
+			"condiciones": {
+				"hambre_max": 30
+			},
+			"efectos": {
+				"lujuria": 5,
+				"tristeza": 3
+			},
+			"texto": "Le das de comer sin que tenga hambre y se siente vigilada. Gruñe sobre el plato.",
+			"nota": "Darle de comer sin hambre la altera."
+		}
+	],
+	"traje_inicial": "inicial",
+	"trajes": {
+		"inicial": "Chaqueta de tachas"
+	},
+	"trajes_efectos": {
+		"inicial": {}
+	},
+	"charla": {
+		"opciones": {
+			"provocar": "Seguirle el juego.",
+			"elogiar": "Decirle algo lindo.",
+			"musica": "Hablar de música.",
+			"distancia": "Darle su espacio."
+		},
+		"ajuste": {
+			"hostil": {
+				"distancia": "buena",
+				"musica": "regular",
+				"provocar": "mala",
+				"elogiar": "mala"
+			},
+			"arisca": {
+				"provocar": "buena",
+				"musica": "regular",
+				"distancia": "regular",
+				"elogiar": "mala"
+			},
+			"distante": {
+				"musica": "buena",
+				"provocar": "regular",
+				"elogiar": "regular",
+				"distancia": "mala"
+			},
+			"confiada": {
+				"elogiar": "buena",
+				"musica": "regular",
+				"provocar": "regular",
+				"distancia": "mala"
+			},
+			"carinosa": {
+				"provocar": "buena",
+				"elogiar": "regular",
+				"musica": "regular",
+				"distancia": "mala"
+			},
+			"unida": {
+				"elogiar": "buena",
+				"musica": "regular",
+				"provocar": "regular",
+				"distancia": "mala"
+			},
+			"alterada": {
+				"musica": "buena",
+				"distancia": "regular",
+				"provocar": "regular",
+				"elogiar": "mala"
+			},
+			"critica": {
+				"distancia": "buena",
+				"musica": "regular",
+				"provocar": "mala",
+				"elogiar": "mala"
+			}
+		},
+		"notas": {
+			"hostil": "Hostil: déjala en paz.",
+			"arisca": "Arisca: síguele el juego.",
+			"distante": "Distante: habla de música.",
+			"confiada": "Confiada: dile algo lindo.",
+			"carinosa": "Cariñosa: síguele el juego.",
+			"unida": "Unida: dile algo lindo.",
+			"alterada": "Alterada: habla de música.",
+			"critica": "Crítica: aléjate."
+		},
+		"toque": {
+			"arisca": {
+				"calma": [
+					"¿Qué quieres?",
+					"No me toques la cola.",
+					"Estoy ocupada. Escuchando música. Muy ocupada."
+				],
+				"alterada": [
+					"No me mires así. Me pones peor.",
+					"Algo me arde y no es la calefacción."
+				],
+				"critica": [
+					"Lejos. Ya.",
+					"Un paso más y te araño. Vete."
+				]
+			},
+			"distante": {
+				"calma": [
+					"Aquí estoy. ¿Y?",
+					"¿Necesitas algo? Yo no.",
+					"Este disco es bueno. No lo entenderías."
+				],
+				"alterada": [
+					"Estoy rara. No preguntes.",
+					"Hace demasiado calor en esta vivienda."
+				],
+				"critica": [
+					"No te conozco tanto como para pedirte ayuda.",
+					"Algo me tira hacia ti. Lo odio."
+				]
+			},
+			"confiada": {
+				"calma": [
+					"¿Sabías que podemos saltar seis veces nuestro largo? Yo, siete.",
+					"Te dejo elegir el disco. Solo hoy.",
+					"Hola. Nada. ¿Qué miras? Idiota."
+				],
+				"alterada": [
+					"Tengo calor. Abre la ventana. Toda.",
+					"Háblame de algo. De lo que sea."
+				],
+				"critica": [
+					"Si me ves rara, cierra con llave. En serio.",
+					"Me late todo. No te acerques."
+				]
+			},
+			"carinosa": {
+				"calma": [
+					"Te guardé el último pedazo de carne. No es que te quiera ni nada.",
+					"Cuando llegas se me quita el mal humor. Un poco.",
+					"Esta canción me recuerda a ti. Es horrible. Me encanta."
+				],
+				"alterada": [
+					"Quédate cerca. Pero no tanto. ¡Agh, no sé!",
+					"No eres tú. Es la maldición. Bueno, un poco eres tú."
+				],
+				"critica": [
+					"Esta noche te quiero lejos. Justamente porque… ya sabes.",
+					"Cierra con llave. Por favor."
+				]
+			},
+			"unida": {
+				"calma": [
+					"No digas nada. Ya sé que te gusto.",
+					"Ya no me escapo. Ni me dan ganas.",
+					"Reconozco tus pasos. Eres ruidoso."
+				],
+				"alterada": [
+					"Te miro demasiado, lo sé. Ayúdame a mirar otra cosa.",
+					"Sigo siendo yo. Dímelo."
+				],
+				"critica": [
+					"Si no me controlo, me voy a la nieve. No me sigas.",
+					"No dejes que me acerque. Aunque te lo pida."
+				]
+			},
+			"hostil": {
+				"calma": [
+					"¿Qué quieres ahora?",
+					"No me toques.",
+					"Tengo el número del mando en el celular."
+				],
+				"alterada": [
+					"Aléjate. Tú no ayudas.",
+					"Ni lo intentes."
+				],
+				"critica": [
+					"¡LEJOS!",
+					"No te debo nada. Fuera."
+				]
+			}
+		},
+		"respuestas": {
+			"hostil": {
+				"buena": [
+					"Por fin entiendes algo."
+				],
+				"regular": [
+					"Mm."
+				],
+				"mala": [
+					"¿En serio? Lárgate."
+				]
+			},
+			"arisca": {
+				"buena": [
+					"Ja. Tienes agallas. No está mal.",
+					"¿Me estás retando? Vas a perder."
+				],
+				"regular": [
+					"Ajá.",
+					"Sí, sí."
+				],
+				"mala": [
+					"Guárdate lo cursi para otra."
+				]
+			},
+			"distante": {
+				"buena": [
+					"¿Conoces a The Leopard Cats? Bueno, no eres un caso perdido.",
+					"Ese disco es bueno. Tienes oído. A veces."
+				],
+				"regular": [
+					"Ah. Ya.",
+					"Bueno."
+				],
+				"mala": [
+					"Claro. Vete. Como todos."
+				]
+			},
+			"confiada": {
+				"buena": [
+					"¿Q-qué? No digas esas cosas de repente.",
+					"Cállate. Bueno, dilo otra vez."
+				],
+				"regular": [
+					"Ajá.",
+					"Puede ser."
+				],
+				"mala": [
+					"¿Te aburro? Dilo de una vez."
+				]
+			},
+			"carinosa": {
+				"buena": [
+					"¡Ja! Idiota. Me haces reír.",
+					"Eres lo peor. Sigue."
+				],
+				"regular": [
+					"Qué cursi. No pares.",
+					"Mm. Está bien que estés aquí."
+				],
+				"mala": [
+					"¿Espacio? ¿Ahora? Bueno."
+				]
+			},
+			"unida": {
+				"buena": [
+					"Ya lo sé. Pero me gusta oírlo.",
+					"Dilo más bajo, que los vecinos escuchan. O no, dilo fuerte."
+				],
+				"regular": [
+					"Ja. Idiota.",
+					"Te escucho. Siempre."
+				],
+				"mala": [
+					"No hace falta que te alejes. Ya no."
+				]
+			},
+			"alterada": {
+				"buena": [
+					"Sí. Ese disco. Ponlo. Así pienso en otra cosa.",
+					"Sigue hablando de música. No pares."
+				],
+				"regular": [
+					"Ajá…",
+					"Puede ser."
+				],
+				"mala": [
+					"No me digas cosas lindas ahora. Lo empeoras."
+				]
+			},
+			"critica": {
+				"buena": [
+					"Gracias. Aléjate un poco más. Así.",
+					"Bien. No vuelvas hasta mañana."
+				],
+				"regular": [
+					"No sé si eso ayuda.",
+					"Mm…"
+				],
+				"mala": [
+					"¡No! Ahora no. Nada de eso."
+				]
+			}
+		},
+		"molesta": {
+			"hostil": [
+				"Lo estoy grabando.",
+				"Sigue. Me falta poco para mandarlo.",
+				"¿Sabes quién contesta en ese número? Pronto lo sabrás."
+			],
+			"arisca": [
+				"Te dije que no.",
+				"Quita la mano o te la araño.",
+				"¿Qué parte de «no» no entiendes?"
+			],
+			"distante": [
+				"Ya basta.",
+				"No me gusta eso.",
+				"¿Puedes dejar de hacerlo?"
+			],
+			"confiada": [
+				"¡Oye! Me despeinas.",
+				"Ya, pesado.",
+				"Una vez da risa. Veinte, no."
+			],
+			"carinosa": [
+				"Me haces cosquillas… pero ya, ¿eh?",
+				"Si sigues, te escondo los discos.",
+				"Sé que te gusto. Ahora déjame quieta."
+			],
+			"unida": [
+				"Estoy aquí. No hace falta comprobarlo.",
+				"Sí, sí. Ya sé que eres tú.",
+				"Te lo digo con cariño: basta."
+			],
+			"alterada": [
+				"No me toques ahora. Lo empeoras.",
+				"¡Basta! Cada vez que me tocas, sube.",
+				"Por favor. Me cuesta mucho aguantar."
+			],
+			"critica": [
+				"¡SUÉLTAME! ¡No sabes lo que estás despertando!",
+				"Una vez más y no respondo.",
+				"Aléjate. Aléjate ya."
+			]
+		},
+		"aviso": "Tengo el número del mando en el celular. Una vez más y te mando un audio que no vas a olvidar."
+	},
+	"dialogos_actitud": {
+		"arisca": {
+			"trabajar": [
+				"Vete. Mejor.",
+				"Trae dinero. Para discos."
+			],
+			"comer": [
+				"Déjalo ahí.",
+				"No creas que con comida me compras."
+			],
+			"pasear": [
+				"Camina detrás. Lejos.",
+				"Salgo por el aire, no por ti."
+			],
+			"limpiar": [
+				"Puedo sola.",
+				"Rápido."
+			],
+			"jugar": [
+				"Juego. No significa que me caigas bien.",
+				"Gané. Obvio."
+			]
+		},
+		"distante": {
+			"trabajar": [
+				"Bueno.",
+				"Ahí te ves."
+			],
+			"comer": [
+				"Gracias. Supongo.",
+				"Está bien."
+			],
+			"pasear": [
+				"Hace buen frío hoy.",
+				"Las calles vacías son las mejores."
+			],
+			"limpiar": [
+				"Ya está.",
+				"Listo. ¿Contento?"
+			],
+			"jugar": [
+				"Estuvo bien.",
+				"Otra, si quieres."
+			]
+		},
+		"carinosa": {
+			"trabajar": [
+				"Vuelve temprano. No porque te espere, ¿eh?",
+				"Si llegas tarde, te escondo las llaves."
+			],
+			"comer": [
+				"Come conmigo. No me gusta comer sola. Digo, me da igual.",
+				"¿Me das de lo tuyo? Gracias."
+			],
+			"pasear": [
+				"Vamos al callejón de los murales. Te va a gustar.",
+				"Camina a mi lado. Bueno, ya, dame la mano."
+			],
+			"limpiar": [
+				"Solo porque eres tú.",
+				"Cepíllame la cola. Solo la cola."
+			],
+			"jugar": [
+				"¡Te gané! Bueno, empate. Bueno, ganaste. Revancha.",
+				"Contigo, hasta perder es divertido. No se lo digas a nadie."
+			]
+		},
+		"unida": {
+			"trabajar": [
+				"Ve. Aquí te espero. Ya no me escapo.",
+				"Te espero con un disco puesto."
+			],
+			"comer": [
+				"Te guardé la mejor parte. Siempre.",
+				"Con la panza llena y contigo al lado, no me falta nada."
+			],
+			"pasear": [
+				"Contigo, hasta el calor se aguanta.",
+				"Si me pierdo, sé que me encuentras."
+			],
+			"limpiar": [
+				"Gracias por cuidarme tanto.",
+				"Ya ni me molesta el agua. Mentira, sí. Pero contigo menos."
+			],
+			"jugar": [
+				"Así quiero los días. Todos.",
+				"Juguemos hasta que se haga de noche."
+			]
+		},
+		"hostil": {
+			"trabajar": [
+				"Vete. Ojalá tardes.",
+				"Mejor sin ti."
+			],
+			"comer": [
+				"No tengo hambre. Para ti.",
+				"Déjalo y vete."
+			],
+			"pasear": [
+				"No me sigas.",
+				"Salgo sola."
+			],
+			"limpiar": [
+				"No me toques.",
+				"Sola."
+			],
+			"jugar": [
+				"No quiero.",
+				"Ya. ¿Terminamos?"
+			]
+		}
+	},
+	"rutina": [
+		"Leapy pone los ojos en blanco. «¿Otra vez lo mismo? Qué aburrido eres.»",
+		"Lo hace de mala gana, con la cola quieta. La rutina ya no la distrae.",
+		"«Esto ya lo hicimos ayer», dice, y se tira en el sofá."
+	],
+	"saturacion": {
+		"felicidad": [
+			"Está tan acelerada que salta de mueble en mueble. No hay quien la calme.",
+			"Se ríe a carcajadas y sube la música al máximo. Demasiada energía junta."
+		],
+		"hambre": [
+			"Comió de más y está de malas, echada en el sofá.",
+			"Con la panza llena, gruñe a todo lo que se mueve."
+		],
+		"higiene": [
+			"Tanto baño la tiene furiosa. Se lame el pelaje para quitarse el olor a jabón.",
+			"Huele a jabón y no a ella. Lo odia."
+		]
+	},
+	"icono_lujuria": "res://personajes/leoparda/icono.png"
+}

@@ -29,6 +29,7 @@ var actions_left := 0
 var money := 0
 var total_money := 0
 var inventory: Dictionary = {}      # id -> cantidad
+var absent := false               # se escapó mientras trabajabas (Leapy); vuelve de noche
 var stash: Dictionary = {}          # lo que ella escondió del inventario (id -> cantidad)
 var passives: Array = []            # ids de objetos pasivos comprados
 var minigames: Array = []           # ids de minijuegos desbloqueados
@@ -66,7 +67,7 @@ var overflow: Dictionary = {}       # lo que la última acción quiso dar de má
 const SAVE_FIELDS := ["stats", "day", "actions_left", "money", "total_money", "inventory",
 	"passives", "minigames", "known_affinity", "events_seen", "times_today", "pending_event",
 	"tolerance", "curse_mark", "marked", "today", "discovered", "outfit", "outfits", "bond",
-	"current_line", "talked_today", "pokes_today", "warned", "term", "crises", "stash"]
+	"current_line", "talked_today", "pokes_today", "warned", "term", "crises", "stash", "absent"]
 const INT_FIELDS := ["day", "actions_left", "money", "total_money", "term", "crises"]
 const SAVE_VERSION := 1
 const SAVE_PATH := "user://partida.json"
@@ -199,7 +200,7 @@ func touch_line() -> String:
 
 ## Tocarla de más: cuánto aguanta depende de su actitud y de la maldición.
 func poke() -> void:
-	if over or not pending_event.is_empty():
+	if over or absent or not pending_event.is_empty():
 		return
 	pokes_today += 1
 	var att := attitude()
@@ -235,7 +236,7 @@ func poke() -> void:
 
 
 func can_talk() -> bool:
-	return not over and pending_event.is_empty() and not talked_today
+	return not over and pending_event.is_empty() and not talked_today and not absent
 
 
 ## Con la maldición alta manda el estado; si no, manda la actitud.
@@ -276,6 +277,8 @@ func can_do(id: String) -> bool:
 		return false
 	if money < int(act.get("precio", 0)):
 		return false
+	if absent and id != "trabajar":
+		return false
 	return true
 
 
@@ -283,6 +286,7 @@ func why_not(id: String) -> String:
 	var act := activity(id)
 	if int(act["costo"]) > actions_left: return "No te quedan acciones hoy."
 	if money < int(act.get("precio", 0)): return "No tienes dinero suficiente."
+	if absent and id != "trabajar": return "No está."
 	return ""
 
 
@@ -320,6 +324,8 @@ func do_activity(id: String) -> void:
 	_count(id)
 	_say(id)
 	today.append(id)
+	if id == "trabajar":
+		_maybe_run_away()
 	_apply_reactions(reactions)
 	_outfit_effects(id)
 	_saturate(id)
@@ -416,7 +422,7 @@ func wear(t: String) -> void:
 
 
 func use_item(id: String) -> void:
-	if over or inventory.get(id, 0) <= 0 or not pending_event.is_empty():
+	if over or absent or inventory.get(id, 0) <= 0 or not pending_event.is_empty():
 		return
 	inventory[id] -= 1
 	if inventory[id] <= 0:
@@ -478,6 +484,7 @@ func sleep() -> void:
 	if term > 0 and day > term:
 		_evaluate()
 		return
+	_come_back()
 	if not quiet:
 		current_line = touch_line()
 	_hide_item()
@@ -594,6 +601,33 @@ func resolve_event(index: int) -> void:
 		_log(opt["resultado"])
 	_check_consumed()
 	changed.emit()
+
+
+## Pasiva de algunas chicas (Leapy): si el apego es poco, a veces aprovecha que sales a
+## trabajar para escaparse. La casa queda vacía hasta la noche. No hay aviso.
+func _maybe_run_away() -> void:
+	var cfg: Dictionary = character.get("fuga", {})
+	if cfg.is_empty() or absent or over or bond >= float(cfg["vinculo_max"]):
+		return
+	var p := float(cfg["prob"])
+	if stats["tristeza"] >= float(cfg.get("tristeza_min", 101)) or stats["felicidad"] <= float(cfg.get("felicidad_max", -1)):
+		p += float(cfg.get("prob_extra", 0))
+	if rng.randf() >= p:
+		return
+	absent = true
+	current_line = ""
+	if not quiet:
+		_log("[color=#9aa3b5]%s[/color]" % _pick(cfg.get("ausente", [])))
+
+
+## Vuelve cuando ya es de noche, con lo que haya hecho afuera encima.
+func _come_back() -> void:
+	if not absent:
+		return
+	absent = false
+	var cfg: Dictionary = character["fuga"]
+	apply(cfg.get("regreso_efectos", {}))
+	_log("[color=#9aa3b5]%s[/color]" % _pick(cfg.get("regreso", [])))
 
 
 ## Pasiva de algunas chicas (Mandy): de noche esconde en silencio algo del inventario.

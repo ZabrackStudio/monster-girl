@@ -436,8 +436,11 @@ func _refresh() -> void:
 		else:
 			stat_bars[s].value = game.stats[s]
 	lbl_line.text = "«%s»" % game.current_line if game.current_line != "" else ""
+	# Si no está en casa, nadie habla: la burbuja se apaga sin mover el resto.
+	lbl_line.get_parent().modulate.a = 0.0 if game.absent else 1.0
 	bg.color = BG.lerp(Color("3a1424"), game.level() * 0.18)
 	portrait.set_state(game.mood(), game.level(), game.outfit)
+	portrait.set_absent(game.absent)
 
 	for id in action_buttons:
 		var b: Button = action_buttons[id][0]
@@ -874,7 +877,7 @@ func _show_inventory() -> void:
 		d.modulate = TEXT_DIM
 		info.add_child(d)
 		row.add_child(info)
-		var b := _button("Usar", _use.bind(id), not game.pending_event.is_empty())
+		var b := _button("Usar", _use.bind(id), not game.pending_event.is_empty() or game.absent)
 		b.custom_minimum_size = Vector2(110, 64)
 		row.add_child(b)
 		v.add_child(row)

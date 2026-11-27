@@ -103,6 +103,22 @@
 		]
 	},
 	{
+		"id": "carne_seca",
+		"nombre": "Carne seca",
+		"categoria": "Alimentación",
+		"tipo": "consumible",
+		"precio": 13,
+		"especie": "leoparda",
+		"descripcion": "Dura, salada y sin adornos.",
+		"efectos": {
+			"hambre": -22,
+			"felicidad": 8
+		},
+		"favorito": [
+			"leoparda"
+		]
+	},
+	{
 		"id": "perfume_ambar",
 		"nombre": "Perfume de ámbar",
 		"categoria": "Cuidado personal",
@@ -113,6 +129,20 @@
 		"efectos": {
 			"felicidad": 10,
 			"higiene": 5,
+			"lujuria": 12
+		}
+	},
+	{
+		"id": "hierba_gatera",
+		"nombre": "Hierba gatera",
+		"categoria": "Artículos especiales",
+		"tipo": "consumible",
+		"precio": 14,
+		"especie": "leoparda",
+		"descripcion": "Para que se relaje. Dicen.",
+		"efectos": {
+			"felicidad": 12,
+			"tristeza": -4,
 			"lujuria": 12
 		}
 	},
@@ -197,6 +227,20 @@
 		}
 	},
 	{
+		"id": "peine",
+		"nombre": "Peine de púas",
+		"categoria": "Cuidado personal",
+		"tipo": "consumible",
+		"precio": 11,
+		"especie": "leoparda",
+		"descripcion": "Para el pelaje, sin agua de por medio.",
+		"efectos": {
+			"higiene": 18,
+			"felicidad": 4,
+			"lujuria": -2
+		}
+	},
+	{
 		"id": "manzanilla",
 		"nombre": "Té de manzanilla",
 		"categoria": "Artículos especiales",
@@ -251,6 +295,18 @@
 		"precio": 60,
 		"especie": "dragona",
 		"descripcion": "La lleva atada a la cola. Que se note.",
+		"pasivo": {
+			"vinculo_noche": 1
+		}
+	},
+	{
+		"id": "llavero",
+		"nombre": "Llavero de leopardo",
+		"categoria": "Artículos especiales",
+		"tipo": "pasivo",
+		"precio": 55,
+		"especie": "leoparda",
+		"descripcion": "Dice que es horrible. No se lo quita.",
 		"pasivo": {
 			"vinculo_noche": 1
 		}
@@ -339,6 +395,19 @@
 		"descripcion": "Se admira horas frente a él.",
 		"pasivo": {
 			"lujuria_diaria": -2
+		}
+	},
+	{
+		"id": "vinilos",
+		"nombre": "Vinilos de The Leopard Cats",
+		"categoria": "Entretenimiento",
+		"tipo": "pasivo",
+		"precio": 50,
+		"especie": "leoparda",
+		"descripcion": "La discografía completa.",
+		"pasivo": {
+			"lujuria_diaria": -2,
+			"tristeza_diaria": -1
 		}
 	},
 	{

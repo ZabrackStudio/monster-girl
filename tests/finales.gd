@@ -24,7 +24,8 @@ func _shot(name: String) -> void:
 func _run() -> void:
 	for run in ["slime/poseida", "slime/lucha", "slime/carnal", "slime/denuncia", "slime/marea",
 			"ratona/poseida", "ratona/lucha", "ratona/carnal", "ratona/denuncia", "ratona/marea",
-			"dragona/poseida", "dragona/lucha", "dragona/carnal", "dragona/denuncia", "dragona/marea"]:
+			"dragona/poseida", "dragona/lucha", "dragona/carnal", "dragona/denuncia", "dragona/marea",
+			"leoparda/poseida", "leoparda/lucha", "leoparda/carnal", "leoparda/denuncia", "leoparda/marea"]:
 		Engine.set_meta("personaje", run.get_slice("/", 0))
 		var kind: String = run.get_slice("/", 1)
 		DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida.json"))
