@@ -64,10 +64,12 @@ var btn_dev: Button
 
 func _ready() -> void:
 	game = Game.new()
-	# Al continuar manda la partida guardada; si no, la asignada que se eligió en el menú.
+	game.mode = Engine.get_meta("modo", "historia")
+	# Al continuar manda la partida guardada de ese modo; si no, la asignada que se eligió en el menú.
 	var saved = null
-	if Engine.get_meta("continuar", false) and FileAccess.file_exists(Game.SAVE_PATH):
-		saved = Game.load_json(Game.SAVE_PATH)
+	Game.migrate_legacy_save()
+	if Engine.get_meta("continuar", false) and FileAccess.file_exists(Game.save_path(game.mode)):
+		saved = Game.load_json(Game.save_path(game.mode))
 		if saved is Dictionary and saved.has("personaje"):
 			Engine.set_meta("personaje", saved["personaje"])
 	var cid: String = Engine.get_meta("personaje", DEFAULT_CHARACTER)
@@ -95,7 +97,7 @@ func _ready() -> void:
 		Engine.set_meta("continuar", false)
 		loaded = saved is Dictionary and game.from_dict(saved)
 	if not loaded:
-		game.start(Progress.funds_for(game.character["id"]))
+		game.start(Progress.funds_for(game.character["id"]) if game.mode == "historia" else 0)
 	_refresh()
 	if loaded and not game.pending_event.is_empty():
 		_show_event(game.pending_event)
@@ -115,14 +117,17 @@ func refresh_dev() -> void:
 	btn_dev.visible = DevMode.active()
 
 
-## Guarda tras cada cambio; al terminar la partida, la borra.
-func _autosave() -> void:
+## Guarda tras cada cambio, en la partida de su modo; al terminar la partida, la borra.
+func _autosave() -> bool:
+	var path := Game.save_path(game.mode)
 	if game.over:
-		DirAccess.remove_absolute(ProjectSettings.globalize_path(Game.SAVE_PATH))
-		return
-	var f := FileAccess.open(Game.SAVE_PATH, FileAccess.WRITE)
-	if f:
-		f.store_string(JSON.stringify(game.to_dict()))
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+		return false
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	if f == null:
+		return false
+	f.store_string(JSON.stringify(game.to_dict()))
+	return true
 
 
 func _to_menu() -> void:
@@ -131,8 +136,16 @@ func _to_menu() -> void:
 
 
 func _show_pause() -> void:
-	var v := _open_modal("Pausa")
+	var v := _open_modal("Pausa · Modo %s" % Game.MODE_NAMES[game.mode])
 	v.add_child(_button("Seguir jugando", _close_modal))
+	var saved_lbl := _label("", 18)
+	saved_lbl.modulate = TEXT_DIM
+	saved_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	saved_lbl.visible = false
+	v.add_child(_button("Guardar partida", func():
+		saved_lbl.visible = true
+		saved_lbl.text = "Partida guardada: %s, día %d." % [game.character["nombre"], game.day] if _autosave() else "No se pudo guardar."))
+	v.add_child(saved_lbl)
 	var snd := _button(_sound_label(), func(): pass)
 	snd.pressed.connect(func():
 		music.toggle_mute()
@@ -1023,7 +1036,7 @@ func _show_game_over(ending: Dictionary) -> void:
 	var finals := _label("Finales descubiertos: %d/%d" % [record["finales"].size(), game.character["finales"].size() + 1], 20)
 	finals.modulate = TEXT_DIM
 	v.add_child(finals)
-	v.add_child(_button("Repetir la asignación", func(): Fade.go(get_tree())))
+	v.add_child(_button("Repetir la asignación" if game.mode == "historia" else "Jugar de nuevo", func(): Fade.go(get_tree())))
 	v.add_child(_button("Menú principal", _to_menu))
 
 

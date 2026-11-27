@@ -39,7 +39,7 @@ var main_ref
 
 func _run() -> void:
 	var key := OS.get_environment("DEV_KEY")
-	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida.json"))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida_historia.json"))
 	Engine.set_meta("dev", false)
 	var main = load("res://scenes/main.tscn").instantiate()
 	main.transitions = false
@@ -86,6 +86,6 @@ func _run() -> void:
 	for i in 5: await process_frame
 	_check(g.over, "Lanzar la evaluación termina la partida")
 	Engine.set_meta("dev", false)
-	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida.json"))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida_historia.json"))
 	print("DEV resultado: ", "todo ok" if fails == 0 else "%d fallas" % fails)
 	quit()

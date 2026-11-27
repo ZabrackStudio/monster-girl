@@ -6,11 +6,15 @@ func _init() -> void:
 
 func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://tests/capturas"))
-	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida.json"))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida_historia.json"))
 	change_scene_to_file("res://scenes/menu.tscn")
 	await create_timer(1.0).timeout
 	_shot("m1_menu")
 	current_scene._on_nueva()
+	await create_timer(1.2).timeout
+	current_scene._pick("historia")
+	await create_timer(1.2).timeout
+	current_scene._start("slime")
 	await create_timer(3.0).timeout
 	_shot("m2_intro")
 	for i in 4:
@@ -36,11 +40,13 @@ func _run() -> void:
 	current_scene._close_modal()
 	current_scene._to_menu()
 	await create_timer(1.2).timeout
-	print("MENU guardado existe: ", FileAccess.file_exists("user://partida.json"))
+	print("MENU guardado existe: ", FileAccess.file_exists("user://partida_historia.json"))
 	current_scene._on_opciones()
 	await create_timer(0.4).timeout
 	_shot("m5_opciones")
 	current_scene._on_continuar()
+	await create_timer(0.4).timeout
+	current_scene._continue("historia")
 	await create_timer(1.2).timeout
 	print("MENU continuar: día ", current_scene.game.day, " acciones ", current_scene.game.actions_left)
 	_shot("m6_continuar")

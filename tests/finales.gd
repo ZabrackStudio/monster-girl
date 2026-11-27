@@ -28,7 +28,7 @@ func _run() -> void:
 			"leoparda/poseida", "leoparda/lucha", "leoparda/carnal", "leoparda/denuncia", "leoparda/marea"]:
 		Engine.set_meta("personaje", run.get_slice("/", 0))
 		var kind: String = run.get_slice("/", 1)
-		DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida.json"))
+		DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida_historia.json"))
 		var main = load("res://scenes/main.tscn").instantiate()
 		root.add_child(main)
 		for i in 10: await process_frame

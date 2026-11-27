@@ -15,7 +15,7 @@ func _tap(pos: Vector2) -> void:
 		await process_frame
 
 func _run() -> void:
-	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida.json"))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida_historia.json"))
 	var main = load("res://scenes/main.tscn").instantiate()
 	root.add_child(main)
 	for i in 30: await process_frame

@@ -58,6 +58,7 @@ var pokes_today := 0                # toques de hoy después de la charla
 var warned := false                 # ya amenazó con denunciarte
 # Plazo de la asignación y evaluación final de H.A.R.E.M.
 var term := 0                       # días de convivencia (0 = sin plazo)
+var mode := "historia"              # "historia" (expedientes con plazo) o "casual" (hasta perder)
 var crises := 0                     # crisis que dejaron marca
 var project: Dictionary = {}        # data/proyecto.json
 var overflow: Dictionary = {}       # lo que la última acción quiso dar de más
@@ -67,10 +68,37 @@ var overflow: Dictionary = {}       # lo que la última acción quiso dar de má
 const SAVE_FIELDS := ["stats", "day", "actions_left", "money", "total_money", "inventory",
 	"passives", "minigames", "known_affinity", "events_seen", "times_today", "pending_event",
 	"tolerance", "curse_mark", "marked", "today", "discovered", "outfit", "outfits", "bond",
-	"current_line", "talked_today", "pokes_today", "warned", "term", "crises", "stash", "absent"]
+	"current_line", "talked_today", "pokes_today", "warned", "term", "crises", "stash", "absent", "mode"]
 const INT_FIELDS := ["day", "actions_left", "money", "total_money", "term", "crises"]
 const SAVE_VERSION := 1
-const SAVE_PATH := "user://partida.json"
+const LEGACY_SAVE := "user://partida.json"     # una sola partida, de antes de los modos
+const MODES := ["historia", "casual"]
+const MODE_NAMES := {"historia": "Historia", "casual": "Casual"}
+
+
+## Cada modo tiene su propia partida guardada: la historia avanza aunque juegues en casual.
+static func save_path(m: String) -> String:
+	return "user://partida_%s.json" % m
+
+
+## La partida única de versiones anteriores pasa a ser la de historia.
+static func migrate_legacy_save() -> void:
+	if FileAccess.file_exists(LEGACY_SAVE) and not FileAccess.file_exists(save_path("historia")):
+		DirAccess.rename_absolute(ProjectSettings.globalize_path(LEGACY_SAVE),
+			ProjectSettings.globalize_path(save_path("historia")))
+
+
+## Resumen de las partidas guardadas, para elegir cuál continuar.
+static func saved_games() -> Array:
+	migrate_legacy_save()
+	var out := []
+	for m in MODES:
+		if not FileAccess.file_exists(save_path(m)):
+			continue
+		var d = load_json(save_path(m))
+		if d is Dictionary and d.has("personaje"):
+			out.append({"modo": m, "personaje": d["personaje"], "dia": int(d.get("day", 1)), "plazo": int(d.get("term", 0))})
+	return out
 
 
 func to_dict() -> Dictionary:
@@ -129,7 +157,7 @@ func start(extra_money := 0) -> void:
 	for s in STATS:
 		stats[s] = float(character["stats_iniciales"].get(s, 50))
 	money = int(balance["dinero_inicial"]) + extra_money
-	term = int(assignment().get("dias", 0))
+	term = int(assignment().get("dias", 0)) if mode == "historia" else 0
 	actions_left = int(balance["acciones_por_dia"])
 	minigames = [character["minijuego_inicial"]]
 	outfit = character.get("traje_inicial", "")

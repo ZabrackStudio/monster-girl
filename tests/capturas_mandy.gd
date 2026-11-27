@@ -14,7 +14,7 @@ func _init() -> void:
 
 func _run() -> void:
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(Progress.PATH))
-	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida.json"))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida_historia.json"))
 	change_scene_to_file("res://scenes/expedientes.tscn")
 	await create_timer(1.0).timeout
 	_shot("x1_expedientes_bloqueado")
@@ -54,5 +54,5 @@ func _run() -> void:
 	await create_timer(1.0).timeout
 	_shot("x8_resultado")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(Progress.PATH))
-	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida.json"))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida_historia.json"))
 	quit()

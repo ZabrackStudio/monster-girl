@@ -1,13 +1,12 @@
-## Menú principal: partida nueva, continuar, opciones y créditos.
+## Menú principal: partida nueva, continuar, galería, opciones y créditos.
 extends Control
 
 const Game := preload("res://scripts/game.gd")
 const Music := preload("res://scripts/music.gd")
 const Fade := preload("res://scripts/transicion.gd")
 const Progress := preload("res://scripts/progreso.gd")
+const ImageMenu := preload("res://scripts/menu_imagen.gd")
 const RECORDS_PATH := "user://records.json"
-const SRC_W := 941.0   # ancho de la imagen original del menú
-const PIECES := [["logo", 0], ["nueva", 695], ["continuar", 925], ["opciones", 1146], ["creditos", 1371]]
 
 var music
 var modal: Control
@@ -31,55 +30,38 @@ func _ready() -> void:
 	bg.modulate = Color(0.32, 0.28, 0.42)
 	add_child(bg)
 
-	var k := size.x / SRC_W
-	var top := (size.y - 1610.0 * k) * 0.5
-	var has_save := FileAccess.file_exists(Game.SAVE_PATH)
-	for p in PIECES:
-		var tex: Texture2D = load("res://ui/menu_%s.png" % p[0])
-		var pos := Vector2(0, top + p[1] * k)
-		var sz := tex.get_size() * k
-		if p[0] == "logo":
-			var logo := TextureRect.new()
-			logo.texture = tex
-			logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			logo.position = pos
-			logo.size = sz
-			add_child(logo)
-			continue
-		var b := TextureButton.new()
-		b.texture_normal = tex
-		b.ignore_texture_size = true
-		b.stretch_mode = TextureButton.STRETCH_SCALE
-		b.position = pos
-		b.size = sz
-		b.pivot_offset = sz * 0.5
-		b.button_down.connect(func(): b.scale = Vector2(0.96, 0.96))
-		b.button_up.connect(func(): b.scale = Vector2.ONE)
-		b.pressed.connect(Callable(self, "_on_" + p[0]))
-		if p[0] == "continuar" and not has_save:
-			b.disabled = true
-			b.modulate = Color(0.45, 0.45, 0.5, 0.7)
-		add_child(b)
+	var nodes := ImageMenu.build(self, ["menu_logo", "menu_nueva", "menu_continuar", "menu_galeria", "menu_opciones", "menu_creditos"], {
+		"menu_nueva": _on_nueva,
+		"menu_continuar": _on_continuar,
+		"menu_galeria": func(): Fade.go(get_tree(), "res://scenes/galeria.tscn"),
+		"menu_opciones": _on_opciones,
+		"menu_creditos": _on_creditos,
+	})
+	if Game.saved_games().is_empty():
+		ImageMenu.disable(nodes["menu_continuar"])
 
 
 # ---------------------------------------------------------------- botones
 
 func _on_nueva() -> void:
-	if FileAccess.file_exists(Game.SAVE_PATH):
-		var v := _open_modal("¿Partida nueva?")
-		v.add_child(_wrap("Tienes una partida en curso. Si empiezas otra, se perderá."))
-		v.add_child(_button("Empezar de cero", _start_new))
-		v.add_child(_button("Cancelar", _close_modal))
-	else:
-		_start_new()
+	Fade.go(get_tree(), "res://scenes/modo.tscn")
 
 
-func _start_new() -> void:
-	DirAccess.remove_absolute(ProjectSettings.globalize_path(Game.SAVE_PATH))
-	Fade.go(get_tree(), "res://scenes/expedientes.tscn")
-
-
+## Una partida guardada por modo: se elige cuál seguir.
 func _on_continuar() -> void:
+	var saves := Game.saved_games()
+	if saves.is_empty():
+		return
+	var v := _open_modal("Continuar partida")
+	for sv in saves:
+		var day := "Día %d de %d" % [sv["dia"], sv["plazo"]] if sv["plazo"] > 0 else "Día %d" % sv["dia"]
+		v.add_child(_button("%s · %s · %s" % [Game.MODE_NAMES[sv["modo"]], Progress.character_name(sv["personaje"]), day],
+			_continue.bind(sv["modo"])))
+	v.add_child(_button("Volver", _close_modal))
+
+
+func _continue(mode: String) -> void:
+	Engine.set_meta("modo", mode)
 	Engine.set_meta("continuar", true)
 	Fade.go(get_tree(), "res://scenes/main.tscn")
 
@@ -107,9 +89,9 @@ func _on_opciones() -> void:
 
 func _confirm_wipe() -> void:
 	var v := _open_modal("¿Borrar todo?")
-	v.add_child(_wrap("Se borrarán la partida guardada, los récords y el avance en el proyecto. No se puede deshacer."))
+	v.add_child(_wrap("Se borrarán las partidas guardadas, los récords, la galería y el avance en el proyecto. No se puede deshacer."))
 	v.add_child(_button("Sí, borrar", func():
-		for path in [Game.SAVE_PATH, RECORDS_PATH, Progress.PATH]:
+		for path in [Game.save_path("historia"), Game.save_path("casual"), Game.LEGACY_SAVE, RECORDS_PATH, Progress.PATH]:
 			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 		Fade.go(get_tree())))
 	v.add_child(_button("Cancelar", _on_opciones))

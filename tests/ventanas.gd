@@ -27,7 +27,7 @@ func _watch(what: String) -> void:
 
 
 func _run() -> void:
-	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida.json"))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida_historia.json"))
 	main = load("res://scenes/main.tscn").instantiate()
 	root.add_child(main)
 	await create_timer(1.0).timeout

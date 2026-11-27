@@ -8,6 +8,8 @@ Pistas que busca el juego (MP3 u Ogg **Vorbis**; Godot no lee Ogg Opus). Todas s
 | `intro.mp3` | Informe de la intendente antes de cada asignación |
 | `lobby_slime.mp3` | Casa de Reme (y de cualquier chica sin tema propio) |
 | `lobby_ratona.mp3` | Casa de Mandy |
+| `lobby_dragona.mp3` | Casa de Vipi |
+| `lobby_leoparda.mp3` | Casa de Leapy |
 | `tienda.mp3` | Tienda y objetos |
 | `final_poseida.mp3` | Final Poseída |
 | `final_carnal.mp3` | Final Disuelto / Sin aire |

@@ -314,6 +314,6 @@ func _all_assignments() -> void:
 
 
 func _switch(character_id: String) -> void:
-	DirAccess.remove_absolute(ProjectSettings.globalize_path(Game.SAVE_PATH))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(Game.save_path(main.game.mode)))
 	Engine.set_meta("personaje", character_id)
 	Fade.go(main.get_tree(), "res://scenes/main.tscn")

@@ -13,7 +13,7 @@ func _shot(name: String) -> void:
 
 
 func _run() -> void:
-	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida.json"))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida_historia.json"))
 	Engine.set_meta("personaje", "dragona")
 	var main = load("res://scenes/main.tscn").instantiate()
 	main.transitions = false
@@ -31,5 +31,5 @@ func _run() -> void:
 	await _shot("tienda")
 	main.queue_free()
 	Engine.set_meta("personaje", "slime")
-	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida.json"))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://partida_historia.json"))
 	quit()
